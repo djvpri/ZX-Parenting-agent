@@ -1,0 +1,37 @@
+# Build CI (ci.yml): compile check tiap push — tanpa keystore, tanpa rilis.
+# Rilis: workflow_dispatch di rilis.yml.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Pasang SDK paket
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          SDKMAN=$(command -v sdkmanager || true)
+          if [ -z "$SDKMAN" ]; then
+            SDKMAN=$(find "$SDK_ROOT/cmdline-tools" -maxdepth 3 -name sdkmanager -type f 2>/dev/null | head -1)
+          fi
+          yes | "$SDKMAN" --sdk_root="$SDK_ROOT" --licenses >/dev/null 2>&1 || true
+          "$SDKMAN" --sdk_root="$SDK_ROOT" --install "build-tools;35.0.0" "platforms;android-35"
+
+      - name: Tulis local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+
+      - name: Build debug (judge compile)
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug

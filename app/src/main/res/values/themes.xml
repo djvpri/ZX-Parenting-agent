@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.ZXAgent" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:statusBarColor">#EFF6FF</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

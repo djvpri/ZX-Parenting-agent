@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ikon ZX Agent: perisai + centang (warna biru #2563EB). Vector langsung, pola Z-Rooms. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M0,0 h108 v108 h-108 z" />
+    <!-- perisai -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,18 L82,30 v22 c0,18 -12,30 -28,38 C38,82 26,70 26,52 V30 Z" />
+    <!-- centang -->
+    <path
+        android:fillColor="#2563EB"
+        android:pathData="M42,52 l8,8 l16,-16 l5,5 l-21,21 l-13,-13 Z" />
+
+</vector>
