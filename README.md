@@ -9,14 +9,14 @@ Agent parental control untuk HP anak — konsumen API `/api/agent` dari web ZX P
 - **GPS** (fase 4): kirim posisi saat diminta (`aksi=lokasi`); geo-fence dihitung server.
 - **Blokir per-app** (fase 5): Accessibility service deteksi app depan → overlay blokir utk app dalam daftar `appBlokir` dari server.
 
-## Rilis Play Store (WAJIB sebelum upload)
-1. Buat keystore sekali di mesin ber-JDK:
-   `keytool -genkeypair -v -keystore rilis.keystore -alias zxagent -keyalg RSA -keysize 2048 -validity 10000`
-2. GitHub repo → Settings → Secrets and variables → Actions → New repository secret, isi 4:
-   - `KEYSTORE_B64` = `base64 -w0 rilis.keystore`
-   - `KEYSTORE_PASSWORD`, `KEYSTORE_ALIAS` (mis. `zxagent`), `KEYSTORE_KEY_PASSWORD`
-3. Workflow rilis build AAB (`bundleRelease`) release-signed; TANPA secret build GAGAL sengaja (Play tolak debug-signed).
-4. Upload AAB ke Play Console; keystore disimpan aman — hilang = tak bisa update app.
+## Rilis Play Store
+Keystore release **sudah ada di repo** (`keystore/rilis.keystore` + `keystore/rilis.keystore.pw`) —
+workflow rilis otomatis pakai itu, tanpa perlu Secrets. Agent lain dgn signature sama:
+copy folder `keystore/` + file `.github/workflows/rilis.yml` ke repo agent itu.
+
+Alternatif (fallback): Secrets `KEYSTORE_B64` (`base64 -w0 rilis.keystore`),
+`KEYSTORE_PASSWORD`, `KEYSTORE_ALIAS`, `KEYSTORE_KEY_PASSWORD`. Tanpa keduanya build GAGAL
+sengaja (Play tolak debug-signed). Keystore hilang = tak bisa update app di Play.
 
 ## Kontrak API (web sudah live)
 ```

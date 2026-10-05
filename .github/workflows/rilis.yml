@@ -2,8 +2,10 @@ name: rilis
 
 # Rilis AAB ZX Agent untuk Play Store (pola Z-Rooms-android).
 # Dipicu manual: Actions -> rilis -> Run workflow. versiKode naik otomatis.
-# Keystore WAJIB dari Secrets: KEYSTORE_B64, KEYSTORE_PASSWORD, KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD.
-# Play Store menolak AAB/APK debug-signed — isi Secrets dulu sebelum rilis pertama resmi.
+# Keystore: utamakan file di repo (keystore/rilis.keystore + .pw) — agent lain
+# tinggal copy folder keystore/ + rilis.yml ini utk rilis dgn signature sama.
+# Fallback: Secrets (KEYSTORE_B64, KEYSTORE_PASSWORD, KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD).
+# Play Store menolak AAB/APK debug-signed.
 
 on:
   workflow_dispatch:
@@ -69,7 +71,7 @@ jobs:
           '
           echo "VERSI=$VERSI" >> "$GITHUB_ENV"
 
-      - name: Tulis keystore dari Secrets (jika ada)
+      - name: Siapkan keystore (repo dulu, fallback Secrets)
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -77,17 +79,29 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          if [ -z "${KEYSTORE_B64:-}" ]; then
-            echo "::error::KEYSTORE_B64 kosong — Play Store wajib release-signed. Isi Secrets dulu (lihat README)."
-            exit 1
-          fi
-          echo "$KEYSTORE_B64" | base64 -d > app/rilis.keystore
-          cat > app/keystore.properties <<EOF
+          if [ -f keystore/rilis.keystore ]; then
+            cp keystore/rilis.keystore app/rilis.keystore
+            STORE_PW=$(cat keystore/rilis.keystore.pw)
+            KEY_PW="${KEYSTORE_KEY_PASSWORD:-$STORE_PW}"
+            ALIAS="${KEYSTORE_ALIAS:-zxagent}"
+            cat > app/keystore.properties <<EOF
+          storeFile=rilis.keystore
+          storePassword=$STORE_PW
+          keyAlias=$ALIAS
+          keyPassword=$KEY_PW
+          EOF
+          elif [ -n "${KEYSTORE_B64:-}" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > app/rilis.keystore
+            cat > app/keystore.properties <<EOF
           storeFile=rilis.keystore
           storePassword=$KEYSTORE_PASSWORD
           keyAlias=$KEYSTORE_ALIAS
           keyPassword=$KEYSTORE_KEY_PASSWORD
           EOF
+          else
+            echo "::error::Keystore tidak ada — taruh keystore/rilis.keystore + .pw di repo, atau isi Secrets (lihat README)."
+            exit 1
+          fi
 
       - name: Build rilis (AAB untuk Play Store)
         run: |
