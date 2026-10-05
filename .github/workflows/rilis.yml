@@ -103,18 +103,19 @@ jobs:
             exit 1
           fi
 
-      - name: Build rilis (AAB untuk Play Store)
+      - name: Build rilis (AAB utk Play Store + APK utk pasang langsung)
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon bundleRelease
+          ./gradlew --no-daemon bundleRelease assembleRelease
 
-      - name: Ganti nama AAB
+      - name: Ganti nama AAB + APK
         run: |
           mkdir -p rilis
           cp app/build/outputs/bundle/release/app-release.aab "rilis/zx-agent-${VERSI}.aab"
+          cp app/build/outputs/apk/release/app-release.apk "rilis/zx-agent-${VERSI}.apk"
           ls -la rilis/
 
-      - name: Commit versi + lampirkan AAB ke Release
+      - name: Commit versi + lampirkan AAB & APK ke Release
         run: |
           set -euo pipefail
           git config user.name "rilis-bot"
@@ -123,8 +124,8 @@ jobs:
           git commit -m "rilis v${VERSI} (CI)" || echo "tak ada perubahan versi"
           git tag "v${VERSI}"
           git push origin HEAD:"main" --tags
-          gh release create "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" \
-            --title "ZX Agent v${VERSI}" --notes "Rilis v${VERSI} (AAB Play Store)" \
-            || gh release upload "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" --clobber
+          gh release create "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" "rilis/zx-agent-${VERSI}.apk" \
+            --title "ZX Agent v${VERSI}" --notes "Rilis v${VERSI} (AAB Play Store + APK pasang langsung)" \
+            || gh release upload "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" "rilis/zx-agent-${VERSI}.apk" --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

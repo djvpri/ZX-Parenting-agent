@@ -28,7 +28,7 @@ Body:   {"aksi": "ping"|"lokasi"|"activity", "detail": {...}}
 ## Build & rilis
 - WSL tak ada toolchain Android → compile dijajakan CI.
 - **CI** (`.github/workflows/ci.yml`): `assembleDebug` tiap push — judge compile.
-- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` → bump `alamat.json` → `bundleRelease` (AAB signed, keystore dari Secrets) → attach AAB ke GitHub Release. Detail langkah Secrets: bagian "Rilis Play Store" di atas.
+- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` → bump `alamat.json` → `bundleRelease` + `assembleRelease` (AAB utk Play + APK utk pasang langsung, keystore repo-first) → attach AAB & APK ke GitHub Release.
 
 ## Struktur
 ```
