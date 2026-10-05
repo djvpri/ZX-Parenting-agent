@@ -45,6 +45,20 @@
             android:exported="false"
             android:foregroundServiceType="location" />
 
+        <!-- Fase 5: aksesibilitas utk deteksi app depan (blokir per-app via overlay) -->
+        <service
+            android:name=".AksesService"
+            android:exported="false"
+            android:label="ZX Agent — blokir app"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/akses_service" />
+        </service>
+
         <!-- Device Admin: kunci layar + anti-uninstall (fase 3) -->
         <receiver
             android:name=".AdminReceiver"

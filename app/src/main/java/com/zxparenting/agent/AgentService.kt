@@ -46,6 +46,8 @@ class AgentService : Service() {
     private fun proses(j: JSONObject) {
         val aturan = Aturan.dari(j)
         Kebijakan.simpan(this, aturan)
+        // Fase 5: simpan daftar app diblokir utk AksesService.
+        Blokir.simpanDaftarApp(this, aturan.appBlokir)
 
         // Catat sesi bila baru mulai (belum ada log sesi_main hari ini menurut server).
         // Ini sekali per siklus sesi: hanya kirim bila sesiTerakhir == null.

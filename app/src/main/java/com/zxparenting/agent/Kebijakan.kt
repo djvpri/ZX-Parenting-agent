@@ -14,6 +14,7 @@ data class Aturan(
     val sesiTerpakaiHariIni: Int,
     val sesiTerakhir: Long?,    // epoch ms sesi terakhir (tipe sesi_main)
     val gpsMinta: Boolean,
+    val appBlokir: List<String>,
 ) {
     companion object {
         fun dari(j: JSONObject): Aturan {
@@ -23,6 +24,14 @@ data class Aturan(
                 else (st.optString("sesiTerakhir").takeIf { it.isNotEmpty() }?.let {
                     runCatching { java.time.Instant.parse(it).toEpochMilli() }.getOrNull()
                 })
+            val daftar = mutableListOf<String>()
+            val arr = a.optJSONArray("appBlokir")
+            if (arr != null) {
+                for (i in 0 until arr.length()) {
+                    val p = arr.optString(i)
+                    if (p.isNotEmpty()) daftar.add(p)
+                }
+            }
             return Aturan(
                 sessionLimit = a.optInt("sessionLimit", 120),
                 cooldown = a.optInt("cooldown", 30),
@@ -33,6 +42,7 @@ data class Aturan(
                 sesiTerpakaiHariIni = st.optInt("sesiTerpakaiHariIni", 0),
                 sesiTerakhir = sesiTerakhir,
                 gpsMinta = j.optJSONObject("gps")?.optBoolean("minta", false) ?: false,
+                appBlokir = daftar,
             )
         }
     }

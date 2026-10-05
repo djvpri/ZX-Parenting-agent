@@ -60,10 +60,25 @@ class StatusActivity : AppCompatActivity() {
                 }
             }
         }
+        val izinAkses = Button(this).apply {
+            text = "Izinkan blokir app (aksesibilitas)"
+            setOnClickListener {
+                if (AksesService.instance == null) {
+                    startActivity(
+                        Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                } else {
+                    text = "Blokir app: sudah aktif ✓"
+                    isEnabled = false
+                }
+            }
+        }
         root.addView(judul)
         root.addView(status)
         root.addView(izinLokasi)
         root.addView(izin)
+        root.addView(izinAkses)
         root.addView(lepas)
         setContentView(root)
         tampil(status)
