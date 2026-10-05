@@ -1,9 +1,9 @@
 name: rilis
 
-# Rilis APK ZX Agent dari GitHub (pola Z-Rooms-android).
+# Rilis AAB ZX Agent untuk Play Store (pola Z-Rooms-android).
 # Dipicu manual: Actions -> rilis -> Run workflow. versiKode naik otomatis.
-# Keystore dari Secrets: KEYSTORE_B64, KEYSTORE_PASSWORD, KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD.
-# Tanpa secret, build jalan tapi APK unsigned-debug (untuk fase skeleton cukup).
+# Keystore WAJIB dari Secrets: KEYSTORE_B64, KEYSTORE_PASSWORD, KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD.
+# Play Store menolak AAB/APK debug-signed — isi Secrets dulu sebelum rilis pertama resmi.
 
 on:
   workflow_dispatch:
@@ -78,8 +78,8 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${KEYSTORE_B64:-}" ]; then
-            echo "KEYSTORE_B64 kosong — build lanjut tanpa keystore rilis (APK debug-signed)."
-            exit 0
+            echo "::error::KEYSTORE_B64 kosong — Play Store wajib release-signed. Isi Secrets dulu (lihat README)."
+            exit 1
           fi
           echo "$KEYSTORE_B64" | base64 -d > app/rilis.keystore
           cat > app/keystore.properties <<EOF
@@ -89,15 +89,15 @@ jobs:
           keyPassword=$KEYSTORE_KEY_PASSWORD
           EOF
 
-      - name: Build rilis
+      - name: Build rilis (AAB untuk Play Store)
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon assembleRelease
+          ./gradlew --no-daemon bundleRelease
 
-      - name: Ganti nama APK
+      - name: Ganti nama AAB
         run: |
           mkdir -p rilis
-          cp app/build/outputs/apk/release/app-release*.apk "rilis/zx-agent-${VERSI}.apk"
+          cp app/build/outputs/bundle/release/app-release.aab "rilis/zx-agent-${VERSI}.aab"
           ls -la rilis/
 
       - name: Commit versi + lampirkan APK ke Release
@@ -109,8 +109,8 @@ jobs:
           git commit -m "rilis v${VERSI} (CI)" || echo "tak ada perubahan versi"
           git tag "v${VERSI}"
           git push origin HEAD:"main" --tags
-          gh release create "v${VERSI}" "rilis/zx-agent-${VERSI}.apk" \
-            --title "ZX Agent v${VERSI}" --notes "Rilis v${VERSI}" \
-            || gh release upload "v${VERSI}" "rilis/zx-agent-${VERSI}.apk" --clobber
+          gh release create "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" \
+            --title "ZX Agent v${VERSI}" --notes "Rilis v${VERSI} (AAB Play Store)" \
+            || gh release upload "v${VERSI}" "rilis/zx-agent-${VERSI}.aab" --clobber
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

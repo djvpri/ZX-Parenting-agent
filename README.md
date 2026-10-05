@@ -7,6 +7,16 @@ Agent parental control untuk HP anak — konsumen API `/api/agent` dari web ZX P
 - **Ping loop**: foreground service, tiap 5 menit POST `aksi=ping` → terima aturan (sesi, curfew), permintaan GPS, zona.
 - **Blokir** (fase 3): layar blokir saat sesi habis/curfew, Device Admin `lockNow` + anti-uninstall.
 - **GPS** (fase 4): kirim posisi saat diminta (`aksi=lokasi`); geo-fence dihitung server.
+- **Blokir per-app** (fase 5): Accessibility service deteksi app depan → overlay blokir utk app dalam daftar `appBlokir` dari server.
+
+## Rilis Play Store (WAJIB sebelum upload)
+1. Buat keystore sekali di mesin ber-JDK:
+   `keytool -genkeypair -v -keystore rilis.keystore -alias zxagent -keyalg RSA -keysize 2048 -validity 10000`
+2. GitHub repo → Settings → Secrets and variables → Actions → New repository secret, isi 4:
+   - `KEYSTORE_B64` = `base64 -w0 rilis.keystore`
+   - `KEYSTORE_PASSWORD`, `KEYSTORE_ALIAS` (mis. `zxagent`), `KEYSTORE_KEY_PASSWORD`
+3. Workflow rilis build AAB (`bundleRelease`) release-signed; TANPA secret build GAGAL sengaja (Play tolak debug-signed).
+4. Upload AAB ke Play Console; keystore disimpan aman — hilang = tak bisa update app.
 
 ## Kontrak API (web sudah live)
 ```
@@ -18,8 +28,7 @@ Body:   {"aksi": "ping"|"lokasi"|"activity", "detail": {...}}
 ## Build & rilis
 - WSL tak ada toolchain Android → compile dijajakan CI.
 - **CI** (`.github/workflows/ci.yml`): `assembleDebug` tiap push — judge compile.
-- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` (mis. `1.0.0`) → bump `alamat.json` → build signed (keystore dari Secrets) → attach APK ke GitHub Release.
-- Secret opsional: `KEYSTORE_B64`, `KEYSTORE_PASSWORD`, `KEYSTORE_ALIAS`, `KEYSTORE_KEY_PASSWORD`. Tanpa itu APK debug-signed.
+- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` → bump `alamat.json` → `bundleRelease` (AAB signed, keystore dari Secrets) → attach AAB ke GitHub Release. Detail langkah Secrets: bagian "Rilis Play Store" di atas.
 
 ## Struktur
 ```
