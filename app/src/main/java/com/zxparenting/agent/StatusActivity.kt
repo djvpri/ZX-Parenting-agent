@@ -33,8 +33,20 @@ class StatusActivity : AppCompatActivity() {
                 finish()
             }
         }
+        val izin = Button(this).apply {
+            text = "Izinkan laporan pemakaian app"
+            setOnClickListener {
+                if (!Pemakaian.adaIzin(applicationContext)) {
+                    startActivity(Pemakaian.intentIzin(applicationContext))
+                } else {
+                    text = "Laporan pemakaian: sudah aktif ✓"
+                    isEnabled = false
+                }
+            }
+        }
         root.addView(judul)
         root.addView(status)
+        root.addView(izin)
         root.addView(lepas)
         setContentView(root)
         tampil(status)

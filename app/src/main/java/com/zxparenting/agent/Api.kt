@@ -52,10 +52,12 @@ object Api {
     }
 
     /** Kirim log aktivitas anak (tipe bebas, server potong 40 char). */
-    fun kirimAktivitas(context: Context, tipe: String): Boolean {
+    fun kirimAktivitas(context: Context, tipe: String, detail: JSONObject? = null): Boolean {
+        val d = detail ?: JSONObject().put("tipe", tipe)
+        if (d.isNull("tipe")) d.put("tipe", tipe)
         val body = JSONObject()
             .put("aksi", "activity")
-            .put("detail", JSONObject().put("tipe", tipe))
+            .put("detail", d)
         return post(context, body).first == 200
     }
 

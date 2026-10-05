@@ -18,6 +18,7 @@ import org.json.JSONObject
 class AgentService : Service() {
     private var thread: HandlerThread? = null
     private var handler: Handler? = null
+    private var hitungPing = 0
 
     override fun onCreate() {
         super.onCreate()
@@ -70,6 +71,13 @@ class AgentService : Service() {
         } else if (blokir == null && sedangBlokir) {
             Blokir.matikan(this)
             BlokirActivity.selesaiJikaAda()
+        }
+
+        // Fase 3: laporan pemakaian app tiap 12 ping (= ~1 jam) bila izin sudah ada.
+        hitungPing += 1
+        if (hitungPing >= 12) {
+            hitungPing = 0
+            if (Pemakaian.adaIzin(this)) Pemakaian.kirim(this)
         }
     }
 
