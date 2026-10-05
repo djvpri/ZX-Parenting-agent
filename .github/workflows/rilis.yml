@@ -100,7 +100,7 @@ jobs:
           cp app/build/outputs/bundle/release/app-release.aab "rilis/zx-agent-${VERSI}.aab"
           ls -la rilis/
 
-      - name: Commit versi + lampirkan APK ke Release
+      - name: Commit versi + lampirkan AAB ke Release
         run: |
           set -euo pipefail
           git config user.name "rilis-bot"
