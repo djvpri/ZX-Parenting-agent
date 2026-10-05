@@ -1,0 +1,11 @@
+name: test-minimal
+
+on:
+  workflow_dispatch:
+
+jobs:
+  halo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Halo
+        run: echo "halo dunia"
