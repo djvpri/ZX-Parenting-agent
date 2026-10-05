@@ -43,13 +43,34 @@ class AgentService : Service() {
     }
 
     private fun proses(j: JSONObject) {
-        val aturan = j.optJSONObject("aturan")
-        val gps = j.optJSONObject("gps")
-        val zona = j.optJSONObject("zona")
-        // Fase 4: kalau gps?.minta == true -> ambil lokasi & kirimLokasi.
-        // Fase 3: baca aturan (sessionLimit/curfew) -> putuskan blokir.
-        // Sekarang: simpan saja utk StatusActivity menampilkan.
-        Simpanan.pingTerakhir(this) // no-op penanda titik ekstensi
+        val aturan = Aturan.dari(j)
+        Kebijakan.simpan(this, aturan)
+
+        // Catat sesi bila baru mulai (belum ada log sesi_main hari ini menurut server).
+        // Ini sekali per siklus sesi: hanya kirim bila sesiTerakhir == null.
+        if (aturan.sesiTerakhir == null && !aturan.masterUnlock) {
+            Api.kirimAktivitas(applicationContext, "sesi_main")
+        }
+
+        // GPS on-demand: server minta posisi -> (fase 4) ambil & kirim.
+        // Sekarang: tandai saja permintaan utk fase berikut.
+
+        // Keputusan blokir: tampilkan layar blokir saat keputusan != null.
+        val kal = java.util.Calendar.getInstance()
+        val blokir = Kebijakan.evaluasi(
+            aturan, kal.get(java.util.Calendar.HOUR_OF_DAY), kal.get(java.util.Calendar.MINUTE)
+        )
+        val sedangBlokir = Blokir.aktif(this)
+        if (blokir != null && !sedangBlokir) {
+            Blokir.nyalakan(this, blokir)
+            startActivity(
+                Intent(this, BlokirActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            )
+        } else if (blokir == null && sedangBlokir) {
+            Blokir.matikan(this)
+            BlokirActivity.selesaiJikaAda()
+        }
     }
 
     private fun mulaiNotifikasi() {
