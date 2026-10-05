@@ -1,7 +1,7 @@
 {
   "idPaket": "com.zxparenting.agent",
-  "versiNama": "1.3.0",
-  "versiKode": 5,
+  "versiNama": "1.4.0",
+  "versiKode": 6,
   "beranda": "https://zxparenting.zomet.my.id",
   "api": "https://zxparenting.zomet.my.id/api/agent"
 }
