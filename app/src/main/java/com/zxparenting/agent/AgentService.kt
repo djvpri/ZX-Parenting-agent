@@ -53,8 +53,8 @@ class AgentService : Service() {
             Api.kirimAktivitas(applicationContext, "sesi_main")
         }
 
-        // GPS on-demand: server minta posisi -> (fase 4) ambil & kirim.
-        // Sekarang: tandai saja permintaan utk fase berikut.
+        // Fase 4: GPS on-demand — server minta posisi -> kirim bila izin lokasi ada.
+        Lokasi.kirimBilaDiminta(this, aturan.gpsMinta)
 
         // Keputusan blokir: tampilkan layar blokir saat keputusan != null.
         val kal = java.util.Calendar.getInstance()

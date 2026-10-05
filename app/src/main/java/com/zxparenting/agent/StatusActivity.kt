@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.concurrent.TimeUnit
 
-/** Status agent: koneksi + ping terakhir. Fase 2 tambah ring waktu bermain (mockup layar 2). */
+/** Status agent: koneksi + ping terakhir + izin lokasi & pemakaian app. */
 class StatusActivity : AppCompatActivity() {
     override fun onCreate(s: Bundle?) {
         super.onCreate(s)
@@ -44,12 +44,34 @@ class StatusActivity : AppCompatActivity() {
                 }
             }
         }
+        val izinLokasi = Button(this).apply {
+            text = "Izinkan pelacakan lokasi"
+            setOnClickListener {
+                if (!Lokasi.adaIzin(applicationContext)) {
+                    requestPermissions(
+                        arrayOf(
+                            android.Manifest.permission.ACCESS_FINE_LOCATION,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                        ), 1
+                    )
+                } else {
+                    text = "Lokasi: sudah aktif ✓"
+                    isEnabled = false
+                }
+            }
+        }
         root.addView(judul)
         root.addView(status)
+        root.addView(izinLokasi)
         root.addView(izin)
         root.addView(lepas)
         setContentView(root)
         tampil(status)
+    }
+
+    override fun onRequestPermissionsResult(kode: Int, izin: Array<out String>, hasil: IntArray) {
+        super.onRequestPermissionsResult(kode, izin, hasil)
+        // Sesi berikutnya service kirim lokasi sendiri; UI cukup segar saat dibuka ulang.
     }
 
     private fun tampil(status: TextView) {
