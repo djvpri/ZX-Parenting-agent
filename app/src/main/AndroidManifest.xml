@@ -35,7 +35,7 @@
         </provider>
 
         <activity
-            android:name=".PasangActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +44,9 @@
         </activity>
 
         <activity android:name=".StatusActivity" android:exported="false" />
+
+        <!-- Pairing device ortu (device admin layer) -->
+        <activity android:name=".PasangActivity" android:exported="false" />
 
         <!-- Layar blokir ditampilkan dari service saat sesi habis / curfew -->
         <activity

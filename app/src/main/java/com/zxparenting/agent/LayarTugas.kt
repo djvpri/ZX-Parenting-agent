@@ -1,0 +1,123 @@
+package com.zxparenting.agent
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+@Composable
+fun LayarTugas(jwt: String) {
+    var items by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
+    var loading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(jwt) {
+        scope.launch {
+            val res = withContext(Dispatchers.IO) {
+                runCatching { Klien.api.tugasList("Bearer $jwt").execute() }.getOrNull()
+            }
+            loading = false
+            if (res?.isSuccessful == true) {
+                items = res.body() ?: emptyList()
+            } else {
+                error = "Gagal muat tugas"
+            }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFEFF6FF)),
+    ) {
+        Text(
+            "Tugas",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(16.dp),
+        )
+
+        when {
+            loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+            error.isNotEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(error, color = MaterialTheme.colorScheme.error)
+            }
+            items.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Tidak ada tugas.", color = Color(0xFF94A3B8))
+            }
+            else -> LazyColumn(
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                items(items) { t -> KartuTugas(t) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun KartuTugas(t: TugasAnak) {
+    val warnaStatus = when (t.status) {
+        "SELESAI" -> Color(0xFFDCFCE7) to Color(0xFF166534)
+        "DIVERIFIKASI" -> Color(0xFFDBEAFE) to Color(0xFF1E40AF)
+        else -> Color(0xFFFEF3C7) to Color(0xFF92400E)
+    }
+    val labelStatus = when (t.status) {
+        "SELESAI" -> "Selesai"
+        "DIVERIFIKASI" -> "Terverifikasi"
+        else -> "Belum selesai"
+    }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF3B82F6).copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Default.Task, contentDescription = null, tint = Color(0xFF3B82F6), modifier = Modifier.size(20.dp))
+                }
+                Spacer(Modifier.width(10.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(t.judul, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    if (!t.deskripsi.isNullOrBlank()) {
+                        Text(t.deskripsi, fontSize = 11.sp, color = Color(0xFF94A3B8))
+                    }
+                }
+                BadgePill("+${t.reward} ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+            }
+            Spacer(Modifier.height(8.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                BadgePill(labelStatus, warnaStatus.first, warnaStatus.second)
+                if (t.deadline != null) {
+                    Text("Deadline: ${t.deadline.take(10)}", fontSize = 10.sp, color = Color(0xFF94A3B8))
+                }
+            }
+        }
+    }
+}
