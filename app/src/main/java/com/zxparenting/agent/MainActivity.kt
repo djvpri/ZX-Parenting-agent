@@ -50,8 +50,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
     var tab by remember { mutableIntStateOf(0) }
+    var kuisId by remember { mutableStateOf<String?>(null) }
     val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: "Anak" }
     val umur = remember { Simpanan.umurAnak(Ctx.get()) }
+
+    // Full-screen kuis detail ketika kuisId dipilih
+    if (kuisId != null) {
+        LayarKuisDetail(jwt = jwt, kuisId = kuisId!!) { kuisId = null }
+        return
+    }
 
     Scaffold(
         bottomBar = {
@@ -69,9 +76,10 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
     ) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
             when (tab) {
-                0 -> LayarBeranda(jwt)
-                1 -> LayarTugas(jwt)
-                2 -> LayarSaya(nama, umur, onKeluar)
+                0 -> LayarBeranda(jwt, onBukaKuis = { kuisId = it })
+                1 -> LayarKuisAI(jwt = jwt, onKembali = { tab = 0 })
+                2 -> LayarTugas(jwt)
+                3 -> LayarSaya(nama, umur, onKeluar)
             }
         }
     }
@@ -79,6 +87,7 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
 
 enum class NavItem(val label: String, val icon: ImageVector) {
     Beranda("Beranda", Icons.Default.Home),
+    Kuis("Kuis AI", Icons.Default.AutoAwesome),
     Tugas("Tugas", Icons.Default.Task),
     Saya("Saya", Icons.Default.Person),
 }

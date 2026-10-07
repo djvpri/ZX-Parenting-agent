@@ -63,6 +63,69 @@ data class TugasAnak(
     val deadline: String?,
 )
 
+// --- Kuis ---
+
+data class Soal(
+    val q: String,
+    val options: List<String>,
+)
+
+data class OfficialDetail(
+    val id: String,
+    val tipe: String,
+    val judul: String,
+    val deskripsi: String?,
+    val konten: List<Soal>?,
+    val kategori: String?,
+    @SerializedName("tokenReward") val tokenReward: Int,
+    val premium: Boolean,
+    val selesai: Boolean,
+)
+
+data class CompleteReq(
+    val jawaban: List<Int>,
+)
+
+data class CompleteRes(
+    val ok: Boolean,
+    val skor: Int?,
+    @SerializedName("totalSoal") val totalSoal: Int?,
+    @SerializedName("tokenDidapat") val tokenDidapat: Int,
+)
+
+// Kuis AI (Gemini on-demand)
+
+data class KuisAIReq(
+    val topik: String,
+    @SerializedName("levelKesulitan") val levelKesulitan: Int,
+    @SerializedName("jumlahSoal") val jumlahSoal: Int,
+)
+
+data class KuisAIRes(
+    @SerializedName("attemptId") val attemptId: String,
+    val soal: List<Soal>,
+)
+
+data class SubmitKuisReq(
+    val jawaban: List<Int>,
+)
+
+data class HasilSoal(
+    val q: String,
+    @SerializedName("jawabAnak") val jawabAnak: Int,
+    @SerializedName("jawabBenar") val jawabBenar: Int,
+    val benar: Boolean,
+    val explain: String,
+)
+
+data class SubmitKuisRes(
+    val skor: Int,
+    @SerializedName("totalSoal") val totalSoal: Int,
+    @SerializedName("tokenDidapat") val tokenDidapat: Int,
+    @SerializedName("challengeSelesai") val challengeSelesai: Boolean,
+    val hasil: List<HasilSoal>,
+)
+
 // --- Retrofit interface ---
 
 interface ZxApi {
@@ -72,8 +135,20 @@ interface ZxApi {
     @GET("anak/official")
     suspend fun feedOfficial(@Header("Authorization") bearer: String): Response<OfficialFeed>
 
+    @GET("anak/official/{id}")
+    suspend fun officialDetail(@Header("Authorization") bearer: String, @retrofit2.http.Path("id") id: String): Response<OfficialDetail>
+
+    @POST("anak/official/{id}/complete")
+    suspend fun officialComplete(@Header("Authorization") bearer: String, @retrofit2.http.Path("id") id: String, @Body req: CompleteReq): Response<CompleteRes>
+
     @GET("anak/tugas")
     suspend fun tugasList(@Header("Authorization") bearer: String): Response<List<TugasAnak>>
+
+    @POST("anak/kuis/start")
+    suspend fun kuisStart(@Header("Authorization") bearer: String, @Body req: KuisAIReq): Response<KuisAIRes>
+
+    @POST("anak/kuis/{id}/submit")
+    suspend fun kuisSubmit(@Header("Authorization") bearer: String, @retrofit2.http.Path("id") id: String, @Body req: SubmitKuisReq): Response<SubmitKuisRes>
 }
 
 // --- Singleton client ---
@@ -90,7 +165,7 @@ object Klien {
     private val okhttp = OkHttpClient.Builder()
         .addInterceptor(logging)
         .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
-        .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+        .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
         .build()
 
     val api: ZxApi by lazy {

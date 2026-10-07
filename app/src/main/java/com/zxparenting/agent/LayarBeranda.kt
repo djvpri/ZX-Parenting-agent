@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LayarBeranda(jwt: String) {
+fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf("") }
@@ -72,14 +72,20 @@ fun LayarBeranda(jwt: String) {
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(items) { item -> KartuOfficial(item) }
+                items(items) { item ->
+                    KartuOfficial(item, onClick = {
+                        if (item.tipe == "KUIS_HARIAN" || item.tipe == "TANTANGAN_MINGGUAN") {
+                            onBukaKuis(item.id)
+                        }
+                    })
+                }
             }
         }
     }
 }
 
 @Composable
-private fun KartuOfficial(item: OfficialItem) {
+private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
     val meta = item.meta
     val tipeLabel = when (item.tipe) {
         "KUIS_HARIAN" -> "Kuis Harian"
@@ -96,6 +102,7 @@ private fun KartuOfficial(item: OfficialItem) {
     }
 
     Card(
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
