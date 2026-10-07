@@ -30,7 +30,7 @@ fun LayarBeranda(jwt: String) {
     LaunchedEffect(jwt) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
-                runCatching { Klien.api.feedOfficial("Bearer $jwt").execute() }.getOrNull()
+                runCatching { Klien.api.feedOfficial("Bearer $jwt") }.getOrNull()
             }
             loading = false
             if (res?.isSuccessful == true) {

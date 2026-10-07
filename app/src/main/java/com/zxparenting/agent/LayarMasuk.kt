@@ -75,9 +75,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                         error = ""
                         scope.launch {
                             val res = withContext(Dispatchers.IO) {
-                                runCatching {
-                                    Klien.api.loginAnak(LoginAnakReq(username.trim(), pin)).execute()
-                                }.getOrNull()
+                                runCatching { Klien.api.loginAnak(LoginAnakReq(username.trim(), pin)) }.getOrNull()
                             }
                             loading = false
                             val body = res?.body()

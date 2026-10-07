@@ -30,7 +30,7 @@ fun LayarTugas(jwt: String) {
     LaunchedEffect(jwt) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
-                runCatching { Klien.api.tugasList("Bearer $jwt").execute() }.getOrNull()
+                runCatching { Klien.api.tugasList("Bearer $jwt") }.getOrNull()
             }
             loading = false
             if (res?.isSuccessful == true) {
