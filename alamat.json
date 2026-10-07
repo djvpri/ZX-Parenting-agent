@@ -1,7 +1,7 @@
 {
   "idPaket": "com.zomet.zxparentingkids",
-  "versiNama": "1.6.2",
-  "versiKode": 10,
+  "versiNama": "1.6.3",
+  "versiKode": 11,
   "beranda": "https://zxparenting.zomet.my.id",
   "api": "https://zxparenting.zomet.my.id/api/agent",
   "repoRilis": "djvpri/ZX-Parenting-agent"
