@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
 
         // Inisialisasi context global utk Simpanan
         Ctx.app = applicationContext
+        val ctx = applicationContext
 
         setContent {
             MaterialTheme(colorScheme = lightColorScheme()) {
@@ -30,12 +31,12 @@ class MainActivity : ComponentActivity() {
                     bottomBar = { },
                 ) { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
-                        val jwt = Simpanan.jwt(this)
+                        val jwt = Simpanan.jwt(ctx)
                         if (jwt == null) {
                             LayarMasuk(onMasuk = { recreate() })
                         } else {
                             LayarUtama(jwt = jwt, onKeluar = {
-                                Simpanan.hapusAnak(this)
+                                Simpanan.hapusAnak(ctx)
                                 recreate()
                             })
                         }

@@ -82,7 +82,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                             if (res?.isSuccessful == true && body?.token != null) {
                                 val a = body.anak
                                 Simpanan.simpanAnak(
-                                    appContext(),
+                                    Ctx.get(),
                                     body.token,
                                     a?.id ?: "",
                                     a?.nama ?: "Anak",
