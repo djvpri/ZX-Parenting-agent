@@ -34,6 +34,12 @@ class StatusActivity : AppCompatActivity() {
             setBackgroundColor(0xFFEFF6FF.toInt())
         }
         val judul = TextView(this).apply { text = "ZX Agent"; textSize = 26f; setTextColor(0xFF0F172A.toInt()) }
+        val versi = TextView(this).apply {
+            text = "Versi ${PemeriksaPembaruan.versiTerpasang()}"
+            textSize = 12f
+            setTextColor(0xFF94A3B8.toInt())
+            setPadding(0, 8, 0, 0)
+        }
         status = TextView(this).apply {
             textSize = 15f
             setTextColor(0xFF475569.toInt())
@@ -102,15 +108,33 @@ class StatusActivity : AppCompatActivity() {
                 }
             }
         }
+        val tombolUpdate = Button(this).apply {
+            text = "Periksa pembaruan"
+            setOnClickListener {
+                text = "Memeriksa…"
+                PemeriksaPembaruan.periksa(applicationContext) { tag ->
+                    text = if (tag != null) {
+                        "Pembaruan v${tag.removePrefix("v")} tersedia — installer terbuka"
+                    } else {
+                        "Sudah versi terbaru"
+                    }
+                }
+            }
+        }
         root.addView(judul)
+        root.addView(versi)
         root.addView(status)
         root.addView(izinLokasi)
         root.addView(izin)
         root.addView(izinAkses)
         root.addView(izinAdmin)
+        root.addView(tombolUpdate)
         root.addView(lepas)
         setContentView(root)
         tampil()
+        // Cek pembaruan otomatis saat halaman status dibuka (silent — hanya
+        // buka installer kalau ada versi baru; tidak ganggu user kalau sudah terbaru).
+        PemeriksaPembaruan.periksa(applicationContext)
     }
 
     private fun tampil() {

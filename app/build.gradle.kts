@@ -30,6 +30,11 @@ android {
         versionCode = bacaAlamat("versiKode").toInt()
         versionName = bacaAlamat("versiNama")
         buildConfigField("String", "API", "\"${bacaAlamat("api")}\"")
+        buildConfigField("String", "BERANDA", "\"${bacaAlamat("beranda")}\"")
+        buildConfigField("String", "REPO_API",
+            "\"https://api.github.com/repos/${bacaAlamat("repoRilis")}/releases/latest\"")
+        buildConfigField("String", "VERSI_NAMA", "\"${bacaAlamat("versiNama")}\"")
+        buildConfigField("int", "VERSI_KODE", bacaAlamat("versiKode"))
     }
 
     signingConfigs {

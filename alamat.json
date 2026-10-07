@@ -3,5 +3,6 @@
   "versiNama": "1.6.2",
   "versiKode": 10,
   "beranda": "https://zxparenting.zomet.my.id",
-  "api": "https://zxparenting.zomet.my.id/api/agent"
+  "api": "https://zxparenting.zomet.my.id/api/agent",
+  "repoRilis": "djvpri/ZX-Parenting-agent"
 }
