@@ -26,7 +26,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
     var fase by remember { mutableStateOf("loading") }
     var sessionId by remember { mutableStateOf("") }
     var soal by remember { mutableStateOf<List<SoalSession>>(emptyList()) }
-    var jawaban by remember { mutableStateOf<MutableMap<Int, Int>>(mutableMapOf()) }
+    val jawaban = remember { mutableStateMapOf<Int, Int>() }
     var submitRes by remember { mutableStateOf<KuisSessionSubmitRes?>(null) }
     var reviewRes by remember { mutableStateOf<KuisSessionReviewRes?>(null) }
     var error by remember { mutableStateOf("") }
@@ -43,7 +43,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
             if (res?.isSuccessful == true && r != null) {
                 sessionId = r.sessionId
                 soal = r.soal
-                jawaban = mutableMapOf()
+                jawaban.clear()
                 fase = "soal"
             } else {
                 error = "Gagal mulai kuis"
@@ -158,7 +158,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                     fase = "loading"
                     sessionId = ""
                     soal = emptyList()
-                    jawaban = mutableMapOf()
+                    jawaban.clear()
                     submitRes = null
                     reviewRes = null
                     scope.launch {
@@ -169,7 +169,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         if (res?.isSuccessful == true && r != null) {
                             sessionId = r.sessionId
                             soal = r.soal
-                            jawaban = mutableMapOf()
+                            jawaban.clear()
                             fase = "soal"
                         } else {
                             error = "Gagal mulai kuis ulang"
@@ -184,7 +184,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                 fase = "loading"
                 sessionId = ""
                 soal = emptyList()
-                jawaban = mutableMapOf()
+                jawaban.clear()
                 submitRes = null
                 reviewRes = null
                 scope.launch {
@@ -195,7 +195,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                     if (res?.isSuccessful == true && r != null) {
                         sessionId = r.sessionId
                         soal = r.soal
-                        jawaban = mutableMapOf()
+                        jawaban.clear()
                         fase = "soal"
                     } else {
                         error = "Gagal mulai kuis ulang"
