@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zxparenting.agent.BuildConfig
 
 @Composable
 fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
@@ -76,5 +77,13 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             Spacer(Modifier.width(8.dp))
             Text("Keluar")
         }
+
+        Text(
+            "Versi ${BuildConfig.VERSI_NAMA} (${BuildConfig.VERSI_KODE})",
+            fontSize = 11.sp,
+            color = Color(0xFF94A3B8),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+        )
     }
 }
