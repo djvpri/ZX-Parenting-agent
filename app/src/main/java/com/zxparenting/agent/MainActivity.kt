@@ -51,12 +51,19 @@ class MainActivity : ComponentActivity() {
 private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
     var tab by remember { mutableIntStateOf(0) }
     var kuisId by remember { mutableStateOf<String?>(null) }
+    var tugasKuisId by remember { mutableStateOf<String?>(null) }
     val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: "Anak" }
     val umur = remember { Simpanan.umurAnak(Ctx.get()) }
 
     // Full-screen kuis detail ketika kuisId dipilih
     if (kuisId != null) {
         LayarKuisDetail(jwt = jwt, kuisId = kuisId!!) { kuisId = null }
+        return
+    }
+
+    // Full-screen kuis session ketika tugasKuisId dipilih
+    if (tugasKuisId != null) {
+        LayarKuisSession(jwt = jwt, tugasId = tugasKuisId!!) { tugasKuisId = null }
         return
     }
 
@@ -78,7 +85,7 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
             when (tab) {
                 0 -> LayarBeranda(jwt, onBukaKuis = { kuisId = it })
                 1 -> LayarKuisAI(jwt = jwt, onKembali = { tab = 0 })
-                2 -> LayarTugas(jwt)
+                2 -> LayarTugas(jwt, onKlikTugas = { t -> tugasKuisId = t.id })
                 3 -> LayarSaya(nama, umur, onKeluar)
             }
         }

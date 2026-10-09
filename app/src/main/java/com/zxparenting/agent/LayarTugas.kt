@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun LayarTugas(jwt: String) {
+fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
     var items by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf("") }
@@ -67,14 +67,16 @@ fun LayarTugas(jwt: String) {
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                items(items) { t -> KartuTugas(t) }
+                items(items) { t -> KartuTugas(t, onKlikTugas) }
             }
         }
     }
 }
 
 @Composable
-private fun KartuTugas(t: TugasAnak) {
+private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
+    val isAiKuis = t.type == "ai_quiz" || t.type == "ai_scheduled"
+    val bisaDikerjakan = isAiKuis && t.status != "SELESAI"
     val warnaStatus = when (t.status) {
         "SELESAI" -> Color(0xFFDCFCE7) to Color(0xFF166534)
         "DIVERIFIKASI" -> Color(0xFFDBEAFE) to Color(0xFF1E40AF)
@@ -87,9 +89,12 @@ private fun KartuTugas(t: TugasAnak) {
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().then(
+            if (bisaDikerjakan) Modifier.clip(RoundedCornerShape(16.dp)) else Modifier
+        ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
+        onClick = { if (bisaDikerjakan) onKlik(t) },
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -113,8 +118,16 @@ private fun KartuTugas(t: TugasAnak) {
             }
             Spacer(Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                BadgePill(labelStatus, warnaStatus.first, warnaStatus.second)
-                if (t.deadline != null) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    BadgePill(labelStatus, warnaStatus.first, warnaStatus.second)
+                    if (isAiKuis) {
+                        Spacer(Modifier.width(6.dp))
+                        BadgePill("AI", Color(0xFFEDE9FE), Color(0xFF6D28D9))
+                    }
+                }
+                if (bisaDikerjakan) {
+                    Text("Kerjakan →", fontSize = 11.sp, color = Color(0xFF3B82F6), fontWeight = FontWeight.Medium)
+                } else if (t.deadline != null) {
                     Text("Deadline: ${t.deadline.take(10)}", fontSize = 10.sp, color = Color(0xFF94A3B8))
                 }
             }

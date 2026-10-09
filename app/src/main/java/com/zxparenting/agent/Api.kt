@@ -61,6 +61,7 @@ data class TugasAnak(
     val reward: Int,
     val status: String,
     val deadline: String?,
+    val type: String? = null, // manual | ai_quiz | ai_scheduled
 )
 
 // --- Kuis ---
@@ -126,6 +127,60 @@ data class SubmitKuisRes(
     val hasil: List<HasilSoal>,
 )
 
+// ============ KUIS SESSION (lock per-soal, shuffle, review, retry) ============
+
+data class KuisSessionStartReq(
+    @SerializedName("tugasId") val tugasId: String,
+)
+
+data class SoalSession(
+    @SerializedName("posisi") val posisi: Int,
+    val question: String,
+    val options: List<String>,
+)
+
+data class KuisSessionStartRes(
+    @SerializedName("sessionId") val sessionId: String,
+    @SerializedName("totalSoal") val totalSoal: Int,
+    val soal: List<SoalSession>,
+)
+
+data class JawabanLocked(
+    @SerializedName("posisi") val posisi: Int,
+    @SerializedName("opsiDipilih") val opsiDipilih: Int,
+)
+
+data class KuisSessionSubmitReq(
+    @SerializedName("sessionId") val sessionId: String,
+    val jawaban: List<JawabanLocked>,
+)
+
+data class KuisSessionSubmitRes(
+    val skor: Int,
+    @SerializedName("benarCount") val benarCount: Int,
+    @SerializedName("totalSoal") val totalSoal: Int,
+    val token: Int,
+)
+
+data class ReviewSoal(
+    @SerializedName("posisi") val posisi: Int,
+    val question: String,
+    val options: List<String>,
+    @SerializedName("jawabanAnak") val jawabanAnak: Int?,
+    @SerializedName("jawabanBenar") val jawabanBenar: Int,
+    val benar: Boolean,
+    val explanation: String,
+)
+
+data class KuisSessionReviewRes(
+    @SerializedName("sessionId") val sessionId: String,
+    val skor: Int?,
+    @SerializedName("benarCount") val benarCount: Int?,
+    @SerializedName("totalSoal") val totalSoal: Int?,
+    @SerializedName("durasiDetik") val durasiDetik: Int?,
+    val review: List<ReviewSoal>,
+)
+
 // --- Retrofit interface ---
 
 interface ZxApi {
@@ -149,6 +204,26 @@ interface ZxApi {
 
     @POST("anak/kuis/{id}/submit")
     suspend fun kuisSubmit(@Header("Authorization") bearer: String, @retrofit2.http.Path("id") id: String, @Body req: SubmitKuisReq): Response<SubmitKuisRes>
+
+    // ============ KUIS SESSION (lock per-soal, shuffle, review) ============
+
+    @POST("kuis-session")
+    suspend fun kuisSessionStart(
+        @Header("Authorization") bearer: String,
+        @Body req: KuisSessionStartReq,
+    ): Response<KuisSessionStartRes>
+
+    @POST("kuis-session/submit")
+    suspend fun kuisSessionSubmit(
+        @Header("Authorization") bearer: String,
+        @Body req: KuisSessionSubmitReq,
+    ): Response<KuisSessionSubmitRes>
+
+    @GET("kuis-session/review")
+    suspend fun kuisSessionReview(
+        @Header("Authorization") bearer: String,
+        @Query("sessionId") sessionId: String,
+    ): Response<KuisSessionReviewRes>
 }
 
 // --- Singleton client ---
