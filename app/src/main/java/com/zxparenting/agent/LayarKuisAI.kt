@@ -24,6 +24,9 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
+    val strTopicReq = stringResource(R.string.topic_required)
+    val strFailCreate = stringResource(R.string.fail_create_quiz)
+    val strFailSubmit = stringResource(R.string.fail_submit)
     var topik by remember { mutableStateOf("") }
     var level by remember { mutableStateOf(3) }
     var fase by remember { mutableStateOf("input") } // input | soal | hasil
@@ -213,9 +216,6 @@ private fun KartuSoalAI(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Uni
 
 @Composable
 private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<Int>, onKembali: () -> Unit) {
-    val strTopicReq = stringResource(R.string.topic_required)
-    val strFailCreate = stringResource(R.string.fail_create_quiz)
-    val strFailSubmit = stringResource(R.string.fail_submit)
     val skor = hasil?.skor ?: 0
     val total = hasil?.totalSoal ?: 0
     val token = hasil?.tokenDidapat ?: 0

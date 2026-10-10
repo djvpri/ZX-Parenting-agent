@@ -23,6 +23,9 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
+    val strFailLoad = stringResource(R.string.fail_load_quiz)
+    val strFailSubmit = stringResource(R.string.fail_submit)
+    val strQuizAi = stringResource(R.string.quiz_ai)
     var detail by remember { mutableStateOf<OfficialDetail?>(null) }
     var jawaban by remember { mutableStateOf<MutableList<Int>>(mutableListOf()) }
     var loading by remember { mutableStateOf(true) }
@@ -185,9 +188,6 @@ private fun KartuSoal(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Unit)
 
 @Composable
 private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
-    val strFailLoad = stringResource(R.string.fail_load_quiz)
-    val strFailSubmit = stringResource(R.string.fail_submit)
-    val strQuizAi = stringResource(R.string.quiz_ai)
     val skor = hasil?.skor ?: 0
     val total = hasil?.totalSoal ?: 0
     val token = hasil?.tokenDidapat ?: 0

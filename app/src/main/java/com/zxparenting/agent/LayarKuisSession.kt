@@ -36,6 +36,9 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
 
     // Start session on mount
     val strFailStart = stringResource(R.string.fail_start_quiz)
+    val strFailSubmit = stringResource(R.string.fail_submit)
+    val strFailLoadExp = stringResource(R.string.fail_load_explanation)
+    val strFailRetry = stringResource(R.string.fail_retry_quiz)
     LaunchedEffect(tugasId) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
@@ -372,9 +375,6 @@ private fun ReviewKuisSession(
     onKembali: () -> Unit,
     onRetry: () -> Unit,
 ) {
-    val strFailSubmit = stringResource(R.string.fail_submit)
-    val strFailLoadExp = stringResource(R.string.fail_load_explanation)
-    val strFailRetry = stringResource(R.string.fail_retry_quiz)
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),

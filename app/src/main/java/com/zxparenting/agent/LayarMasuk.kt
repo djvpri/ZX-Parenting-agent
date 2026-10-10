@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 fun LayarMasuk(onMasuk: () -> Unit) {
     val strReq = stringResource(R.string.username_pin_required)
     val strWrong = stringResource(R.string.username_pin_wrong)
+    val strAnak = stringResource(R.string.nav_child)
     var username by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
@@ -76,7 +77,6 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                         }
                         loading = true
                         error = ""
-                        val strAnak = stringResource(R.string.nav_child)
                         scope.launch {
                             val res = withContext(Dispatchers.IO) {
                                 runCatching { Klien.api.loginAnak(LoginAnakReq(username.trim(), pin)) }.getOrNull()

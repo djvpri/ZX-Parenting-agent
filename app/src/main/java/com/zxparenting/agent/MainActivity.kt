@@ -79,8 +79,8 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
                     NavigationBarItem(
                         selected = tab == i,
                         onClick = { tab = i },
-                        icon = { Icon(item.icon, contentDescription = item.label) },
-                        label = { Text(item.label) },
+                        icon = { Icon(item.icon, contentDescription = null) },
+                        label = { Text(stringResource(item.labelRes)) },
                     )
                 }
             }
@@ -97,9 +97,9 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
     }
 }
 
-enum class NavItem(val label: String, val icon: ImageVector) {
-    Beranda(stringResource(R.string.nav_home), Icons.Default.Home),
-    Kuis(stringResource(R.string.quiz_ai), Icons.Default.AutoAwesome),
-    Tugas(stringResource(R.string.task_title), Icons.Default.Task),
-    Saya(stringResource(R.string.nav_profile), Icons.Default.Person),
+enum class NavItem(@androidx.annotation.StringRes val labelRes: Int, val icon: ImageVector) {
+    Beranda(R.string.nav_home, Icons.Default.Home),
+    Kuis(R.string.quiz_ai, Icons.Default.AutoAwesome),
+    Tugas(R.string.task_title, Icons.Default.Task),
+    Saya(R.string.nav_profile, Icons.Default.Person),
 }
