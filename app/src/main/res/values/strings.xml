@@ -88,4 +88,5 @@
     <string name="lang_indonesian">Indonesian</string>
     <string name="lang_system">System</string>
     <string name="okay">Okay</string>
+    <string name="akses_desc">Detect app switching to block restricted apps</string>
 </resources>

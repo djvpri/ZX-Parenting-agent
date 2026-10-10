@@ -88,4 +88,5 @@
     <string name="lang_indonesian">Indonesia</string>
     <string name="lang_system">Sistem</string>
     <string name="okay">Lumayan</string>
+    <string name="akses_desc">Deteksi perpindahan app untuk blokir app yang dibatasi</string>
 </resources>
