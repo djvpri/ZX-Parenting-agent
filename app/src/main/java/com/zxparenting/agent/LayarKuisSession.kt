@@ -113,7 +113,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                                         submitRes = r
                                         fase = "hasil"
                                     } else {
-                                        error = stringResource(R.string.fail_submit)
+                                        error = strFailSubmit
                                         fase = "error"
                                     }
                                 }
@@ -151,7 +151,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             reviewRes = r
                             fase = "review"
                         } else {
-                            error = stringResource(R.string.fail_load_explanation)
+                            error = strFailLoadExp
                             fase = "error"
                         }
                     }
@@ -174,7 +174,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             jawaban.clear()
                             fase = "soal"
                         } else {
-                            error = stringResource(R.string.fail_retry_quiz)
+                            error = strFailRetry
                             fase = "error"
                         }
                     }
@@ -200,7 +200,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         jawaban.clear()
                         fase = "soal"
                     } else {
-                        error = stringResource(R.string.fail_retry_quiz)
+                        error = strFailRetry
                         fase = "error"
                     }
                 }
@@ -302,7 +302,7 @@ private fun HasilKuisSession(
     val emoji = when {
         persen == 100 -> stringResource(R.string.perfect)
         persen >= 70 -> stringResource(R.string.great)
-        persen >= 50 -> "Lumayan"
+        persen >= 50 -> stringResource(R.string.okay)
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
@@ -372,6 +372,9 @@ private fun ReviewKuisSession(
     onKembali: () -> Unit,
     onRetry: () -> Unit,
 ) {
+    val strFailSubmit = stringResource(R.string.fail_submit)
+    val strFailLoadExp = stringResource(R.string.fail_load_explanation)
+    val strFailRetry = stringResource(R.string.fail_retry_quiz)
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),

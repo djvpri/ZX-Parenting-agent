@@ -53,10 +53,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
+    val strAnak = stringResource(R.string.nav_child)
     var tab by remember { mutableIntStateOf(0) }
     var kuisId by remember { mutableStateOf<String?>(null) }
     var tugasKuisId by remember { mutableStateOf<String?>(null) }
-    val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: stringResource(R.string.nav_child) }
+    val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: strAnak }
     val umur = remember { Simpanan.umurAnak(Ctx.get()) }
 
     // Full-screen kuis detail ketika kuisId dipilih

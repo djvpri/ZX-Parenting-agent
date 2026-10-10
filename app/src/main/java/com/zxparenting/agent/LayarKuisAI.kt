@@ -55,7 +55,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                 onTopik = { topik = it },
                 onLevel = { level = it },
                 onMulai = {
-                    if (topik.isBlank()) { error = stringResource(R.string.topic_required); return@FormKuisAI }
+                    if (topik.isBlank()) { error = strTopicReq; return@FormKuisAI }
                     loading = true; error = ""
                     scope.launch {
                         val res = withContext(Dispatchers.IO) {
@@ -71,7 +71,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                             attemptId = r.attemptId
                             fase = "soal"
                         } else {
-                            error = stringResource(R.string.fail_create_quiz)
+                            error = strFailCreate
                         }
                     }
                 },
@@ -99,7 +99,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                                         hasil = r
                                         fase = "hasil"
                                     } else {
-                                        error = stringResource(R.string.fail_submit)
+                                        error = strFailSubmit
                                     }
                                 }
                             },
@@ -213,6 +213,9 @@ private fun KartuSoalAI(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Uni
 
 @Composable
 private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<Int>, onKembali: () -> Unit) {
+    val strTopicReq = stringResource(R.string.topic_required)
+    val strFailCreate = stringResource(R.string.fail_create_quiz)
+    val strFailSubmit = stringResource(R.string.fail_submit)
     val skor = hasil?.skor ?: 0
     val total = hasil?.totalSoal ?: 0
     val token = hasil?.tokenDidapat ?: 0
@@ -220,7 +223,7 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
     val emoji = when {
         persen == 100 -> stringResource(R.string.perfect)
         persen >= 70 -> stringResource(R.string.great)
-        persen >= 50 -> "Lumayan"
+        persen >= 50 -> stringResource(R.string.okay)
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {

@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarMasuk(onMasuk: () -> Unit) {
+    val strReq = stringResource(R.string.username_pin_required)
+    val strWrong = stringResource(R.string.username_pin_wrong)
     var username by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
     var error by remember { mutableStateOf("") }
@@ -69,7 +71,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                 Button(
                     onClick = {
                         if (username.isBlank() || pin.isBlank()) {
-                            error = stringResource(R.string.username_pin_required)
+                            error = strReq
                             return@Button
                         }
                         loading = true
@@ -92,7 +94,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                                 )
                                 onMasuk()
                             } else {
-                                error = stringResource(R.string.username_pin_wrong)
+                                error = strWrong
                             }
                         }
                     },

@@ -43,7 +43,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 jawaban = MutableList(d.konten?.size ?: 0) { -1 }
                 if (d.selesai) fase = "selesai"
             } else {
-                error = stringResource(R.string.fail_load_quiz)
+                error = strFailLoad
             }
         }
     }
@@ -62,7 +62,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
             }
             Text(
-                detail?.judul ?: stringResource(R.string.quiz_ai),
+                detail?.judul ?: strQuizAi,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f),
@@ -118,7 +118,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                             hasil = r
                                             fase = "hasil"
                                         } else {
-                                            error = stringResource(R.string.fail_submit)
+                                            error = strFailSubmit
                                         }
                                     }
                                 },
@@ -185,6 +185,9 @@ private fun KartuSoal(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Unit)
 
 @Composable
 private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
+    val strFailLoad = stringResource(R.string.fail_load_quiz)
+    val strFailSubmit = stringResource(R.string.fail_submit)
+    val strQuizAi = stringResource(R.string.quiz_ai)
     val skor = hasil?.skor ?: 0
     val total = hasil?.totalSoal ?: 0
     val token = hasil?.tokenDidapat ?: 0
@@ -192,7 +195,7 @@ private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
     val emoji = when {
         persen == 100 -> stringResource(R.string.perfect)
         persen >= 70 -> stringResource(R.string.great)
-        persen >= 50 -> "Lumayan"
+        persen >= 50 -> stringResource(R.string.okay)
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
