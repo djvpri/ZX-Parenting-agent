@@ -65,7 +65,7 @@
     <string name="try_again">Try Again</string>
     <string name="usage_active">Usage reporting: active ✓</string>
     <string name="username">Username</string>
-    <string name="username_pin_required">Username & PIN required</string>
+    <string name="username_pin_required">Username &amp; PIN required</string>
     <string name="username_pin_wrong">Wrong username or PIN</string>
     <string name="waiting_connection">Waiting for first connection…</string>
     <string name="zx_official">ZX Official</string>

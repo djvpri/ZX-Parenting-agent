@@ -65,7 +65,7 @@
     <string name="try_again">Coba Lagi</string>
     <string name="usage_active">Laporan pemakaian: sudah aktif ✓</string>
     <string name="username">Username</string>
-    <string name="username_pin_required">Username & PIN wajib</string>
+    <string name="username_pin_required">Username &amp; PIN wajib</string>
     <string name="username_pin_wrong">Username atau PIN salah</string>
     <string name="waiting_connection">Menunggu koneksi pertama…</string>
     <string name="zx_official">ZX Official</string>
