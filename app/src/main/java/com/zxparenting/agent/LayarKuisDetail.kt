@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
@@ -42,7 +43,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 jawaban = MutableList(d.konten?.size ?: 0) { -1 }
                 if (d.selesai) fase = "selesai"
             } else {
-                error = "Gagal muat kuis"
+                error = stringResource(R.string.fail_load_quiz)
             }
         }
     }
@@ -61,7 +62,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
             }
             Text(
-                detail?.judul ?: "Kuis",
+                detail?.judul ?: stringResource(R.string.quiz_ai),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f),
@@ -83,7 +84,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF10B981), modifier = Modifier.size(48.dp))
                         Spacer(Modifier.height(12.dp))
-                        Text("Sudah diselesaikan", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.already_done), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -117,7 +118,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                             hasil = r
                                             fase = "hasil"
                                         } else {
-                                            error = "Gagal kirim jawaban"
+                                            error = stringResource(R.string.fail_submit)
                                         }
                                     }
                                 },
@@ -125,7 +126,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                 modifier = Modifier.fillMaxWidth().height(48.dp),
                                 shape = RoundedCornerShape(12.dp),
                             ) {
-                                Text("Kirim Jawaban")
+                                Text(stringResource(R.string.submit_answers))
                             }
                         }
                     }
@@ -189,10 +190,10 @@ private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
     val token = hasil?.tokenDidapat ?: 0
     val persen = if (total > 0) (skor * 100 / total) else 0
     val emoji = when {
-        persen == 100 -> "Sempurna!"
-        persen >= 70 -> "Bagus!"
+        persen == 100 -> stringResource(R.string.perfect)
+        persen >= 70 -> stringResource(R.string.great)
         persen >= 50 -> "Lumayan"
-        else -> "Terus berlatih"
+        else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
         persen >= 70 -> Color(0xFF10B981)
@@ -233,7 +234,7 @@ private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
                     onClick = onKembali,
                     modifier = Modifier.fillMaxWidth().height(48.dp),
                     shape = RoundedCornerShape(12.dp),
-                ) { Text("Selesai") }
+                ) { Text(stringResource(R.string.done)) }
             }
         }
     }

@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.zxparenting.agent.R
 
 /**
  * Layar pairing: masukkan deviceToken dari dashboard ortu -> simpan -> mulai service.
@@ -30,18 +31,18 @@ class PasangActivity : AppCompatActivity() {
             setBackgroundColor(0xFFEFF6FF.toInt())
         }
         val judul = TextView(this).apply {
-            text = "ZX Agent"
+            text = getString(R.string.app_name_agent)
             textSize = 26f
             setTextColor(0xFF0F172A.toInt())
         }
         val petunjuk = TextView(this).apply {
-            text = "Masukkan kode pairing yang tampil di dashboard orang tua."
+            text = getString(R.string.pairing_hint)
             textSize = 14f
             setTextColor(0xFF475569.toInt())
             setPadding(0, 24, 0, 40)
         }
         val input = EditText(this).apply {
-            hint = "Kode pairing"
+            hint = getString(R.string.pairing_code)
             textSize = 15f
             setSingleLine(true)
         }
@@ -50,7 +51,7 @@ class PasangActivity : AppCompatActivity() {
             setOnClickListener {
                 val t = input.text.toString().trim()
                 if (t.length < 8) {
-                    Toast.makeText(context, "Kode terlalu pendek", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.code_too_short), Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 Simpanan.simpanToken(applicationContext, t)

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
@@ -36,7 +37,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
             if (res?.isSuccessful == true) {
                 items = res.body()?.items ?: emptyList()
             } else {
-                error = "Gagal muat konten"
+                error = stringResource(R.string.fail_load_content)
             }
         }
     }
@@ -51,7 +52,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Beranda", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.home), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             BadgePill("ZX Official", Color(0xFFDCFCE7), Color(0xFF166534))
         }
 
@@ -65,7 +66,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
             }
         } else if (items.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Belum ada konten.", color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.no_content), color = Color(0xFF94A3B8))
             }
         } else {
             LazyColumn(
@@ -88,10 +89,10 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
 private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
     val meta = item.meta
     val tipeLabel = when (item.tipe) {
-        "KUIS_HARIAN" -> "Kuis Harian"
-        "TANTANGAN_MINGGUAN" -> "Tantangan"
-        "ARTIKEL" -> "Artikel"
-        "VIDEO_PENDEK" -> "Video"
+        "KUIS_HARIAN" -> stringResource(R.string.daily_quiz)
+        "TANTANGAN_MINGGUAN" -> stringResource(R.string.challenge)
+        "ARTIKEL" -> stringResource(R.string.article)
+        "VIDEO_PENDEK" -> stringResource(R.string.video)
         else -> item.tipe
     }
     val warnaTipe = when (item.tipe) {
@@ -130,7 +131,7 @@ private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
                     Text(tipeLabel, fontSize = 10.sp, color = Color(0xFF94A3B8))
                 }
                 if (meta?.premium == true) {
-                    BadgePill("PRO", Color(0xFFFEE2E2), Color(0xFF991B1B))
+                    BadgePill(stringResource(R.string.pro_badge), Color(0xFFFEE2E2), Color(0xFF991B1B))
                 }
             }
             if (!item.deskripsi.isNullOrBlank()) {

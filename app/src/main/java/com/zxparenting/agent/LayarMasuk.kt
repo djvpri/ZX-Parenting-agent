@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarMasuk(onMasuk: () -> Unit) {
@@ -35,7 +36,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("ZX Parenting", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0F172A))
-        Text("Masuk sebagai Anak", fontSize = 14.sp, color = Color(0xFF475569))
+        Text(stringResource(R.string.login_as_child), fontSize = 14.sp, color = Color(0xFF475569))
         Spacer(Modifier.height(32.dp))
 
         Card(
@@ -47,7 +48,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                 OutlinedTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = { Text("Username") },
+                    label = { Text(stringResource(R.string.username)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -55,7 +56,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                 OutlinedTextField(
                     value = pin,
                     onValueChange = { pin = it },
-                    label = { Text("PIN") },
+                    label = { Text(stringResource(R.string.pin)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                     visualTransformation = PasswordVisualTransformation(),
@@ -68,7 +69,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                 Button(
                     onClick = {
                         if (username.isBlank() || pin.isBlank()) {
-                            error = "Username & PIN wajib"
+                            error = stringResource(R.string.username_pin_required)
                             return@Button
                         }
                         loading = true
@@ -85,12 +86,12 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                                     Ctx.get(),
                                     body.token,
                                     a?.id ?: "",
-                                    a?.nama ?: "Anak",
+                                    a?.nama ?: stringResource(R.string.nav_child),
                                     a?.umur ?: 0,
                                 )
                                 onMasuk()
                             } else {
-                                error = "Username atau PIN salah"
+                                error = stringResource(R.string.username_pin_wrong)
                             }
                         }
                     },
@@ -101,7 +102,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                     if (loading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                     } else {
-                        Text("Masuk")
+                        Text(stringResource(R.string.login))
                     }
                 }
             }

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
@@ -36,7 +37,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
             if (res?.isSuccessful == true) {
                 items = res.body() ?: emptyList()
             } else {
-                error = "Gagal muat tugas"
+                error = stringResource(R.string.fail_load_tasks)
             }
         }
     }
@@ -47,7 +48,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
             .background(Color(0xFFEFF6FF)),
     ) {
         Text(
-            "Tugas",
+            stringResource(R.string.task_title),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(16.dp),
@@ -61,7 +62,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
                 Text(error, color = MaterialTheme.colorScheme.error)
             }
             items.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Tidak ada tugas.", color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.no_tasks), color = Color(0xFF94A3B8))
             }
             else -> LazyColumn(
                 contentPadding = PaddingValues(16.dp),
@@ -83,9 +84,9 @@ private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
         else -> Color(0xFFFEF3C7) to Color(0xFF92400E)
     }
     val labelStatus = when (t.status) {
-        "SELESAI" -> "Selesai"
-        "DIVERIFIKASI" -> "Terverifikasi"
-        else -> "Belum selesai"
+        "SELESAI" -> stringResource(R.string.done)
+        "DIVERIFIKASI" -> stringResource(R.string.verified)
+        else -> stringResource(R.string.not_done)
     }
 
     Card(
@@ -122,7 +123,7 @@ private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
                     BadgePill(labelStatus, warnaStatus.first, warnaStatus.second)
                     if (isAiKuis) {
                         Spacer(Modifier.width(6.dp))
-                        BadgePill("AI", Color(0xFFEDE9FE), Color(0xFF6D28D9))
+                        BadgePill(stringResource(R.string.ai_badge), Color(0xFFEDE9FE), Color(0xFF6D28D9))
                     }
                 }
                 if (bisaDikerjakan) {

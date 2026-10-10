@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
@@ -46,7 +47,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                 jawaban.clear()
                 fase = "soal"
             } else {
-                error = "Gagal mulai kuis"
+                error = stringResource(R.string.fail_start_quiz)
                 fase = "error"
             }
         }
@@ -62,7 +63,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
             IconButton(onClick = onKembali) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
             }
-            Text("Kuis AI", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.quiz_ai), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
 
         when (fase) {
@@ -111,7 +112,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                                         submitRes = r
                                         fase = "hasil"
                                     } else {
-                                        error = "Gagal kirim jawaban"
+                                        error = stringResource(R.string.fail_submit)
                                         fase = "error"
                                     }
                                 }
@@ -123,14 +124,14 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             if (loading) {
                                 CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                                 Spacer(Modifier.width(8.dp))
-                                Text("Mengirim...")
+                                Text(stringResource(R.string.sending))
                             } else {
-                                Text("Kirim Jawaban")
+                                Text(stringResource(R.string.submit_answers))
                             }
                         }
                         if (!semuaTerjawab) {
                             Spacer(Modifier.height(4.dp))
-                            Text("Jawab semua soal dulu!", fontSize = 11.sp, color = Color(0xFFEF4444))
+                            Text(stringResource(R.string.answer_all_first), fontSize = 11.sp, color = Color(0xFFEF4444))
                         }
                     }
                 }
@@ -149,7 +150,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             reviewRes = r
                             fase = "review"
                         } else {
-                            error = "Gagal muat pembahasan"
+                            error = stringResource(R.string.fail_load_explanation)
                             fase = "error"
                         }
                     }
@@ -172,7 +173,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             jawaban.clear()
                             fase = "soal"
                         } else {
-                            error = "Gagal mulai kuis ulang"
+                            error = stringResource(R.string.fail_retry_quiz)
                             fase = "error"
                         }
                     }
@@ -198,7 +199,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         jawaban.clear()
                         fase = "soal"
                     } else {
-                        error = "Gagal mulai kuis ulang"
+                        error = stringResource(R.string.fail_retry_quiz)
                         fase = "error"
                     }
                 }
@@ -278,7 +279,7 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
             }
             if (terkunci) {
                 Spacer(Modifier.height(6.dp))
-                Text("Jawaban terkunci", fontSize = 10.sp, color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.answers_locked), fontSize = 10.sp, color = Color(0xFF94A3B8))
             }
         }
     }
@@ -298,10 +299,10 @@ private fun HasilKuisSession(
     val token = hasil?.token ?: 0
     val persen = if (total > 0) (benar * 100 / total) else 0
     val emoji = when {
-        persen == 100 -> "Sempurna!"
-        persen >= 70 -> "Bagus!"
+        persen == 100 -> stringResource(R.string.perfect)
+        persen >= 70 -> stringResource(R.string.great)
         persen >= 50 -> "Lumayan"
-        else -> "Terus berlatih"
+        else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
         persen >= 70 -> Color(0xFF10B981)
@@ -343,7 +344,7 @@ private fun HasilKuisSession(
                         ) {
                             Icon(Icons.Default.MenuBook, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(6.dp))
-                            Text("Pembahasan")
+                            Text(stringResource(R.string.explanation))
                         }
                         Button(
                             onClick = onRetry,
@@ -353,11 +354,11 @@ private fun HasilKuisSession(
                         ) {
                             Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
                             Spacer(Modifier.width(6.dp))
-                            Text("Ulang")
+                            Text(stringResource(R.string.retry))
                         }
                     }
                     Spacer(Modifier.height(8.dp))
-                    TextButton(onClick = onSelesai) { Text("Selesai") }
+                    TextButton(onClick = onSelesai) { Text(stringResource(R.string.done)) }
                 }
             }
         }
@@ -376,7 +377,7 @@ private fun ReviewKuisSession(
     ) {
         item {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Pembahasan", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.explanation), fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 if (review != null) {
                     val persen = if ((review.totalSoal ?: 0) > 0) ((review.benarCount ?: 0) * 100 / review.totalSoal!!) else 0
                     BadgePill("$persen%", Color(0xFFDBEAFE), Color(0xFF1E40AF))
@@ -448,13 +449,13 @@ private fun ReviewKuisSession(
                 ) {
                     Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text("Coba Lagi")
+                    Text(stringResource(R.string.try_again))
                 }
                 OutlinedButton(
                     onClick = onKembali,
                     modifier = Modifier.weight(1f).height(44.dp),
                     shape = RoundedCornerShape(12.dp),
-                ) { Text("Selesai") }
+                ) { Text(stringResource(R.string.done)) }
             }
         }
     }

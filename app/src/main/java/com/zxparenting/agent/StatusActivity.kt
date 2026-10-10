@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.concurrent.TimeUnit
+import com.zxparenting.agent.R
 
 /** Status agent: koneksi + ping terakhir + 4 izin (lokasi, usage, aksesibilitas, device admin). */
 class StatusActivity : AppCompatActivity() {
@@ -33,7 +34,7 @@ class StatusActivity : AppCompatActivity() {
             setPadding(56, 120, 56, 56)
             setBackgroundColor(0xFFEFF6FF.toInt())
         }
-        val judul = TextView(this).apply { text = "ZX Agent"; textSize = 26f; setTextColor(0xFF0F172A.toInt()) }
+        val judul = TextView(this).apply { text = getString(R.string.app_name_agent); textSize = 26f; setTextColor(0xFF0F172A.toInt()) }
         val versi = TextView(this).apply {
             text = "Versi ${PemeriksaPembaruan.versiTerpasang()}"
             textSize = 12f
@@ -46,7 +47,7 @@ class StatusActivity : AppCompatActivity() {
             setPadding(0, 32, 0, 0)
         }
         val lepas = Button(this).apply {
-            text = "Lepas perangkat"
+            text = getString(R.string.disconnect_device)
             setOnClickListener {
                 if (adminAktif) dpm.removeActiveAdmin(adminComp)
                 Simpanan.hapusToken(applicationContext)
@@ -56,18 +57,18 @@ class StatusActivity : AppCompatActivity() {
             }
         }
         izin = Button(this).apply {
-            text = "Izinkan laporan pemakaian app"
+            text = getString(R.string.allow_usage_report)
             setOnClickListener {
                 if (!Pemakaian.adaIzin(applicationContext)) {
                     startActivity(Pemakaian.intentIzin(applicationContext))
                 } else {
-                    text = "Laporan pemakaian: sudah aktif ✓"
+                    text = getString(R.string.usage_active)
                     isEnabled = false
                 }
             }
         }
         izinLokasi = Button(this).apply {
-            text = "Izinkan pelacakan lokasi"
+            text = getString(R.string.allow_location)
             setOnClickListener {
                 if (!Lokasi.adaIzin(applicationContext)) {
                     requestPermissions(
@@ -77,13 +78,13 @@ class StatusActivity : AppCompatActivity() {
                         ), 1
                     )
                 } else {
-                    text = "Lokasi: sudah aktif ✓"
+                    text = getString(R.string.location_active)
                     isEnabled = false
                 }
             }
         }
         izinAkses = Button(this).apply {
-            text = "Izinkan blokir app (aksesibilitas)"
+            text = getString(R.string.allow_block_apps)
             setOnClickListener {
                 if (AksesService.instance == null) {
                     startActivity(
@@ -94,7 +95,7 @@ class StatusActivity : AppCompatActivity() {
             }
         }
         izinAdmin = Button(this).apply {
-            text = "Aktifkan proteksi uninstall (device admin)"
+            text = getString(R.string.enable_admin)
             setOnClickListener {
                 if (!adminAktif) {
                     @Suppress("DEPRECATION")
@@ -102,21 +103,21 @@ class StatusActivity : AppCompatActivity() {
                         Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
                             putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComp)
                             putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                                "Diperlukan agar orang tua bisa mengunci layar saat waktu habis dan mencegah agent dilepas tanpa izin.")
+                                getString(R.string.admin_explanation))
                         }, 2
                     )
                 }
             }
         }
         val tombolUpdate = Button(this).apply {
-            text = "Periksa pembaruan"
+            text = getString(R.string.check_update)
             setOnClickListener {
                 text = "Memeriksa…"
                 PemeriksaPembaruan.periksa(applicationContext) { tag ->
                     text = if (tag != null) {
                         "Pembaruan v${tag.removePrefix("v")} tersedia — installer terbuka"
                     } else {
-                        "Sudah versi terbaru"
+                        getString(R.string.latest_version)
                     }
                 }
             }
@@ -142,7 +143,7 @@ class StatusActivity : AppCompatActivity() {
             // Status koneksi: umur ping terakhir (service ping tiap 5 menit).
             val umur = System.currentTimeMillis() - Simpanan.pingTerakhir(applicationContext)
             if (Simpanan.pingTerakhir(applicationContext) == 0L) {
-                append("Menunggu koneksi pertama…")
+                append(getString(R.string.waiting_connection))
             } else if (umur < TimeUnit.MINUTES.toMillis(15)) {
                 append("Terhubung ✓ (ping ${TimeUnit.MILLISECONDS.toMinutes(umur)} mnt lalu)")
             } else {

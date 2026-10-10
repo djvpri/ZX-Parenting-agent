@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import org.json.JSONObject
+import com.zxparenting.agent.R
 
 /**
  * Jantung agent: foreground service, ping tiap PERIODE detik.
@@ -84,11 +85,11 @@ class AgentService : Service() {
     }
 
     private fun mulaiNotifikasi() {
-        val ch = NotificationChannel(CH, "ZX Agent", NotificationManager.IMPORTANCE_LOW)
+        val ch = NotificationChannel(CH, getString(R.string.app_name_agent), NotificationManager.IMPORTANCE_LOW)
         getSystemService(NotificationManager::class.java).createNotificationChannel(ch)
         val n: Notification = Notification.Builder(this, CH)
-            .setContentTitle("ZX Agent aktif")
-            .setContentText("Perangkat terhubung ke orang tua")
+            .setContentTitle(getString(R.string.agent_active))
+            .setContentText(getString(R.string.device_connected))
             .setSmallIcon(android.R.drawable.stat_sys_upload)
             .setOngoing(true)
             .build()

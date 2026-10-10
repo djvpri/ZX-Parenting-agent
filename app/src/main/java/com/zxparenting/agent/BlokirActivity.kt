@@ -8,11 +8,12 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.lang.ref.WeakReference
+import com.zxparenting.agent.R
 
 /**
  * Layar blokir (mockup layar 3 & 4): ditampilkan AgentService saat sesi habis / curfew.
  * Fullscreen, back diblok, keluar hanya bila server bilang lepas (ping berikutnya)
- * atau master unlock ortu di web. Tombol "Minta Izin" kirim log activity utk ortu lihat.
+ * atau master unlock ortu di web. Tombol getString(R.string.ask_permission) kirim log activity utk ortu lihat.
  */
 class BlokirActivity : Activity() {
     override fun onCreate(s: Bundle?) {
@@ -34,11 +35,11 @@ class BlokirActivity : Activity() {
             textSize = 26f
             setTextColor(0xFFFFFFFF.toInt())
             text = when {
-                paketTertutup != null -> "App ini dibatasi"
-                alasan == AlasanBlokir.JAM_TIDUR -> "Selamat malam!"
-                alasan == AlasanBlokir.DAILY_HABIS -> "Waktunya istirahat!"
-                alasan == AlasanBlokir.COOLDOWN -> "Istirahat sebentar ya!"
-                else -> "Waktunya istirahat!"
+                paketTertutup != null -> getString(R.string.app_restricted)
+                alasan == AlasanBlokir.JAM_TIDUR -> getString(R.string.good_night)
+                alasan == AlasanBlokir.DAILY_HABIS -> getString(R.string.time_to_rest)
+                alasan == AlasanBlokir.COOLDOWN -> getString(R.string.short_break)
+                else -> getString(R.string.time_to_rest)
             }
         }
         val isi = TextView(this).apply {
@@ -46,13 +47,13 @@ class BlokirActivity : Activity() {
             setTextColor(0xFFB6C6E8.toInt())
             setPadding(0, 32, 0, 0)
             text = when {
-                paketTertutup != null -> "App ini diblokir oleh orang tua. Coba buka app lain ya."
-                alasan == AlasanBlokir.JAM_TIDUR -> "HP terkunci sampai jam tidur berakhir. Tidur yang cukup ya!"
-                else -> "Waktu bermain sudah habis. Nanti bisa main lagi."
+                paketTertutup != null -> getString(R.string.app_blocked_msg)
+                alasan == AlasanBlokir.JAM_TIDUR -> getString(R.string.bedtime_lock_msg)
+                else -> getString(R.string.playtime_over_msg)
             }
         }
         val minta = Button(this).apply {
-            text = "Minta Izin Ortu"
+            text = getString(R.string.ask_parent_permission)
             setOnClickListener { Api.kirimAktivitas(applicationContext, "minta_buka") }
         }
         root.addView(judul)

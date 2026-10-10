@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
@@ -46,7 +47,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
             IconButton(onClick = onKembali) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "Kembali")
             }
-            Text("Kuis AI", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.quiz_ai), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
 
         when (fase) {
@@ -54,7 +55,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                 onTopik = { topik = it },
                 onLevel = { level = it },
                 onMulai = {
-                    if (topik.isBlank()) { error = "Topik wajib"; return@FormKuisAI }
+                    if (topik.isBlank()) { error = stringResource(R.string.topic_required); return@FormKuisAI }
                     loading = true; error = ""
                     scope.launch {
                         val res = withContext(Dispatchers.IO) {
@@ -70,7 +71,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                             attemptId = r.attemptId
                             fase = "soal"
                         } else {
-                            error = "Gagal membuat soal AI"
+                            error = stringResource(R.string.fail_create_quiz)
                         }
                     }
                 },
@@ -98,14 +99,14 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                                         hasil = r
                                         fase = "hasil"
                                     } else {
-                                        error = "Gagal kirim jawaban"
+                                        error = stringResource(R.string.fail_submit)
                                     }
                                 }
                             },
                             enabled = semua,
                             modifier = Modifier.fillMaxWidth().height(48.dp),
                             shape = RoundedCornerShape(12.dp),
-                        ) { Text("Kirim Jawaban") }
+                        ) { Text(stringResource(R.string.submit_answers)) }
                     }
                 }
             }
@@ -134,12 +135,12 @@ private fun FormKuisAI(
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Buat Kuis Sendiri", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text("AI akan membuat soal sesuai topik pilihanmu.", fontSize = 12.sp, color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.create_own_quiz), fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.ai_quiz_desc), fontSize = 12.sp, color = Color(0xFF94A3B8))
                 OutlinedTextField(
                     value = topik,
                     onValueChange = onTopik,
-                    label = { Text("Topik (cth: Matematika, IPA)") },
+                    label = { Text(stringResource(R.string.topic_hint)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
@@ -163,11 +164,11 @@ private fun FormKuisAI(
                     if (loading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                         Spacer(Modifier.width(8.dp))
-                        Text("Membuat soal...")
+                        Text(stringResource(R.string.creating_quiz))
                     } else {
                         Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("Mulai Kuis")
+                        Text(stringResource(R.string.start_quiz))
                     }
                 }
             }
@@ -217,10 +218,10 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
     val token = hasil?.tokenDidapat ?: 0
     val persen = if (total > 0) (skor * 100 / total) else 0
     val emoji = when {
-        persen == 100 -> "Sempurna!"
-        persen >= 70 -> "Bagus!"
+        persen == 100 -> stringResource(R.string.perfect)
+        persen >= 70 -> stringResource(R.string.great)
         persen >= 50 -> "Lumayan"
-        else -> "Terus berlatih"
+        else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
         persen >= 70 -> Color(0xFF10B981)
@@ -292,7 +293,7 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
                 onClick = onKembali,
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(12.dp),
-            ) { Text("Selesai") }
+            ) { Text(stringResource(R.string.done)) }
         }
     }
 }
