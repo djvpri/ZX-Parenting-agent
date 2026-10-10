@@ -79,7 +79,7 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             modifier = Modifier.fillMaxWidth().height(48.dp),
             shape = RoundedCornerShape(12.dp),
         ) {
-            Icon(Icons.Default.Language, contentDescription = null, modifier = Modifier.size(18.dp))
+            Icon(Icons.Default.Translate, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
             Text("${stringResource(R.string.language)}: ${bahasaAktif ?: stringResource(R.string.lang_system)}")
         }

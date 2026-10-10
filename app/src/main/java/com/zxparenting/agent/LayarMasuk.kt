@@ -74,6 +74,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                         }
                         loading = true
                         error = ""
+                        val strAnak = stringResource(R.string.nav_child)
                         scope.launch {
                             val res = withContext(Dispatchers.IO) {
                                 runCatching { Klien.api.loginAnak(LoginAnakReq(username.trim(), pin)) }.getOrNull()
@@ -86,7 +87,7 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                                     Ctx.get(),
                                     body.token,
                                     a?.id ?: "",
-                                    a?.nama ?: stringResource(R.string.nav_child),
+                                    a?.nama ?: strAnak,
                                     a?.umur ?: 0,
                                 )
                                 onMasuk()

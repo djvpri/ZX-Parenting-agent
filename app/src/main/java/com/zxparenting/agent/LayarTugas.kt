@@ -28,6 +28,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
     var error by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
+    val strFailLoad = stringResource(R.string.fail_load_tasks)
     LaunchedEffect(jwt) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
@@ -37,7 +38,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
             if (res?.isSuccessful == true) {
                 items = res.body() ?: emptyList()
             } else {
-                error = stringResource(R.string.fail_load_tasks)
+                error = strFailLoad
             }
         }
     }

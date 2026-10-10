@@ -35,6 +35,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     // Start session on mount
+    val strFailStart = stringResource(R.string.fail_start_quiz)
     LaunchedEffect(tugasId) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
@@ -47,7 +48,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                 jawaban.clear()
                 fase = "soal"
             } else {
-                error = stringResource(R.string.fail_start_quiz)
+                error = strFailStart
                 fase = "error"
             }
         }

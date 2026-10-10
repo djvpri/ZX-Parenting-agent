@@ -28,6 +28,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
     var error by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
+    val strFailLoad = stringResource(R.string.fail_load_content)
     LaunchedEffect(jwt) {
         scope.launch {
             val res = withContext(Dispatchers.IO) {
@@ -37,7 +38,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
             if (res?.isSuccessful == true) {
                 items = res.body()?.items ?: emptyList()
             } else {
-                error = stringResource(R.string.fail_load_content)
+                error = strFailLoad
             }
         }
     }
