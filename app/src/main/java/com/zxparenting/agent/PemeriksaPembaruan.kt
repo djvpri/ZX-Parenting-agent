@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.content.FileProvider
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.AppUpdateType
+import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import org.json.JSONObject
 import java.io.File
@@ -98,7 +98,7 @@ object PemeriksaPembaruan {
             conn.connectTimeout = 30_000
             conn.readTimeout = 60_000
             conn.inputStream.use { input ->
-                file.outputStream.use { input.copyTo(it) }
+                file.outputStream().use { input.copyTo(it) }
             }
             conn.disconnect()
             file
