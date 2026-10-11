@@ -113,4 +113,10 @@
     <string name="tema_default">Default</string>
     <string name="tema_malam">Night</string>
     <string name="tema_laut">Ocean</string>
+    <string name="channel_challenge">Daily Challenge</string>
+    <string name="channel_streak">Streak Reminder</string>
+    <string name="notif_challenge_title">Daily Challenge!</string>
+    <string name="notif_challenge_body">Complete today\'s challenge and earn tokens!</string>
+    <string name="notif_streak_title">Keep your streak!</string>
+    <string name="notif_streak_body">Don\'t break your streak — finish an activity today!</string>
 </resources>

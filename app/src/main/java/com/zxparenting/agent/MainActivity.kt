@@ -33,6 +33,11 @@ class MainActivity : ComponentActivity() {
         // Inisialisasi tema tersimpan
         WarnaAktif.inisialisasi(ctx)
 
+        // Fase 4: jadwalkan pengingat harian (challenge 09:00 + streak 20:00)
+        val jwt = Simpanan.jwt(ctx)
+        val demo = Simpanan.isDemo(ctx)
+        if (jwt != null || demo) Pengingat.jadwalkan(ctx)
+
         setContent {
             TemaZX {
                 Scaffold(
@@ -43,13 +48,16 @@ class MainActivity : ComponentActivity() {
                         val jwt = Simpanan.jwt(ctx)
                         val demo = Simpanan.isDemo(ctx)
                         if (jwt == null && !demo) {
+                            Pengingat.batalkan(ctx)
                             LayarMasuk(onMasuk = { recreate() }, onDemo = {
                                 Simpanan.setDemo(ctx)
+                                Pengingat.jadwalkan(ctx)
                                 recreate()
                             })
                         } else {
                             LayarUtama(jwt = jwt, onKeluar = {
                                 Simpanan.hapusAnak(ctx)
+                                Pengingat.batalkan(ctx)
                                 recreate()
                             })
                         }

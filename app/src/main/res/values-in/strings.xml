@@ -113,4 +113,10 @@
     <string name="tema_default">Default</string>
     <string name="tema_malam">Malam</string>
     <string name="tema_laut">Laut</string>
+    <string name="channel_challenge">Challenge Harian</string>
+    <string name="channel_streak">Pengingat Streak</string>
+    <string name="notif_challenge_title">Challenge Harian!</string>
+    <string name="notif_challenge_body">Selesaikan challenge hari ini dan dapatkan token!</string>
+    <string name="notif_streak_title">Jaga streak kamu!</string>
+    <string name="notif_streak_body">Jangan putus streak — kerjakan aktivitas hari ini!</string>
 </resources>
