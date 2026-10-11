@@ -142,11 +142,9 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
-                        sedangCek && statusUpdate == null
-                            ? stringResource(R.string.update_checking)
-                            : statusUpdate != null
-                            ? "${stringResource(R.string.update_available)} $statusUpdate"
-                            : stringResource(R.string.up_to_date),
+                        if (sedangCek && statusUpdate == null) stringResource(R.string.update_checking)
+                        else if (statusUpdate != null) "${stringResource(R.string.update_available)} $statusUpdate"
+                        else stringResource(R.string.up_to_date),
                         fontSize = 11.sp,
                         color = if (statusUpdate != null) Amber else MutedFg,
                     )
