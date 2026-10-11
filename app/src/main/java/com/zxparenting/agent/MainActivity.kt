@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
+private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
     val strAnak = stringResource(R.string.nav_child)
     var tab by remember { mutableIntStateOf(0) }
     var kuisId by remember { mutableStateOf<String?>(null) }
@@ -66,13 +66,13 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
 
     // Full-screen kuis detail ketika kuisId dipilih
     if (kuisId != null) {
-        LayarKuisDetail(jwt = jwt, kuisId = kuisId!!) { kuisId = null }
+        LayarKuisDetail(jwt = jwt ?: "", kuisId = kuisId!!) { kuisId = null }
         return
     }
 
     // Full-screen kuis session ketika tugasKuisId dipilih
     if (tugasKuisId != null) {
-        LayarKuisSession(jwt = jwt, tugasId = tugasKuisId!!) { tugasKuisId = null }
+        LayarKuisSession(jwt = jwt ?: "", tugasId = tugasKuisId!!) { tugasKuisId = null }
         return
     }
 
@@ -95,7 +95,8 @@ private fun LayarUtama(jwt: String, onKeluar: () -> Unit) {
                 0 -> LayarBeranda(jwt, onBukaKuis = { kuisId = it })
                 1 -> LayarKuisAI(jwt = jwt, onKembali = { tab = 0 })
                 2 -> LayarTugas(jwt, onKlikTugas = { t -> tugasKuisId = t.id })
-                3 -> LayarSaya(nama, umur, onKeluar)
+                3 -> LayarHadiah(jwt = jwt)
+                4 -> LayarSaya(nama, umur, onKeluar)
             }
         }
     }
@@ -105,5 +106,6 @@ enum class NavItem(@androidx.annotation.StringRes val labelRes: Int, val icon: I
     Beranda(R.string.nav_home, Icons.Default.Home),
     Kuis(R.string.quiz_ai, Icons.Default.AutoAwesome),
     Tugas(R.string.task_title, Icons.Default.Task),
+    Hadiah(R.string.nav_hadiah, Icons.Default.CardGiftcard),
     Saya(R.string.nav_profile, Icons.Default.Person),
 }

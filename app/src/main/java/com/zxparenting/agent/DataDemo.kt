@@ -91,4 +91,35 @@ object DataDemo {
             type = "manual",
         ),
     )
+
+    // --- Hadiah tab demo data ---
+
+    val saldo = 320
+
+    val katalog = listOf(
+        HadiahItem("demo-h1", "Lego Set", "Build your own city!", 50, 3, false),
+        HadiahItem("demo-h2", "Ice Cream", "Pick your favorite flavor", 20, 5, true),
+        HadiahItem("demo-h3", "Game Voucher", "30 min game time", 100, 0, false),
+    )
+
+    val quests = listOf(
+        QuestAnak("demo-q1", "Help Mom clean up", "Tidy your room", 30, "2026-10-12T21:00:00Z",
+            listOf(QuestAnggota("demo", false))),
+        QuestAnak("demo-q2", "Read a book 30 min", "Any book you like", 20, null,
+            listOf(QuestAnggota("demo", true))),
+    )
+
+    val challenge = ChallengeRes("demo-c1", "Perfect Quiz", "Math multiplication", 5, false)
+
+    val streak = StreakRes(current = 7, terbaik = 12, terakhir = "2026-10-11")
+
+    val ledger = listOf(
+        LedgerItem("demo-l1", "KUIS", 15, "Math Addition", null, "2026-10-11T10:30:00Z"),
+        LedgerItem("demo-l2", "PEMAKAIAN", -30, "Tukar 30 min play", null, "2026-10-11T09:15:00Z"),
+        LedgerItem("demo-l3", "TUGAS", 25, "English: Animals", null, "2026-10-10T14:00:00Z"),
+        LedgerItem("demo-l4", "CHALLENGE", 5, "Perfect Quiz", null, "2026-10-10T11:00:00Z"),
+        LedgerItem("demo-l5", "TANTANGAN", 50, "Natural Science", null, "2026-10-09T15:00:00Z"),
+    )
+
+    val pinjam = PinjamRes(hutang = 0, riwayat = emptyList())
 }

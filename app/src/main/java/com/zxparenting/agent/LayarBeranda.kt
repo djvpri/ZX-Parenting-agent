@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
+fun LayarBeranda(jwt: String?, onBukaKuis: (String) -> Unit = {}) {
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf("") }
@@ -30,7 +30,7 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
 
     val strFailLoad = stringResource(R.string.fail_load_content)
     LaunchedEffect(jwt) {
-        if (jwt.isEmpty()) {
+        if (jwt.isNullOrEmpty()) {
             // Demo mode — sample data
             items = DataDemo.officialItems
             loading = false

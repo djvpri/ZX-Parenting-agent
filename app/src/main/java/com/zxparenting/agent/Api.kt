@@ -183,6 +183,65 @@ data class KuisSessionReviewRes(
     val review: List<ReviewSoal>,
 )
 
+// --- Hadiah tab: saldo, tukar token, katalog, quest, challenge, streak, riwayat, pinjam ---
+
+data class SaldoRes(val saldo: Int)
+
+data class TukarTokenReq(val menit: Int)
+data class TukarTokenRes(val ok: Boolean, val menit: Int, val saldo: Int)
+
+data class HadiahItem(
+    val id: String,
+    val judul: String,
+    val deskripsi: String?,
+    @SerializedName("hargaCoin") val hargaCoin: Int,
+    val stok: Int,
+    @SerializedName("sudahMinta") val sudahMinta: Boolean,
+)
+data class KatalogRes(val katalog: List<HadiahItem>)
+data class MintaHadiahReq(@SerializedName("hadiahId") val hadiahId: String)
+
+data class QuestAnak(
+    val id: String,
+    val judul: String,
+    val deskripsi: String?,
+    @SerializedName("tokenReward") val tokenReward: Int,
+    val deadline: String?,
+    val anggota: List<QuestAnggota>?,
+)
+data class QuestAnggota(val anakId: String, val selesai: Boolean)
+
+data class ChallengeRes(
+    val id: String?,
+    val judul: String?,
+    val topik: String?,
+    @SerializedName("tokenReward") val tokenReward: Int,
+    val selesai: Boolean,
+)
+
+data class StreakRes(
+    val current: Int,
+    val terbaik: Int,
+    val terakhir: String?,
+)
+
+data class LedgerItem(
+    val id: String,
+    val tipe: String,
+    val jumlah: Int,
+    val catatan: String?,
+    val refId: String?,
+    val createdAt: String,
+)
+data class RiwayatRes(val ledger: List<LedgerItem>)
+
+data class PinjamRes(
+    val hutang: Int,
+    val riwayat: List<LedgerItem>?,
+)
+data class PinjamReq(val menit: Int)
+data class PinjamPostRes(val ok: Boolean, val menit: Int, val id: String)
+
 // --- Retrofit interface ---
 
 interface ZxApi {
@@ -226,6 +285,38 @@ interface ZxApi {
         @Header("Authorization") bearer: String,
         @Query("sessionId") sessionId: String,
     ): Response<KuisSessionReviewRes>
+
+    // --- Hadiah tab ---
+
+    @GET("anak/saldo")
+    suspend fun saldo(@Header("Authorization") bearer: String): Response<SaldoRes>
+
+    @POST("anak/sesi-main")
+    suspend fun tukarToken(@Header("Authorization") bearer: String, @Body req: TukarTokenReq): Response<TukarTokenRes>
+
+    @GET("anak/hadiah")
+    suspend fun katalogHadiah(@Header("Authorization") bearer: String): Response<KatalogRes>
+
+    @POST("anak/hadiah")
+    suspend fun mintaHadiah(@Header("Authorization") bearer: String, @Body req: MintaHadiahReq): Response<Map<String, Any>>
+
+    @GET("quests-saya")
+    suspend fun questsSaya(@Header("Authorization") bearer: String): Response<List<QuestAnak>>
+
+    @GET("anak/challenge")
+    suspend fun challenge(@Header("Authorization") bearer: String): Response<ChallengeRes>
+
+    @GET("anak/streak")
+    suspend fun streak(@Header("Authorization") bearer: String): Response<StreakRes>
+
+    @GET("anak/riwayat-token")
+    suspend fun riwayatToken(@Header("Authorization") bearer: String): Response<RiwayatRes>
+
+    @GET("anak/pinjam")
+    suspend fun pinjamStatus(@Header("Authorization") bearer: String): Response<PinjamRes>
+
+    @POST("anak/pinjam")
+    suspend fun pinjamAjukan(@Header("Authorization") bearer: String, @Body req: PinjamReq): Response<PinjamPostRes>
 }
 
 // --- Singleton client ---

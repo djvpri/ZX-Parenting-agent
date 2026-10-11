@@ -92,4 +92,21 @@
     <string name="demo_mode">Demo Mode</string>
     <string name="demo_mode_desc">Browse the app with sample data. No login or device pairing needed.</string>
     <string name="demo_user">Demo User</string>
+    <string name="nav_hadiah">Rewards</string>
+    <string name="token_balance">Token Balance</string>
+    <string name="tukar_token">Exchange Tokens</string>
+    <string name="tukar_btn">Exchange</string>
+    <string name="minutes">minutes</string>
+    <string name="quest_family">Family Quests</string>
+    <string name="katalog_hadiah">Reward Catalog</string>
+    <string name="btn_minta">Request</string>
+    <string name="btn_sudah_minta">Requested</string>
+    <string name="btn_habis">Out of stock</string>
+    <string name="riwayat_token">Token History</string>
+    <string name="pinjam_waktu">Borrow Time</string>
+    <string name="pinjam_btn">Borrow %1$d min</string>
+    <string name="hutang_aktif">Active debt: %1$d tokens</string>
+    <string name="challenge_harian">Daily Challenge</string>
+    <string name="streak_hari">day streak</string>
+    <string name="streak_terbaik">Best</string>
 </resources>

@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
+fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
     var items by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf("") }
@@ -30,7 +30,7 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
 
     val strFailLoad = stringResource(R.string.fail_load_tasks)
     LaunchedEffect(jwt) {
-        if (jwt.isEmpty()) {
+        if (jwt.isNullOrEmpty()) {
             items = DataDemo.tugas
             loading = false
             return@LaunchedEffect
