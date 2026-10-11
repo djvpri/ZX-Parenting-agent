@@ -37,6 +37,32 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(kuisId) {
+        if (jwt.isEmpty()) {
+            // Demo mode (Play Console reviewer)
+            val demoSoalList = DataDemo.demoSoal[kuisId]
+            val demoArtikel = DataDemo.demoDetail[kuisId]
+            if (demoSoalList != null) {
+                val item = DataDemo.officialItems.find { it.id == kuisId }
+                detail = OfficialDetail(
+                    id = kuisId,
+                    tipe = item?.tipe ?: "KUIS_HARIAN",
+                    judul = item?.judul ?: DataDemo.challenge.judul ?: "Quiz",
+                    deskripsi = item?.deskripsi,
+                    konten = demoSoalList,
+                    kategori = item?.meta?.kategori,
+                    tokenReward = item?.meta?.tokenReward ?: 15,
+                    premium = false,
+                    selesai = false,
+                )
+                jawaban = MutableList(demoSoalList.size) { -1 }
+            } else if (demoArtikel != null) {
+                detail = demoArtikel
+                jawaban = MutableList(0) { -1 }
+            }
+            loading = false
+            if (detail == null) error = strFailLoad
+            return@LaunchedEffect
+        }
         scope.launch {
             val res = withContext(Dispatchers.IO) {
                 runCatching { Klien.api.officialDetail("Bearer $jwt", kuisId) }.getOrNull()
@@ -95,7 +121,21 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
             }
             detail != null -> {
                 val soal = detail!!.konten ?: emptyList()
-                if (fase == "soal") {
+                if (soal.isEmpty()) {
+                    // Artikel/video reader
+                    Column(
+                        modifier = Modifier.fillMaxSize().padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Text(detail!!.deskripsi ?: "", fontSize = 15.sp, color = Teks, lineHeight = 24.sp)
+                        Spacer(Modifier.weight(1f))
+                        Button(
+                            onClick = onKembali,
+                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            shape = RoundedCornerShape(12.dp),
+                        ) { Text(stringResource(R.string.done)) }
+                    }
+                } else if (fase == "soal") {
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -112,18 +152,25 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                             val semuaTerjawab = jawaban.all { it >= 0 }
                             Button(
                                 onClick = {
-                                    scope.launch {
-                                        val res = withContext(Dispatchers.IO) {
-                                            runCatching {
-                                                Klien.api.officialComplete("Bearer $jwt", kuisId, CompleteReq(jawaban.toList()))
-                                            }.getOrNull()
-                                        }
-                                        val r = res?.body()
-                                        if (res?.isSuccessful == true && r != null) {
-                                            hasil = r
-                                            fase = "hasil"
-                                        } else {
-                                            error = strFailSubmit
+                                    if (jwt.isEmpty()) {
+                                        val kunci = DataDemo.demoJawaban[kuisId] ?: emptyList()
+                                        val skor = jawaban.mapIndexed { i, ans -> if (i < kunci.size && ans == kunci[i]) 1 else 0 }.sum()
+                                        hasil = CompleteRes(ok = true, skor = skor, totalSoal = jawaban.size, tokenDidapat = skor * 3)
+                                        fase = "hasil"
+                                    } else {
+                                        scope.launch {
+                                            val res = withContext(Dispatchers.IO) {
+                                                runCatching {
+                                                    Klien.api.officialComplete("Bearer $jwt", kuisId, CompleteReq(jawaban.toList()))
+                                                }.getOrNull()
+                                            }
+                                            val r = res?.body()
+                                            if (res?.isSuccessful == true && r != null) {
+                                                hasil = r
+                                                fase = "hasil"
+                                            } else {
+                                                error = strFailSubmit
+                                            }
                                         }
                                     }
                                 },

@@ -122,4 +122,53 @@ object DataDemo {
     )
 
     val pinjam = PinjamRes(hutang = 0, riwayat = emptyList())
+
+    // --- Demo kuis detail (utk Play Console reviewer) ---
+
+    val demoSoal = mapOf(
+        "demo-t1" to listOf(
+            Soal("Which animal says 'moo'?", listOf("Dog", "Cat", "Cow", "Duck")),
+            Soal("Which animal says 'meow'?", listOf("Dog", "Cat", "Cow", "Bird")),
+            Soal("Which animal is known as man's best friend?", listOf("Cat", "Dog", "Fish", "Snake")),
+            Soal("Which animal hops?", listOf("Elephant", "Rabbit", "Turtle", "Whale")),
+            Soal("Which animal swims?", listOf("Eagle", "Fish", "Lion", "Monkey")),
+        ),
+        "demo1" to listOf(
+            Soal("What is 5 + 3?", listOf("6", "7", "8", "9")),
+            Soal("What is 10 + 5?", listOf("13", "14", "15", "16")),
+            Soal("What is 2 + 7?", listOf("8", "9", "10", "11")),
+            Soal("What is 4 + 4?", listOf("7", "8", "9", "10")),
+            Soal("What is 6 + 3?", listOf("8", "9", "10", "11")),
+        ),
+        "demo2" to listOf(
+            Soal("What do plants need to grow?", listOf("Sunlight", "Darkness", "Cold", "Noise")),
+            Soal("Which animal lays eggs?", listOf("Dog", "Cat", "Chicken", "Cow")),
+            Soal("What is the largest mammal?", listOf("Elephant", "Blue Whale", "Giraffe", "Horse")),
+            Soal("Where do fish live?", listOf("Sky", "Forest", "Water", "Desert")),
+            Soal("What color are most leaves?", listOf("Red", "Blue", "Green", "Purple")),
+        ),
+        "demo-c1" to listOf(
+            Soal("What is 3 × 4?", listOf("7", "12", "14", "16")),
+            Soal("What is 6 × 2?", listOf("8", "10", "12", "14")),
+            Soal("What is 5 × 3?", listOf("10", "12", "15", "18")),
+            Soal("What is 7 × 2?", listOf("12", "14", "16", "18")),
+            Soal("What is 4 × 4?", listOf("12", "14", "16", "18")),
+        ),
+    )
+
+    val demoJawaban = mapOf(
+        "demo-t1" to listOf(2, 1, 1, 1, 1),
+        "demo1" to listOf(2, 2, 1, 1, 1),
+        "demo2" to listOf(0, 2, 1, 2, 2),
+        "demo-c1" to listOf(1, 2, 2, 1, 2),
+    )
+
+    val demoDetail = mapOf(
+        "demo3" to OfficialDetail("demo3", "ARTIKEL", "Why Should We Sleep on Time?",
+            "Sleep is important for growing bodies. When you sleep, your brain rests and your body grows stronger. Kids who sleep 9-11 hours feel happier and do better in school. Going to bed on time means you have energy to play and learn the next day!",
+            null, "Health", 10, false, false),
+        "demo4" to OfficialDetail("demo4", "VIDEO_PENDEK", "How to Make an Origami Bird",
+            "Follow along to fold a paper bird! All you need is a square piece of paper. Start by folding it diagonally, then fold the corners to make wings. Watch the full video in the app!",
+            null, "Craft", 10, false, false),
+    )
 }

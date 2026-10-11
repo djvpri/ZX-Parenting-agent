@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> Unit = {}) {
+fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}) {
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var tugas by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
     var challenge by remember { mutableStateOf<ChallengeRes?>(null) }
@@ -131,13 +131,13 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> 
             if (readItems.isNotEmpty()) {
                 item { SectionLabel(stringResource(R.string.section_read_watch)) }
                 items(readItems) { item ->
-                    KartuOfficial(item, onClick = {})
+                    KartuOfficial(item, onClick = { onBukaKuis(item.id) })
                 }
             }
 
             if (tugas.isNotEmpty()) {
                 item { SectionLabel(stringResource(R.string.section_task_parent)) }
-                items(tugas) { t -> TugasCard(t) }
+                items(tugas) { t -> TugasCard(t, onClick = { onKlikTugas(t) }) }
             }
 
             if (error.isNotEmpty()) {
@@ -270,8 +270,11 @@ private fun ChallengeCard(c: ChallengeRes, onBukaKuis: (String) -> Unit) {
 }
 
 @Composable
-private fun TugasCard(t: TugasAnak) {
+private fun TugasCard(t: TugasAnak, onClick: () -> Unit = {}) {
+    val isAiKuis = t.type == "ai_quiz" || t.type == "ai_scheduled"
+    val bisaDikerjakan = isAiKuis && t.status != "SELESAI"
     Card(
+        onClick = { if (bisaDikerjakan) onClick() },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -297,7 +300,11 @@ private fun TugasCard(t: TugasAnak) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                t.deadline?.let { Text(it, fontSize = 12.sp, color = MutedFg) }
+                if (bisaDikerjakan) {
+                    Text("Kerjakan →", fontSize = 12.sp, color = Biru, fontWeight = FontWeight.Medium)
+                } else {
+                    t.deadline?.let { Text(it.take(10), fontSize = 12.sp, color = MutedFg) }
+                }
                 BadgePill("+${t.reward}", Amber.copy(alpha = .15f), OranyeGelap)
             }
         }

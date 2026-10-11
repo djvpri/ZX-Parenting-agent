@@ -42,6 +42,16 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
     val strFailLoadExp = stringResource(R.string.fail_load_explanation)
     val strFailRetry = stringResource(R.string.fail_retry_quiz)
     LaunchedEffect(tugasId) {
+        if (jwt.isEmpty()) {
+            // Demo mode (Play Console reviewer)
+            val demoTugas = DataDemo.tugas.find { it.id == tugasId }
+            val soalDemo = DataDemo.demoSoal[tugasId] ?: DataDemo.demoSoal["demo1"]!!
+            soal = soalDemo.mapIndexed { i, s -> SoalSession(posisi = i, question = s.q, options = s.options) }
+            sessionId = "demo-session"
+            jawaban.clear()
+            fase = "soal"
+            return@LaunchedEffect
+        }
         scope.launch {
             val res = withContext(Dispatchers.IO) {
                 runCatching { Klien.api.kuisSessionStart("Bearer $jwt", KuisSessionStartReq(tugasId)) }.getOrNull()
@@ -104,7 +114,14 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         Button(
                             onClick = {
                                 loading = true
-                                scope.launch {
+                                if (jwt.isEmpty()) {
+                                    val kunci = DataDemo.demoJawaban[tugasId] ?: DataDemo.demoJawaban["demo1"]!!
+                                    val benarCount = soal.count { s -> jawaban[s.posisi] == kunci.getOrNull(s.posisi) }
+                                    submitRes = KuisSessionSubmitRes(skor = benarCount, benarCount = benarCount, totalSoal = soal.size, token = benarCount * 3)
+                                    loading = false
+                                    fase = "hasil"
+                                } else {
+                                    scope.launch {
                                     val req = KuisSessionSubmitReq(
                                         sessionId = sessionId,
                                         jawaban = jawaban.entries.map { JawabanLocked(it.key, it.value) },
@@ -121,6 +138,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                                         error = strFailSubmit
                                         fase = "error"
                                     }
+                                }
                                 }
                             },
                             enabled = semuaTerjawab && !loading,
@@ -145,19 +163,44 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
             "hasil" -> HasilKuisSession(
                 hasil = submitRes,
                 onReview = {
-                    loading = true
-                    scope.launch {
-                        val res = withContext(Dispatchers.IO) {
-                            runCatching { Klien.api.kuisSessionReview("Bearer $jwt", sessionId) }.getOrNull()
-                        }
-                        loading = false
-                        val r = res?.body()
-                        if (res?.isSuccessful == true && r != null) {
-                            reviewRes = r
-                            fase = "review"
-                        } else {
-                            error = strFailLoadExp
-                            fase = "error"
+                    if (jwt.isEmpty()) {
+                        val kunci = DataDemo.demoJawaban[tugasId] ?: DataDemo.demoJawaban["demo1"]!!
+                        reviewRes = KuisSessionReviewRes(
+                            sessionId = "demo-session",
+                            skor = submitRes?.skor,
+                            benarCount = submitRes?.benarCount,
+                            totalSoal = submitRes?.totalSoal,
+                            durasiDetik = null,
+                            review = soal.mapIndexed { i, s ->
+                                val jawabAnak = jawaban[s.posisi]
+                                val jawabBenar = kunci.getOrNull(i) ?: 0
+                                ReviewSoal(
+                                    posisi = i,
+                                    question = s.question,
+                                    options = s.options,
+                                    jawabanAnak = jawabAnak,
+                                    jawabanBenar = jawabBenar,
+                                    benar = jawabAnak == jawabBenar,
+                                    explanation = if (jawabAnak == jawabBenar) "Benar!" else "Jawaban benar: ${s.options.getOrElse(jawabBenar) { "" }}",
+                                )
+                            },
+                        )
+                        fase = "review"
+                    } else {
+                        loading = true
+                        scope.launch {
+                            val res = withContext(Dispatchers.IO) {
+                                runCatching { Klien.api.kuisSessionReview("Bearer $jwt", sessionId) }.getOrNull()
+                            }
+                            loading = false
+                            val r = res?.body()
+                            if (res?.isSuccessful == true && r != null) {
+                                reviewRes = r
+                                fase = "review"
+                            } else {
+                                error = strFailLoadExp
+                                fase = "error"
+                            }
                         }
                     }
                 },
@@ -168,6 +211,47 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                     jawaban.clear()
                     submitRes = null
                     reviewRes = null
+                    if (jwt.isEmpty()) {
+                        val soalDemo = DataDemo.demoSoal[tugasId] ?: DataDemo.demoSoal["demo1"]!!
+                        soal = soalDemo.mapIndexed { i, s -> SoalSession(posisi = i, question = s.q, options = s.options) }
+                        sessionId = "demo-session"
+                        jawaban.clear()
+                        fase = "soal"
+                    } else {
+                        scope.launch {
+                            val res = withContext(Dispatchers.IO) {
+                                runCatching { Klien.api.kuisSessionStart("Bearer $jwt", KuisSessionStartReq(tugasId)) }.getOrNull()
+                            }
+                            val r = res?.body()
+                            if (res?.isSuccessful == true && r != null) {
+                                sessionId = r.sessionId
+                                soal = r.soal
+                                jawaban.clear()
+                                fase = "soal"
+                            } else {
+                                error = strFailRetry
+                                fase = "error"
+                            }
+                        }
+                    }
+                },
+                onSelesai = onKembali,
+                loading = loading,
+            )
+            "review" -> ReviewKuisSession(reviewRes, onKembali, onRetry = {
+                fase = "loading"
+                sessionId = ""
+                soal = emptyList()
+                jawaban.clear()
+                submitRes = null
+                reviewRes = null
+                if (jwt.isEmpty()) {
+                    val soalDemo = DataDemo.demoSoal[tugasId] ?: DataDemo.demoSoal["demo1"]!!
+                    soal = soalDemo.mapIndexed { i, s -> SoalSession(posisi = i, question = s.q, options = s.options) }
+                    sessionId = "demo-session"
+                    jawaban.clear()
+                    fase = "soal"
+                } else {
                     scope.launch {
                         val res = withContext(Dispatchers.IO) {
                             runCatching { Klien.api.kuisSessionStart("Bearer $jwt", KuisSessionStartReq(tugasId)) }.getOrNull()
@@ -182,31 +266,6 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             error = strFailRetry
                             fase = "error"
                         }
-                    }
-                },
-                onSelesai = onKembali,
-                loading = loading,
-            )
-            "review" -> ReviewKuisSession(reviewRes, onKembali, onRetry = {
-                fase = "loading"
-                sessionId = ""
-                soal = emptyList()
-                jawaban.clear()
-                submitRes = null
-                reviewRes = null
-                scope.launch {
-                    val res = withContext(Dispatchers.IO) {
-                        runCatching { Klien.api.kuisSessionStart("Bearer $jwt", KuisSessionStartReq(tugasId)) }.getOrNull()
-                    }
-                    val r = res?.body()
-                    if (res?.isSuccessful == true && r != null) {
-                        sessionId = r.sessionId
-                        soal = r.soal
-                        jawaban.clear()
-                        fase = "soal"
-                    } else {
-                        error = strFailRetry
-                        fase = "error"
                     }
                 }
             })

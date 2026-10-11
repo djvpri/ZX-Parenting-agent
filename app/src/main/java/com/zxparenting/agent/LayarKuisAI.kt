@@ -62,6 +62,22 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                 onMulai = {
                     if (topik.isBlank()) { error = strTopicReq; return@FormKuisAI }
                     loading = true; error = ""
+                    if (jwt.isEmpty()) {
+                        // Demo mode — generate soal statis berdasarkan topik
+                        val demoSoalAi = listOf(
+                            Soal("What is $topik mainly about?", listOf("Option A", "Option B", "Option C", "Option D")),
+                            Soal("Which is true about $topik?", listOf("Option A", "Option B", "Option C", "Option D")),
+                            Soal("What best describes $topik?", listOf("Option A", "Option B", "Option C", "Option D")),
+                            Soal("A question about $topik:", listOf("Option A", "Option B", "Option C", "Option D")),
+                            Soal("Which is false about $topik?", listOf("Option A", "Option B", "Option C", "Option D")),
+                        )
+                        soal = demoSoalAi
+                        jawaban = MutableList(demoSoalAi.size) { -1 }
+                        attemptId = "demo-ai"
+                        loading = false
+                        fase = "soal"
+                        return@FormKuisAI
+                    }
                     scope.launch {
                         val res = withContext(Dispatchers.IO) {
                             runCatching {
@@ -93,18 +109,39 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                         val semua = jawaban.all { it >= 0 }
                         Button(
                             onClick = {
-                                scope.launch {
-                                    val res = withContext(Dispatchers.IO) {
-                                        runCatching {
-                                            Klien.api.kuisSubmit("Bearer $jwt", attemptId, SubmitKuisReq(jawaban.toList()))
-                                        }.getOrNull()
-                                    }
-                                    val r = res?.body()
-                                    if (res?.isSuccessful == true && r != null) {
-                                        hasil = r
-                                        fase = "hasil"
-                                    } else {
-                                        error = strFailSubmit
+                                if (jwt.isEmpty()) {
+                                    val kunci = listOf(1, 2, 0, 3, 1)
+                                    val skor = jawaban.mapIndexed { i, ans -> if (i < kunci.size && ans == kunci[i]) 1 else 0 }.sum()
+                                    hasil = SubmitKuisRes(
+                                        skor = skor,
+                                        totalSoal = soal.size,
+                                        tokenDidapat = skor * 3,
+                                        challengeSelesai = false,
+                                        hasil = soal.mapIndexed { i, s ->
+                                            HasilSoal(
+                                                q = s.q,
+                                                jawabAnak = jawaban[i],
+                                                jawabBenar = kunci.getOrElse(i) { 0 },
+                                                benar = jawaban[i] == kunci.getOrElse(i) { 0 },
+                                                explain = if (jawaban[i] == kunci.getOrElse(i) { 0 }) "Benar!" else "Jawaban benar: ${s.options.getOrElse(kunci.getOrElse(i) { 0 }) { "" }}",
+                                            )
+                                        },
+                                    )
+                                    fase = "hasil"
+                                } else {
+                                    scope.launch {
+                                        val res = withContext(Dispatchers.IO) {
+                                            runCatching {
+                                                Klien.api.kuisSubmit("Bearer $jwt", attemptId, SubmitKuisReq(jawaban.toList()))
+                                            }.getOrNull()
+                                        }
+                                        val r = res?.body()
+                                        if (res?.isSuccessful == true && r != null) {
+                                            hasil = r
+                                            fase = "hasil"
+                                        } else {
+                                            error = strFailSubmit
+                                        }
                                     }
                                 }
                             },
