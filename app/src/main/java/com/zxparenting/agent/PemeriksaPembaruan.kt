@@ -126,9 +126,9 @@ object PemeriksaPembaruan {
             task.addOnSuccessListener { info ->
                 val avail = info.updateAvailability()
                 if (avail == UpdateAvailability.UPDATE_AVAILABLE &&
-                    info.isUpdateTypeAllowed(AppUpdateType.FLEX)) {
+                    info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                     mgr.startUpdateFlowForResult(
-                        info, AppUpdateType.FLEX, activity, REQ_UPDATE,
+                        info, AppUpdateType.FLEXIBLE, activity, REQ_UPDATE,
                     )
                     Handler(Looper.getMainLooper()).post { callback("play") }
                 } else {
