@@ -326,7 +326,7 @@ interface ZxApi {
     @POST("anak/pinjam")
     suspend fun pinjamAjukan(@Header("Authorization") bearer: String, @Body req: PinjamReq): Response<PinjamPostRes>
 
-    @POST("anak/log-error")
+    @POST("log-error")
     suspend fun logError(@Header("Authorization") bearer: String, @Body req: ErrorLogReq): Response<Map<String, Any>>
 }
 
