@@ -93,6 +93,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                             fase = "soal"
                         } else {
                             error = strFailCreate
+                            LaporError.kirim(jwt, "LayarKuisAI", "kuisStart fail", mapOf("topik" to topik, "code" to (res?.code() ?: -1)))
                         }
                     }
                 },
@@ -141,6 +142,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                                             fase = "hasil"
                                         } else {
                                             error = strFailSubmit
+                                            LaporError.kirim(jwt, "LayarKuisAI", "kuisSubmit fail", mapOf("attemptId" to attemptId, "code" to (res?.code() ?: -1)))
                                         }
                                     }
                                 }

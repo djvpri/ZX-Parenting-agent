@@ -72,6 +72,7 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> 
                 items = resFeed.body()?.items ?: emptyList()
             } else {
                 error = strFailLoad
+                LaporError.kirim(jwt, "LayarBeranda", "feedOfficial fail", mapOf("code" to (resFeed?.code() ?: -1)))
             }
             if (resTugas?.isSuccessful == true) {
                 tugas = resTugas.body() ?: emptyList()

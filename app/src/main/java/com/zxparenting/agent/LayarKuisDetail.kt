@@ -75,6 +75,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 if (d.selesai) fase = "selesai"
             } else {
                 error = strFailLoad
+                LaporError.kirim(jwt, "LayarKuisDetail", "officialDetail fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
             }
         }
     }
@@ -170,6 +171,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                                 fase = "hasil"
                                             } else {
                                                 error = strFailSubmit
+                                                LaporError.kirim(jwt, "LayarKuisDetail", "officialComplete fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
                                             }
                                         }
                                     }

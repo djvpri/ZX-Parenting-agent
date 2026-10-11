@@ -65,6 +65,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
             } else {
                 error = strFailStart
                 fase = "error"
+                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionStart fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
             }
         }
     }
@@ -137,6 +138,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                                     } else {
                                         error = strFailSubmit
                                         fase = "error"
+                                        LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionSubmit fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
                                     }
                                 }
                                 }
@@ -200,6 +202,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             } else {
                                 error = strFailLoadExp
                                 fase = "error"
+                                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionReview fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
                             }
                         }
                     }
@@ -231,6 +234,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             } else {
                                 error = strFailRetry
                                 fase = "error"
+                                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionStart retry fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
                             }
                         }
                     }

@@ -242,6 +242,14 @@ data class PinjamRes(
 data class PinjamReq(val menit: Int)
 data class PinjamPostRes(val ok: Boolean, val menit: Int, val id: String)
 
+// --- Error reporting (fire-and-forget) ---
+
+data class ErrorLogReq(
+    val screen: String,
+    val message: String,
+    val extra: Map<String, Any?>? = null,
+)
+
 // --- Retrofit interface ---
 
 interface ZxApi {
@@ -317,6 +325,9 @@ interface ZxApi {
 
     @POST("anak/pinjam")
     suspend fun pinjamAjukan(@Header("Authorization") bearer: String, @Body req: PinjamReq): Response<PinjamPostRes>
+
+    @POST("anak/log-error")
+    suspend fun logError(@Header("Authorization") bearer: String, @Body req: ErrorLogReq): Response<Map<String, Any>>
 }
 
 // --- Singleton client ---
