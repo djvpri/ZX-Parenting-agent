@@ -106,7 +106,7 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
         Box(Modifier.padding(innerPadding)) {
             when (tab) {
                 0 -> LayarBeranda(jwt, onBukaKuis = { kuisId = it })
-                1 -> LayarKuisAI(jwt = jwt, onKembali = { tab = 0 })
+                1 -> LayarKuisAI(jwt = jwt ?: "", onKembali = { tab = 0 })
                 2 -> LayarTugas(jwt, onKlikTugas = { t -> tugasKuisId = t.id })
                 3 -> LayarHadiah(jwt = jwt)
                 4 -> LayarSaya(nama, umur, onKeluar)
