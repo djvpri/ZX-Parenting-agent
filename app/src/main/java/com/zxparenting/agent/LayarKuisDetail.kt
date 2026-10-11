@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
     val strFailLoad = stringResource(R.string.fail_load_quiz)
     val strFailSubmit = stringResource(R.string.fail_submit)
     val strQuizAi = stringResource(R.string.quiz_ai)
@@ -75,7 +76,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 if (d.selesai) fase = "selesai"
             } else {
                 error = strFailLoad
-                LaporError.kirim(jwt, "LayarKuisDetail", "officialDetail fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
+                LaporError.kirim(ctx, "LayarKuisDetail", "officialDetail fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
             }
         }
     }
@@ -171,7 +172,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                                 fase = "hasil"
                                             } else {
                                                 error = strFailSubmit
-                                                LaporError.kirim(jwt, "LayarKuisDetail", "officialComplete fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
+                                                LaporError.kirim(ctx, "LayarKuisDetail", "officialComplete fail", mapOf("kuisId" to kuisId, "code" to (res?.code() ?: -1)))
                                             }
                                         }
                                     }

@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
     val strTopicReq = stringResource(R.string.topic_required)
     val strFailCreate = stringResource(R.string.fail_create_quiz)
     val strFailSubmit = stringResource(R.string.fail_submit)
@@ -93,7 +94,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                             fase = "soal"
                         } else {
                             error = strFailCreate
-                            LaporError.kirim(jwt, "LayarKuisAI", "kuisStart fail", mapOf("topik" to topik, "code" to (res?.code() ?: -1)))
+                            LaporError.kirim(ctx, "LayarKuisAI", "kuisStart fail", mapOf("topik" to topik, "code" to (res?.code() ?: -1)))
                         }
                     }
                 },
@@ -142,7 +143,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
                                             fase = "hasil"
                                         } else {
                                             error = strFailSubmit
-                                            LaporError.kirim(jwt, "LayarKuisAI", "kuisSubmit fail", mapOf("attemptId" to attemptId, "code" to (res?.code() ?: -1)))
+                                            LaporError.kirim(ctx, "LayarKuisAI", "kuisSubmit fail", mapOf("attemptId" to attemptId, "code" to (res?.code() ?: -1)))
                                         }
                                     }
                                 }

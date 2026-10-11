@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var tugas by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
     var challenge by remember { mutableStateOf<ChallengeRes?>(null) }
@@ -72,7 +73,7 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> 
                 items = resFeed.body()?.items ?: emptyList()
             } else {
                 error = strFailLoad
-                LaporError.kirim(jwt, "LayarBeranda", "feedOfficial fail", mapOf("code" to (resFeed?.code() ?: -1)))
+                LaporError.kirim(ctx, "LayarBeranda", "feedOfficial fail", mapOf("code" to (resFeed?.code() ?: -1)))
             }
             if (resTugas?.isSuccessful == true) {
                 tugas = resTugas.body() ?: emptyList()

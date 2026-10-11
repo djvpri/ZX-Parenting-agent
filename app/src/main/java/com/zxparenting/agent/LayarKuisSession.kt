@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 
 @Composable
 fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
     var fase by remember { mutableStateOf("loading") }
     var sessionId by remember { mutableStateOf("") }
     var soal by remember { mutableStateOf<List<SoalSession>>(emptyList()) }
@@ -65,7 +66,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
             } else {
                 error = strFailStart
                 fase = "error"
-                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionStart fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
+                LaporError.kirim(ctx, "LayarKuisSession", "kuisSessionStart fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
             }
         }
     }
@@ -138,7 +139,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                                     } else {
                                         error = strFailSubmit
                                         fase = "error"
-                                        LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionSubmit fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
+                                        LaporError.kirim(ctx, "LayarKuisSession", "kuisSessionSubmit fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
                                     }
                                 }
                                 }
@@ -202,7 +203,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             } else {
                                 error = strFailLoadExp
                                 fase = "error"
-                                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionReview fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
+                                LaporError.kirim(ctx, "LayarKuisSession", "kuisSessionReview fail", mapOf("sessionId" to sessionId, "code" to (res?.code() ?: -1)))
                             }
                         }
                     }
@@ -234,7 +235,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                             } else {
                                 error = strFailRetry
                                 fase = "error"
-                                LaporError.kirim(jwt, "LayarKuisSession", "kuisSessionStart retry fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
+                                LaporError.kirim(ctx, "LayarKuisSession", "kuisSessionStart retry fail", mapOf("tugasId" to tugasId, "code" to (res?.code() ?: -1)))
                             }
                         }
                     }
