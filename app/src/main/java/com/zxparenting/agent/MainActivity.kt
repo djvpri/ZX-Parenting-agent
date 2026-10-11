@@ -36,8 +36,12 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     Box(Modifier.padding(innerPadding)) {
                         val jwt = Simpanan.jwt(ctx)
-                        if (jwt == null) {
-                            LayarMasuk(onMasuk = { recreate() })
+                        val demo = Simpanan.isDemo(ctx)
+                        if (jwt == null && !demo) {
+                            LayarMasuk(onMasuk = { recreate() }, onDemo = {
+                                Simpanan.setDemo(ctx)
+                                recreate()
+                            })
                         } else {
                             LayarUtama(jwt = jwt, onKeluar = {
                                 Simpanan.hapusAnak(ctx)

@@ -26,7 +26,7 @@ jobs:
             SDKMAN=$(find "$SDK_ROOT/cmdline-tools" -maxdepth 3 -name sdkmanager -type f 2>/dev/null | head -1)
           fi
           yes | "$SDKMAN" --sdk_root="$SDK_ROOT" --licenses >/dev/null 2>&1 || true
-          "$SDKMAN" --sdk_root="$SDK_ROOT" --install "build-tools;35.0.0" "platforms;android-35"
+          "$SDKMAN" --sdk_root="$SDK_ROOT" --install "build-tools;36.0.0" "platforms;android-36"
 
       - name: Tulis local.properties
         run: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties

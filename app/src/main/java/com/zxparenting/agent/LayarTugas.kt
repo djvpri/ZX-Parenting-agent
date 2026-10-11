@@ -30,6 +30,11 @@ fun LayarTugas(jwt: String, onKlikTugas: (TugasAnak) -> Unit = {}) {
 
     val strFailLoad = stringResource(R.string.fail_load_tasks)
     LaunchedEffect(jwt) {
+        if (jwt.isEmpty()) {
+            items = DataDemo.tugas
+            loading = false
+            return@LaunchedEffect
+        }
         scope.launch {
             val res = withContext(Dispatchers.IO) {
                 runCatching { Klien.api.tugasList("Bearer $jwt") }.getOrNull()

@@ -30,6 +30,12 @@ fun LayarBeranda(jwt: String, onBukaKuis: (String) -> Unit = {}) {
 
     val strFailLoad = stringResource(R.string.fail_load_content)
     LaunchedEffect(jwt) {
+        if (jwt.isEmpty()) {
+            // Demo mode — sample data
+            items = DataDemo.officialItems
+            loading = false
+            return@LaunchedEffect
+        }
         scope.launch {
             val res = withContext(Dispatchers.IO) {
                 runCatching { Klien.api.feedOfficial("Bearer $jwt") }.getOrNull()

@@ -5,6 +5,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
@@ -20,6 +23,9 @@ class AgentService : Service() {
     private var thread: HandlerThread? = null
     private var handler: Handler? = null
     private var hitungPing = 0
+
+    private val dpm get() = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+    private val adminComp get() = ComponentName(this, AdminReceiver::class.java)
 
     override fun onCreate() {
         super.onCreate()
@@ -67,6 +73,9 @@ class AgentService : Service() {
         val sedangBlokir = Blokir.aktif(this)
         if (blokir != null && !sedangBlokir) {
             Blokir.nyalakan(this, blokir)
+            // Double layer: system lock + overlay. Overlay saja bisa di-bypass
+            // (notification bar, recent apps, force stop). lockNow() kunci layar level OS.
+            if (dpm.isAdminActive(adminComp)) dpm.lockNow()
             startActivity(
                 Intent(this, BlokirActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)

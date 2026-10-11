@@ -11,6 +11,20 @@ object Simpanan {
     private const val K_NAMA = "nama_anak"
     private const val K_ANAK_ID = "anak_id"
     private const val K_UMUR = "umur_anak"
+    private const val K_DEMO = "demo_mode"      // true = reviewer demo, skip API
+
+    // --- Demo mode (Play Console reviewer) ---
+
+    fun setDemo(c: Context) {
+        c.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()
+            .putBoolean(K_DEMO, true)
+            .putString(K_NAMA, "Demo")
+            .putInt(K_UMUR, 8)
+            .apply()
+    }
+
+    fun isDemo(c: Context): Boolean =
+        c.getSharedPreferences(FILE, Context.MODE_PRIVATE).getBoolean(K_DEMO, false)
 
     // --- Device pairing (existing, utk AgentService) ---
 
@@ -58,7 +72,7 @@ object Simpanan {
 
     fun hapusAnak(c: Context) {
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()
-            .remove(K_JWT).remove(K_NAMA).remove(K_ANAK_ID).remove(K_UMUR)
+            .remove(K_JWT).remove(K_NAMA).remove(K_ANAK_ID).remove(K_UMUR).remove(K_DEMO)
             .apply()
     }
 }

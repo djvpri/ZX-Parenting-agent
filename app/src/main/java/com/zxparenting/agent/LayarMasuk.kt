@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarMasuk(onMasuk: () -> Unit) {
+fun LayarMasuk(onMasuk: () -> Unit, onDemo: () -> Unit) {
     val strReq = stringResource(R.string.username_pin_required)
     val strWrong = stringResource(R.string.username_pin_wrong)
     val strAnak = stringResource(R.string.nav_child)
@@ -109,6 +109,21 @@ fun LayarMasuk(onMasuk: () -> Unit) {
                     }
                 }
             }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Text(
+            stringResource(R.string.demo_mode_desc),
+            fontSize = 12.sp,
+            color = Color(0xFF94A3B8),
+            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+        )
+        OutlinedButton(
+            onClick = onDemo,
+            modifier = Modifier.fillMaxWidth().height(44.dp),
+            shape = RoundedCornerShape(12.dp),
+        ) {
+            Text(stringResource(R.string.demo_mode))
         }
     }
 }

@@ -89,4 +89,7 @@
     <string name="lang_system">System</string>
     <string name="okay">Okay</string>
     <string name="akses_desc">Detect app switching to block restricted apps</string>
+    <string name="demo_mode">Demo Mode</string>
+    <string name="demo_mode_desc">Browse the app with sample data. No login or device pairing needed.</string>
+    <string name="demo_user">Demo User</string>
 </resources>

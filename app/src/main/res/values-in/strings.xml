@@ -88,5 +88,8 @@
     <string name="lang_indonesian">Indonesia</string>
     <string name="lang_system">Sistem</string>
     <string name="okay">Lumayan</string>
-    <string name="akses_desc">Deteksi perpindahan app untuk blokir app yang dibatasi</string>
+    <string name="akses_desc">Mendeteksi peralihan app untuk memblokir app terlarang</string>
+    <string name="demo_mode">Mode Demo</string>
+    <string name="demo_mode_desc">Jelajahi app dengan data contoh. Tanpa login atau pairing perangkat.</string>
+    <string name="demo_user">Pengguna Demo</string>
 </resources>

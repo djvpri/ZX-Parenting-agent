@@ -44,7 +44,7 @@ jobs:
           echo "sdkmanager: $SDKMAN (SDK_ROOT=$SDK_ROOT)"
           yes | "$SDKMAN" --sdk_root="$SDK_ROOT" --licenses >/dev/null 2>&1 || true
           "$SDKMAN" --sdk_root="$SDK_ROOT" \
-            --install "build-tools;35.0.0" "platforms;android-35" "cmdline-tools;latest"
+            --install "build-tools;36.0.0" "platforms;android-36" "cmdline-tools;latest"
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Tulis local.properties
