@@ -119,4 +119,20 @@
     <string name="notif_challenge_body">Selesaikan challenge hari ini dan dapatkan token!</string>
     <string name="notif_streak_title">Jaga streak kamu!</string>
     <string name="notif_streak_body">Jangan putus streak — kerjakan aktivitas hari ini!</string>
+    <string name="greeting_hi">Hai</string>
+    <string name="token_count">%1$d token</string>
+    <string name="level_short">Lv %1$d</string>
+    <string name="section_challenge_today">Challenge Hari Ini</string>
+    <string name="section_quiz_today">Kuis Hari Ini</string>
+    <string name="section_read_watch">Baca &amp; Tonton</string>
+    <string name="section_task_parent">Tugas dari Ortu</string>
+    <string name="accessibility_off">Aksesibilitas nonaktif. Blokir app tidak berfungsi.</string>
+    <string name="open">Buka</string>
+    <string name="complete_one_quiz">Selesaikan 1 kuis skor penuh</string>
+    <string name="from_parent">Dari Ortu</string>
+    <string name="questions_count">%1$d soal</string>
+    <string name="level_n">Level %1$d</string>
+    <string name="min_n">%1$d menit</string>
+    <string name="children_count">%1$s anak</string>
+    <string name="views_count">%1$sx dilihat</string>
 </resources>
