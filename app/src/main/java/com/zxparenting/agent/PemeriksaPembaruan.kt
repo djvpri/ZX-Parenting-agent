@@ -7,19 +7,42 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.FileProvider
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import org.json.JSONObject
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 
 /**
- * Pembaruan otomatis APK — cek GitHub releases latest, banding versi,
- * unduh APK, buka installer. Pola ZXRoom PemeriksaPembaruan (fix tuple).
+ * Pembaruan otomatis — dual source:
+ * 1. Play Store install → Play In-App Update API (flex)
+ * 2. Sideload / GitHub install → unduh APK dari GitHub releases
  *
- * versiNama dibandingkan sebagai tuple angka [major, minor, patch],
- * BUKAN versiKode (dua skala berpisah setelah hotfix).
+ * Deteksi source via PackageManager.getInstallSourceInfo().
+ * versiNama dibandingkan sebagai tuple [major, minor, patch].
  */
 object PemeriksaPembaruan {
+
+    // --- Installer detection ---
+
+    fun dariPlayStore(ctx: Context): Boolean {
+        return try {
+            val pm = ctx.packageManager
+            val installer = if (android.os.Build.VERSION.SDK_INT >= 30) {
+                pm.getInstallSourceInfo(ctx.packageName).installingPackageName
+            } else {
+                @Suppress("DEPRECATION")
+                pm.getInstallerPackageName(ctx.packageName)
+            }
+            installer == "com.android.vending"
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    // --- Versi comparison (GitHub path) ---
 
     private fun angkaVersi(tag: String): List<Int>? {
         val bagian = tag.removePrefix("v").trim().split(".")
@@ -39,7 +62,8 @@ object PemeriksaPembaruan {
         return false
     }
 
-    /** Cek rilis terbaru. Return (tag, url apk) atau null kalau sudah terbaru / gagal. */
+    // --- GitHub releases path (sideload) ---
+
     private fun rilisTerbaru(): Pair<String, String>? {
         return try {
             val conn = URL(BuildConfig.REPO_API).openConnection() as HttpURLConnection
@@ -74,7 +98,7 @@ object PemeriksaPembaruan {
             conn.connectTimeout = 30_000
             conn.readTimeout = 60_000
             conn.inputStream.use { input ->
-                file.outputStream().use { input.copyTo(it) }
+                file.outputStream.use { input.copyTo(it) }
             }
             conn.disconnect()
             file
@@ -93,11 +117,46 @@ object PemeriksaPembaruan {
         ctx.startActivity(intent)
     }
 
+    // --- Play In-App Update path ---
+
+    private fun periksaPlayUpdate(activity: Activity, callback: (String?) -> Unit) {
+        try {
+            val mgr = AppUpdateManagerFactory.create(activity)
+            val task = mgr.appUpdateInfo
+            task.addOnSuccessListener { info ->
+                val avail = info.updateAvailability()
+                if (avail == UpdateAvailability.UPDATE_AVAILABLE &&
+                    info.isUpdateTypeAllowed(AppUpdateType.FLEX)) {
+                    mgr.startUpdateFlowForResult(
+                        info, AppUpdateType.FLEX, activity, REQ_UPDATE,
+                    )
+                    Handler(Looper.getMainLooper()).post { callback("play") }
+                } else {
+                    Handler(Looper.getMainLooper()).post { callback(null) }
+                }
+            }
+            task.addOnFailureListener {
+                Handler(Looper.getMainLooper()).post { callback(null) }
+            }
+        } catch (_: Exception) {
+            callback(null)
+        }
+    }
+
     /**
-     * Periksa & tawarkan pembaruan. Jalankan di background (dipanggil dari
-     * AgentService atau Activity). Tidak memaksa — user konfirmasi installer.
+     * Periksa & tawarkan pembaruan.
+     * - Play Store install → Play In-App Update (butuh Activity)
+     * - Sideload → GitHub releases unduh APK
+     *
+     * @param ctx Context (Activity untuk Play path)
+     * @param callback null = terbaru/gagal, non-null = tag ("v2.1.0" atau "play")
      */
     fun periksa(ctx: Context, callback: ((String?) -> Unit)? = null) {
+        if (dariPlayStore(ctx) && ctx is Activity) {
+            periksaPlayUpdate(ctx) { tag -> callback?.invoke(tag) }
+            return
+        }
+        // GitHub path
         Thread {
             val hasil = rilisTerbaru()
             if (hasil == null) {
@@ -117,6 +176,8 @@ object PemeriksaPembaruan {
         }.start()
     }
 
-    /** Versi terpasang untuk ditampilkan di UI: "1.6.2 (10)". */
+    /** Versi terpasang untuk ditampilkan di UI: "2.1.0 (22)". */
     fun versiTerpasang(): String = "${BuildConfig.VERSI_NAMA} (${BuildConfig.VERSI_KODE})"
+
+    const val REQ_UPDATE = 777
 }

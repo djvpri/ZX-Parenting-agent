@@ -26,6 +26,8 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
     var showLangDialog by remember { mutableStateOf(false) }
     var showTemaDialog by remember { mutableStateOf(false) }
     val temaAktif = WarnaAktif.keyAktif(ctx)
+    var statusUpdate by remember { mutableStateOf<String?>(null) }
+    var sedangCek by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -112,6 +114,57 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.logout))
+        }
+
+        // Cek Pembaruan card
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Default.SystemUpdate,
+                    contentDescription = null,
+                    tint = Biru,
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.cek_pembaruan),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        sedangCek && statusUpdate == null
+                            ? stringResource(R.string.update_checking)
+                            : statusUpdate != null
+                            ? "${stringResource(R.string.update_available)} $statusUpdate"
+                            : stringResource(R.string.up_to_date),
+                        fontSize = 11.sp,
+                        color = if (statusUpdate != null) Amber else MutedFg,
+                    )
+                }
+                TextButton(
+                    onClick = {
+                        sedangCek = true
+                        statusUpdate = null
+                        PemeriksaPembaruan.periksa(ctx) { tag ->
+                            sedangCek = false
+                            statusUpdate = tag
+                        }
+                    },
+                    enabled = !sedangCek,
+                ) {
+                    Text(stringResource(R.string.check))
+                }
+            }
         }
 
         Text(

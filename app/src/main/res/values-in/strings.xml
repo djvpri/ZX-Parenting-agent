@@ -135,4 +135,9 @@
     <string name="min_n">%1$d menit</string>
     <string name="children_count">%1$s anak</string>
     <string name="views_count">%1$sx dilihat</string>
+    <string name="cek_pembaruan">Cek Pembaruan</string>
+    <string name="update_checking">Memeriksa…</string>
+    <string name="update_available">Pembaruan tersedia:</string>
+    <string name="up_to_date">Sudah terbaru</string>
+    <string name="check">Cek</string>
 </resources>

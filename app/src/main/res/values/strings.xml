@@ -135,4 +135,9 @@
     <string name="min_n">%1$d min</string>
     <string name="children_count">%1$s kids</string>
     <string name="views_count">%1$s views</string>
+    <string name="cek_pembaruan">Check for Updates</string>
+    <string name="update_checking">Checking…</string>
+    <string name="update_available">Update available:</string>
+    <string name="up_to_date">Up to date</string>
+    <string name="check">Check</string>
 </resources>

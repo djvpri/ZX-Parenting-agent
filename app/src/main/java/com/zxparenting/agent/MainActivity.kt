@@ -113,6 +113,11 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Play In-App Update callback — REQ_UPDATE handled by Play Core
+    }
 }
 
 enum class NavItem(@androidx.annotation.StringRes val labelRes: Int, val icon: ImageVector) {
