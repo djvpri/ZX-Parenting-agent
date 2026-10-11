@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,7 +43,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF)),
+            .background(Bg),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -139,7 +141,7 @@ private fun FormKuisAI(
         ) {
             Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(R.string.create_own_quiz), fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.ai_quiz_desc), fontSize = 12.sp, color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.ai_quiz_desc), fontSize = 12.sp, color = MutedFg)
                 OutlinedTextField(
                     value = topik,
                     onValueChange = onTopik,
@@ -148,7 +150,7 @@ private fun FormKuisAI(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                 )
-                Text("Tingkat kesulitan: $level/5", fontSize = 12.sp, color = Color(0xFF64748B))
+                Text("Tingkat kesulitan: $level/5", fontSize = 12.sp, color = MutedFg)
                 Slider(
                     value = level.toFloat(),
                     onValueChange = { onLevel(it.toInt()) },
@@ -195,18 +197,18 @@ private fun KartuSoalAI(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Uni
                     onClick = { onPilih(idx) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     shape = RoundedCornerShape(10.dp),
-                    color = if (terpilih) Color(0xFF3B82F6) else Color(0xFFF8FAFC),
+                    color = if (terpilih) Biru else Kartu,
                 ) {
                     Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
                                 .size(24.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(if (terpilih) Color.White else Color(0xFF3B82F6).copy(alpha = 0.15f)),
+                                .background(if (terpilih) Color.White else Biru.copy(alpha = 0.15f)),
                             contentAlignment = Alignment.Center,
-                        ) { Text(('A' + idx).toString(), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFF3B82F6)) }
+                        ) { Text(('A' + idx).toString(), fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Biru) }
                         Spacer(Modifier.width(10.dp))
-                        Text(opt, fontSize = 13.sp, color = if (terpilih) Color.White else Color(0xFF1E293B))
+                        Text(opt, fontSize = 13.sp, color = if (terpilih) Color.White else Teks)
                     }
                 }
             }
@@ -227,9 +229,9 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
-        persen >= 70 -> Color(0xFF10B981)
-        persen >= 50 -> Color(0xFFF59E0B)
-        else -> Color(0xFFEF4444)
+        persen >= 70 -> Hijau
+        persen >= 50 -> Amber
+        else -> Merah
     }
 
     LazyColumn(
@@ -253,9 +255,9 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
                     ) { Text("$persen", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = warna) }
                     Spacer(Modifier.height(8.dp))
                     Text(emoji, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text("$skor/$total benar", fontSize = 13.sp, color = Color(0xFF64748B))
+                    Text("$skor/$total benar", fontSize = 13.sp, color = MutedFg)
                     Spacer(Modifier.height(12.dp))
-                    BadgePill("+$token ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                    BadgePill("+$token ZX", Hijau.copy(alpha = .12f), Hijau)
                 }
             }
         }
@@ -271,7 +273,7 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
                         Icon(
                             if (h.benar) Icons.Default.CheckCircle else Icons.Default.Cancel,
                             contentDescription = null,
-                            tint = if (h.benar) Color(0xFF10B981) else Color(0xFFEF4444),
+                            tint = if (h.benar) Hijau else Merah,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
@@ -280,13 +282,13 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
                     Spacer(Modifier.height(6.dp))
                     Text(h.q, fontSize = 13.sp)
                     Spacer(Modifier.height(4.dp))
-                    Text("Jawabanmu: ${'A' + h.jawabAnak}", fontSize = 11.sp, color = if (h.benar) Color(0xFF10B981) else Color(0xFFEF4444))
+                    Text("Jawabanmu: ${'A' + h.jawabAnak}", fontSize = 11.sp, color = if (h.benar) Hijau else Merah)
                     if (!h.benar) {
-                        Text("Jawaban benar: ${'A' + h.jawabBenar}", fontSize = 11.sp, color = Color(0xFF10B981))
+                        Text("Jawaban benar: ${'A' + h.jawabBenar}", fontSize = 11.sp, color = Hijau)
                     }
                     if (h.explain.isNotBlank()) {
                         Spacer(Modifier.height(4.dp))
-                        Text(h.explain, fontSize = 11.sp, color = Color(0xFF64748B))
+                        Text(h.explain, fontSize = 11.sp, color = MutedFg)
                     }
                 }
             }

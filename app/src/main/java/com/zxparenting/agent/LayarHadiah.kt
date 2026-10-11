@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -82,14 +84,14 @@ fun LayarHadiah(jwt: String?) {
     }
 
     if (loading) {
-        Box(Modifier.fillMaxSize().background(Color(0xFFEFF6FF)), contentAlignment = Alignment.Center) {
+        Box(Modifier.fillMaxSize().background(Bg), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFEFF6FF)),
+        modifier = Modifier.fillMaxSize().background(Bg),
         contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 90.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -98,7 +100,7 @@ fun LayarHadiah(jwt: String?) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF2563EB)),
+                colors = CardDefaults.cardColors(containerColor = Biru),
             ) {
                 Column(Modifier.padding(20.dp)) {
                     Text(stringResource(R.string.token_balance), fontSize = 13.sp, color = Color.White.copy(alpha = .8f))
@@ -106,7 +108,7 @@ fun LayarHadiah(jwt: String?) {
                     streak?.let {
                         Spacer(Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.LocalFireDepartment, contentDescription = null, tint = Color(0xFFFBBF24), modifier = Modifier.size(16.dp))
+                            Icon(Icons.Default.LocalFireDepartment, contentDescription = null, tint = Amber, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(4.dp))
                             Text("${it.current} $strStreak", fontSize = 12.sp, color = Color.White)
                             Spacer(Modifier.width(12.dp))
@@ -130,19 +132,19 @@ fun LayarHadiah(jwt: String?) {
                         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 Modifier.size(40.dp).clip(RoundedCornerShape(10.dp))
-                                    .background(Color(0xFFF59E0B).copy(alpha = .12f)),
+                                    .background(Amber.copy(alpha = .12f)),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFF59E0B), modifier = Modifier.size(20.dp))
+                                Icon(Icons.Default.Star, contentDescription = null, tint = Amber, modifier = Modifier.size(20.dp))
                             }
                             Spacer(Modifier.width(12.dp))
                             Column(Modifier.weight(1f)) {
                                 Text(ch.judul ?: "", fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                                ch.topik?.let { Text(it, fontSize = 12.sp, color = Color(0xFF94A3B8)) }
+                                ch.topik?.let { Text(it, fontSize = 12.sp, color = MutedFg) }
                             }
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("+${ch.tokenReward}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Color(0xFFF59E0B))
-                                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFF59E0B), modifier = Modifier.size(14.dp))
+                                Text("+${ch.tokenReward}", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Amber)
+                                Icon(Icons.Default.Star, contentDescription = null, tint = Amber, modifier = Modifier.size(14.dp))
                             }
                         }
                     }
@@ -156,7 +158,7 @@ fun LayarHadiah(jwt: String?) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFDCFCE7)),
+                colors = CardDefaults.cardColors(containerColor = Hijau.copy(alpha = .12f)),
             ) {
                 Column(Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -188,7 +190,7 @@ fun LayarHadiah(jwt: String?) {
                                     }
                                 }
                             },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF16A34A)),
+                            colors = ButtonDefaults.buttonColors(containerColor = Hijau),
                         ) { Text(strTukar) }
                     }
                     // Quick select chips
@@ -204,7 +206,7 @@ fun LayarHadiah(jwt: String?) {
                     }
                     if (tukarMsg.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
-                        Text(tukarMsg, fontSize = 11.sp, color = Color(0xFF16A34A))
+                        Text(tukarMsg, fontSize = 11.sp, color = Hijau)
                     }
                 }
             }
@@ -224,13 +226,13 @@ fun LayarHadiah(jwt: String?) {
                         Icon(
                             if (selesai) Icons.Default.CheckCircle else Icons.Default.Pending,
                             contentDescription = null,
-                            tint = if (selesai) Color(0xFF16A34A) else Color(0xFF14B8A6),
+                            tint = if (selesai) Hijau else Teal,
                             modifier = Modifier.size(20.dp),
                         )
                         Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text(q.judul, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                            Text("+${q.tokenReward} tokens", fontSize = 12.sp, color = Color(0xFF94A3B8))
+                            Text("+${q.tokenReward} tokens", fontSize = 12.sp, color = MutedFg)
                         }
                     }
                 }
@@ -249,19 +251,19 @@ fun LayarHadiah(jwt: String?) {
                     Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             Modifier.size(40.dp).clip(RoundedCornerShape(10.dp))
-                                .background(Color(0xFFEC4899).copy(alpha = .12f)),
+                                .background(Pink.copy(alpha = .12f)),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(Icons.Default.CardGiftcard, contentDescription = null, tint = Color(0xFFEC4899), modifier = Modifier.size(20.dp))
+                            Icon(Icons.Default.CardGiftcard, contentDescription = null, tint = Pink, modifier = Modifier.size(20.dp))
                         }
                         Spacer(Modifier.width(12.dp))
                         Column(Modifier.weight(1f)) {
                             Text(h.judul, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                            Text("${h.hargaCoin} coins", fontSize = 12.sp, color = Color(0xFF94A3B8))
+                            Text("${h.hargaCoin} coins", fontSize = 12.sp, color = MutedFg)
                         }
                         when {
-                            h.sudahMinta -> Text(strSudahMinta, fontSize = 12.sp, color = Color(0xFF94A3B8))
-                            h.stok <= 0 -> Text(strHabis, fontSize = 12.sp, color = Color(0xFF991B1B))
+                            h.sudahMinta -> Text(strSudahMinta, fontSize = 12.sp, color = MutedFg)
+                            h.stok <= 0 -> Text(strHabis, fontSize = 12.sp, color = Merah)
                             else -> Button(
                                 onClick = {
                                     if (demo) return@Button
@@ -272,7 +274,7 @@ fun LayarHadiah(jwt: String?) {
                                         }
                                     }
                                 },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEC4899)),
+                                colors = ButtonDefaults.buttonColors(containerColor = Pink),
                                 contentPadding = PaddingValues(12.dp, 4.dp),
                             ) { Text(strMinta, fontSize = 12.sp) }
                         }
@@ -295,16 +297,16 @@ fun LayarHadiah(jwt: String?) {
                             (if (l.jumlah > 0) "+" else "") + l.jumlah,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (l.jumlah > 0) Color(0xFF16A34A) else Color(0xFFDC2626),
+                            color = if (l.jumlah > 0) Hijau else Merah,
                             modifier = Modifier.width(55.dp),
                         )
-                        Text(l.tipe, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Color(0xFF64748B),
+                        Text(l.tipe, fontSize = 10.sp, fontWeight = FontWeight.Bold, color = MutedFg,
                             modifier = Modifier
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(Color(0xFFF1F5F9))
+                                .background(Muted)
                                 .padding(4.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text(l.catatan ?: "", fontSize = 12.sp, color = Color(0xFF94A3B8), modifier = Modifier.weight(1f))
+                        Text(l.catatan ?: "", fontSize = 12.sp, color = MutedFg, modifier = Modifier.weight(1f))
                     }
                 }
             }
@@ -316,10 +318,10 @@ fun LayarHadiah(jwt: String?) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF7ED)),
+                colors = CardDefaults.cardColors(containerColor = OranyeBg),
             ) {
                 Column(Modifier.padding(16.dp)) {
-                    Text(String.format(strHutang, hutang), fontSize = 13.sp, color = Color(0xFF9A3412))
+                    Text(String.format(strHutang, hutang), fontSize = 13.sp, color = OranyeGelap)
                     Spacer(Modifier.height(8.dp))
                     Button(
                         onClick = {
@@ -336,7 +338,7 @@ fun LayarHadiah(jwt: String?) {
                                 }
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEA580C)),
+                        colors = ButtonDefaults.buttonColors(containerColor = Oranye),
                         enabled = hutang == 0,
                     ) { Text(String.format(stringResource(R.string.pinjam_btn), 15)) }
                 }
@@ -347,6 +349,6 @@ fun LayarHadiah(jwt: String?) {
 
 @Composable
 private fun SectionLabel(text: String) {
-    Text(text, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Color(0xFF475569),
+    Text(text, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = MutedFg,
         modifier = Modifier.padding(top = 4.dp))
 }

@@ -1,0 +1,22 @@
+{
+  "nama": "Default",
+  "bg": "#EFF6FF",
+  "kartu": "#FFFFFF",
+  "utama": "#2563EB",
+  "aksen": "#F59E0B",
+  "teks": "#0F172A",
+  "teksMuted": "#475569",
+  "muted": "#F1F5F9",
+  "border": "#E2E8F0",
+  "biru": "#2563EB",
+  "ungu": "#8B5CF6",
+  "amber": "#F59E0B",
+  "hijau": "#16A34A",
+  "merah": "#DC2626",
+  "pink": "#EC4899",
+  "biruGelap": "#1E3A8A",
+  "teal": "#14B8A6",
+  "oranye": "#EA580C",
+  "oranyeBg": "#FFF7ED",
+  "oranyeGelap": "#9A3412"
+}

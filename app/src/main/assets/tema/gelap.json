@@ -1,0 +1,22 @@
+{
+  "nama": "Malam",
+  "bg": "#0F172A",
+  "kartu": "#1E293B",
+  "utama": "#3B82F6",
+  "aksen": "#FBBF24",
+  "teks": "#F1F5F9",
+  "teksMuted": "#94A3B8",
+  "muted": "#334155",
+  "border": "#334155",
+  "biru": "#3B82F6",
+  "ungu": "#A78BFA",
+  "amber": "#FBBF24",
+  "hijau": "#34D399",
+  "merah": "#F87171",
+  "pink": "#F472B6",
+  "biruGelap": "#1D4ED8",
+  "teal": "#2DD4BF",
+  "oranye": "#FB923C",
+  "oranyeBg": "#1E1B16",
+  "oranyeGelap": "#FDBA74"
+}

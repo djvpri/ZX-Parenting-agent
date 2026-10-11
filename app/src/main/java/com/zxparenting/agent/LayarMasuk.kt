@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,13 +35,13 @@ fun LayarMasuk(onMasuk: () -> Unit, onDemo: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF))
+            .background(Bg)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("ZX Parenting", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0F172A))
-        Text(stringResource(R.string.login_as_child), fontSize = 14.sp, color = Color(0xFF475569))
+        Text("ZX Parenting", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = Teks)
+        Text(stringResource(R.string.login_as_child), fontSize = 14.sp, color = MutedFg)
         Spacer(Modifier.height(32.dp))
 
         Card(
@@ -115,7 +117,7 @@ fun LayarMasuk(onMasuk: () -> Unit, onDemo: () -> Unit) {
         Text(
             stringResource(R.string.demo_mode_desc),
             fontSize = 12.sp,
-            color = Color(0xFF94A3B8),
+            color = MutedFg,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
         )
         OutlinedButton(

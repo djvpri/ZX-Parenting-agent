@@ -16,17 +16,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.zxparenting.agent.BuildConfig
 import androidx.compose.ui.res.stringResource
+import com.zxparenting.agent.tema.*
+import com.zxparenting.agent.tema.WarnaAktif
 
 @Composable
 fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val bahasaAktif = ManajerBahasa.bahasaAktif(ctx)
     var showLangDialog by remember { mutableStateOf(false) }
+    var showTemaDialog by remember { mutableStateOf(false) }
+    val temaAktif = WarnaAktif.keyAktif(ctx)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF))
+            .background(Bg)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -42,15 +46,15 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
                     modifier = Modifier
                         .size(56.dp)
                         .clip(RoundedCornerShape(28.dp))
-                        .background(Color(0xFF3B82F6).copy(alpha = 0.15f)),
+                        .background(Biru.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(Icons.Default.Person, contentDescription = null, tint = Color(0xFF3B82F6), modifier = Modifier.size(28.dp))
+                    Icon(Icons.Default.Person, contentDescription = null, tint = Biru, modifier = Modifier.size(28.dp))
                 }
                 Spacer(Modifier.width(16.dp))
                 Column {
                     Text(nama, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text("Umur $umur tahun", fontSize = 12.sp, color = Color(0xFF94A3B8))
+                    Text("Umur $umur tahun", fontSize = 12.sp, color = MutedFg)
                 }
             }
         }
@@ -62,11 +66,11 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             colors = CardDefaults.cardColors(containerColor = Color.White),
         ) {
             Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Shield, contentDescription = null, tint = Color(0xFF10B981), modifier = Modifier.size(24.dp))
+                Icon(Icons.Default.Shield, contentDescription = null, tint = Hijau, modifier = Modifier.size(24.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.parental_control), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                    Text(stringResource(R.string.device_admin_active), fontSize = 11.sp, color = Color(0xFF94A3B8))
+                    Text(stringResource(R.string.device_admin_active), fontSize = 11.sp, color = MutedFg)
                 }
             }
         }
@@ -84,6 +88,22 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             Text("${stringResource(R.string.language)}: ${bahasaAktif ?: stringResource(R.string.lang_system)}")
         }
 
+        // Theme switcher
+        OutlinedButton(
+            onClick = { showTemaDialog = true },
+            modifier = Modifier.fillMaxWidth().height(48.dp),
+            shape = RoundedCornerShape(12.dp),
+        ) {
+            Icon(Icons.Default.Palette, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            val namaTema = when (temaAktif) {
+                "gelap" -> stringResource(R.string.tema_malam)
+                "laut" -> stringResource(R.string.tema_laut)
+                else -> stringResource(R.string.tema_default)
+            }
+            Text("${stringResource(R.string.tema)}: $namaTema")
+        }
+
         OutlinedButton(
             onClick = onKeluar,
             modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -97,7 +117,7 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
         Text(
             "Versi ${BuildConfig.VERSI_NAMA} (${BuildConfig.VERSI_KODE})",
             fontSize = 11.sp,
-            color = Color(0xFF94A3B8),
+            color = MutedFg,
             modifier = Modifier.fillMaxWidth(),
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
         )
@@ -123,7 +143,7 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
                         ) {
                             Text(label, modifier = Modifier.weight(1f))
                             if (bahasaAktif == code) {
-                                Icon(Icons.Default.Check, contentDescription = null, tint = Color(0xFF3B82F6))
+                                Icon(Icons.Default.Check, contentDescription = null, tint = Biru)
                             }
                         }
                     }
@@ -131,6 +151,37 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
             },
             confirmButton = {},
             dismissButton = { TextButton(onClick = { showLangDialog = false }) { Text(stringResource(R.string.done)) } },
+        )
+    }
+
+    if (showTemaDialog) {
+        AlertDialog(
+            onDismissRequest = { showTemaDialog = false },
+            title = { Text(stringResource(R.string.tema)) },
+            text = {
+                Column {
+                    listOf(
+                        "default" to stringResource(R.string.tema_default),
+                        "gelap" to stringResource(R.string.tema_malam),
+                        "laut" to stringResource(R.string.tema_laut),
+                    ).forEach { (key, label) ->
+                        TextButton(
+                            onClick = {
+                                WarnaAktif.gantiByKey(ctx, key)
+                                showTemaDialog = false
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(label, modifier = Modifier.weight(1f))
+                            if (temaAktif == key) {
+                                Icon(Icons.Default.Check, contentDescription = null, tint = Biru)
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { showTemaDialog = false }) { Text(stringResource(R.string.done)) } },
         )
     }
 }

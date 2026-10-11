@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,7 +53,7 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF)),
+            .background(Bg),
     ) {
         Text(
             stringResource(R.string.task_title),
@@ -68,7 +70,7 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
                 Text(error, color = MaterialTheme.colorScheme.error)
             }
             items.isEmpty() -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.no_tasks), color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.no_tasks), color = MutedFg)
             }
             else -> LazyColumn(
                 contentPadding = PaddingValues(16.dp),
@@ -85,9 +87,9 @@ private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
     val isAiKuis = t.type == "ai_quiz" || t.type == "ai_scheduled"
     val bisaDikerjakan = isAiKuis && t.status != "SELESAI"
     val warnaStatus = when (t.status) {
-        "SELESAI" -> Color(0xFFDCFCE7) to Color(0xFF166534)
-        "DIVERIFIKASI" -> Color(0xFFDBEAFE) to Color(0xFF1E40AF)
-        else -> Color(0xFFFEF3C7) to Color(0xFF92400E)
+        "SELESAI" -> Hijau.copy(alpha = .12f) to Hijau
+        "DIVERIFIKASI" -> Biru.copy(alpha = .12f) to BiruGelap
+        else -> Amber.copy(alpha = .15f) to Amber.copy(alpha = .7f)
     }
     val labelStatus = when (t.status) {
         "SELESAI" -> stringResource(R.string.done)
@@ -109,19 +111,19 @@ private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF3B82F6).copy(alpha = 0.15f)),
+                        .background(Biru.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(Icons.Default.Task, contentDescription = null, tint = Color(0xFF3B82F6), modifier = Modifier.size(20.dp))
+                    Icon(Icons.Default.Task, contentDescription = null, tint = Biru, modifier = Modifier.size(20.dp))
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(t.judul, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     if (!t.deskripsi.isNullOrBlank()) {
-                        Text(t.deskripsi, fontSize = 11.sp, color = Color(0xFF94A3B8))
+                        Text(t.deskripsi, fontSize = 11.sp, color = MutedFg)
                     }
                 }
-                BadgePill("+${t.reward} ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                BadgePill("+${t.reward} ZX", Hijau.copy(alpha = .12f), Hijau)
             }
             Spacer(Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -129,13 +131,13 @@ private fun KartuTugas(t: TugasAnak, onKlik: (TugasAnak) -> Unit) {
                     BadgePill(labelStatus, warnaStatus.first, warnaStatus.second)
                     if (isAiKuis) {
                         Spacer(Modifier.width(6.dp))
-                        BadgePill(stringResource(R.string.ai_badge), Color(0xFFEDE9FE), Color(0xFF6D28D9))
+                        BadgePill(stringResource(R.string.ai_badge), Ungu.copy(alpha = .12f), Ungu)
                     }
                 }
                 if (bisaDikerjakan) {
-                    Text("Kerjakan →", fontSize = 11.sp, color = Color(0xFF3B82F6), fontWeight = FontWeight.Medium)
+                    Text("Kerjakan →", fontSize = 11.sp, color = Biru, fontWeight = FontWeight.Medium)
                 } else if (t.deadline != null) {
-                    Text("Deadline: ${t.deadline.take(10)}", fontSize = 10.sp, color = Color(0xFF94A3B8))
+                    Text("Deadline: ${t.deadline.take(10)}", fontSize = 10.sp, color = MutedFg)
                 }
             }
         }

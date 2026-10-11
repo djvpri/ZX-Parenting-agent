@@ -1,0 +1,22 @@
+{
+  "nama": "Laut",
+  "bg": "#ECFEFF",
+  "kartu": "#FFFFFF",
+  "utama": "#0891B2",
+  "aksen": "#06B6D4",
+  "teks": "#083344",
+  "teksMuted": "#0E7490",
+  "muted": "#CFFAFE",
+  "border": "#A5F3FC",
+  "biru": "#0891B2",
+  "ungu": "#7C3AED",
+  "amber": "#F59E0B",
+  "hijau": "#059669",
+  "merah": "#DC2626",
+  "pink": "#EC4899",
+  "biruGelap": "#155E75",
+  "teal": "#14B8A6",
+  "oranye": "#EA580C",
+  "oranyeBg": "#FFF7ED",
+  "oranyeGelap": "#9A3412"
+}

@@ -109,4 +109,8 @@
     <string name="challenge_harian">Daily Challenge</string>
     <string name="streak_hari">day streak</string>
     <string name="streak_terbaik">Best</string>
+    <string name="tema">Theme</string>
+    <string name="tema_default">Default</string>
+    <string name="tema_malam">Night</string>
+    <string name="tema_laut">Ocean</string>
 </resources>

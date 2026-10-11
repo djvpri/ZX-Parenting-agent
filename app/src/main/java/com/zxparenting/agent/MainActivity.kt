@@ -15,6 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import com.zxparenting.agent.tema.WarnaAktif
+import com.zxparenting.agent.tema.TemaZX
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(s: Bundle?) {
@@ -28,8 +30,11 @@ class MainActivity : ComponentActivity() {
         // Inisialisasi bahasa tersimpan
         ManajerBahasa.inisialisasi(ctx)
 
+        // Inisialisasi tema tersimpan
+        WarnaAktif.inisialisasi(ctx)
+
         setContent {
-            MaterialTheme(colorScheme = lightColorScheme()) {
+            TemaZX {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = { },

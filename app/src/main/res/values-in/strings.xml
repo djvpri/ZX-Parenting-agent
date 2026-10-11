@@ -109,4 +109,8 @@
     <string name="challenge_harian">Challenge Harian</string>
     <string name="streak_hari">hari streak</string>
     <string name="streak_terbaik">Terbaik</string>
+    <string name="tema">Tema</string>
+    <string name="tema_default">Default</string>
+    <string name="tema_malam">Malam</string>
+    <string name="tema_laut">Laut</string>
 </resources>

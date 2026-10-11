@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -58,7 +60,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFEFF6FF)),
+        modifier = Modifier.fillMaxSize().background(Bg),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -96,7 +98,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         Text(
                             "$terkunci/${soal.size} soal terjawab",
                             fontSize = 12.sp,
-                            color = Color(0xFF64748B),
+                            color = MutedFg,
                         )
                         Spacer(Modifier.height(8.dp))
                         Button(
@@ -135,7 +137,7 @@ fun LayarKuisSession(jwt: String, tugasId: String, onKembali: () -> Unit) {
                         }
                         if (!semuaTerjawab) {
                             Spacer(Modifier.height(4.dp))
-                            Text(stringResource(R.string.answer_all_first), fontSize = 11.sp, color = Color(0xFFEF4444))
+                            Text(stringResource(R.string.answer_all_first), fontSize = 11.sp, color = Merah)
                         }
                     }
                 }
@@ -222,7 +224,7 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("$no.", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color(0xFF3B82F6))
+                Text("$no.", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Biru)
                 Spacer(Modifier.width(6.dp))
                 Text(soal.question, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
@@ -234,9 +236,9 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     shape = RoundedCornerShape(10.dp),
                     color = when {
-                        terpilih -> Color(0xFF3B82F6)
-                        terkunci -> Color(0xFFF1F5F9)
-                        else -> Color(0xFFF8FAFC)
+                        terpilih -> Biru
+                        terkunci -> Muted
+                        else -> Kartu
                     },
                 ) {
                     Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -247,8 +249,8 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
                                 .background(
                                     when {
                                         terpilih -> Color.White
-                                        terkunci -> Color(0xFFCBD5E1)
-                                        else -> Color(0xFF3B82F6).copy(alpha = 0.15f)
+                                        terkunci -> Border
+                                        else -> Biru.copy(alpha = 0.15f)
                                     }
                                 ),
                             contentAlignment = Alignment.Center,
@@ -259,8 +261,8 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
                                 fontWeight = FontWeight.Bold,
                                 color = when {
                                     terpilih -> Color.White
-                                    terkunci -> Color(0xFF94A3B8)
-                                    else -> Color(0xFF3B82F6)
+                                    terkunci -> MutedFg
+                                    else -> Biru
                                 },
                             )
                         }
@@ -270,20 +272,20 @@ private fun KartuSoalLockable(no: Int, soal: SoalSession, dipilih: Int?, onPilih
                             fontSize = 13.sp,
                             color = when {
                                 terpilih -> Color.White
-                                terkunci -> Color(0xFF94A3B8)
-                                else -> Color(0xFF1E293B)
+                                terkunci -> MutedFg
+                                else -> Teks
                             },
                         )
                         if (terkunci && !terpilih) {
                             Spacer(Modifier.weight(1f))
-                            Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFFCBD5E1), modifier = Modifier.size(14.dp))
+                            Icon(Icons.Default.Lock, contentDescription = null, tint = Border, modifier = Modifier.size(14.dp))
                         }
                     }
                 }
             }
             if (terkunci) {
                 Spacer(Modifier.height(6.dp))
-                Text(stringResource(R.string.answers_locked), fontSize = 10.sp, color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.answers_locked), fontSize = 10.sp, color = MutedFg)
             }
         }
     }
@@ -309,9 +311,9 @@ private fun HasilKuisSession(
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
-        persen >= 70 -> Color(0xFF10B981)
-        persen >= 50 -> Color(0xFFF59E0B)
-        else -> Color(0xFFEF4444)
+        persen >= 70 -> Hijau
+        persen >= 50 -> Amber
+        else -> Merah
     }
 
     LazyColumn(
@@ -335,9 +337,9 @@ private fun HasilKuisSession(
                     Spacer(Modifier.height(12.dp))
                     Text(emoji, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
-                    Text("$benar dari $total benar", fontSize = 14.sp, color = Color(0xFF64748B))
+                    Text("$benar dari $total benar", fontSize = 14.sp, color = MutedFg)
                     Spacer(Modifier.height(16.dp))
-                    BadgePill("+$token ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                    BadgePill("+$token ZX", Hijau.copy(alpha = .12f), Hijau)
                     Spacer(Modifier.height(20.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         OutlinedButton(
@@ -384,7 +386,7 @@ private fun ReviewKuisSession(
                 Text(stringResource(R.string.explanation), fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 if (review != null) {
                     val persen = if ((review.totalSoal ?: 0) > 0) ((review.benarCount ?: 0) * 100 / review.totalSoal!!) else 0
-                    BadgePill("$persen%", Color(0xFFDBEAFE), Color(0xFF1E40AF))
+                    BadgePill("$persen%", Biru.copy(alpha = .12f), BiruGelap)
                 }
             }
         }
@@ -393,7 +395,7 @@ private fun ReviewKuisSession(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (r.benar) Color(0xFFF0FDF4) else Color(0xFFFEF2F2),
+                    containerColor = if (r.benar) Hijau.copy(alpha = .08f) else Merah.copy(alpha = .05f),
                 ),
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
@@ -401,7 +403,7 @@ private fun ReviewKuisSession(
                         Icon(
                             if (r.benar) Icons.Default.CheckCircle else Icons.Default.Cancel,
                             contentDescription = null,
-                            tint = if (r.benar) Color(0xFF10B981) else Color(0xFFEF4444),
+                            tint = if (r.benar) Hijau else Merah,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
@@ -414,31 +416,31 @@ private fun ReviewKuisSession(
                         val benarIdx = idx == r.jawabanBenar
                         val anakIdx = r.jawabanAnak != null && idx == r.jawabanAnak
                         val bg = when {
-                            benarIdx -> Color(0xFFDCFCE7)
-                            anakIdx -> Color(0xFFFEE2E2)
+                            benarIdx -> Hijau.copy(alpha = .12f)
+                            anakIdx -> Merah.copy(alpha = .12f)
                             else -> Color.Transparent
                         }
                         Row(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text("${('A' + idx)}.", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (benarIdx) Color(0xFF166534) else if (anakIdx) Color(0xFF991B1B) else Color(0xFF64748B))
+                            Text("${('A' + idx)}.", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = if (benarIdx) Hijau else if (anakIdx) Merah else MutedFg)
                             Spacer(Modifier.width(6.dp))
-                            Text(opt, fontSize = 12.sp, color = if (benarIdx) Color(0xFF166534) else if (anakIdx) Color(0xFF991B1B) else Color(0xFF1E293B))
+                            Text(opt, fontSize = 12.sp, color = if (benarIdx) Hijau else if (anakIdx) Merah else Teks)
                             if (benarIdx) {
                                 Spacer(Modifier.weight(1f))
-                                Icon(Icons.Default.Check, contentDescription = null, tint = Color(0xFF166534), modifier = Modifier.size(14.dp))
+                                Icon(Icons.Default.Check, contentDescription = null, tint = Hijau, modifier = Modifier.size(14.dp))
                             }
                         }
                     }
                     if (r.explanation.isNotBlank()) {
                         Spacer(Modifier.height(8.dp))
-                        Divider(color = Color(0xFFE2E8F0))
+                        Divider(color = Border)
                         Spacer(Modifier.height(6.dp))
                         Row {
-                            Icon(Icons.Default.Lightbulb, contentDescription = null, tint = Color(0xFFF59E0B), modifier = Modifier.size(16.dp))
+                            Icon(Icons.Default.Lightbulb, contentDescription = null, tint = Amber, modifier = Modifier.size(16.dp))
                             Spacer(Modifier.width(6.dp))
-                            Text(r.explanation, fontSize = 11.sp, color = Color(0xFF475569))
+                            Text(r.explanation, fontSize = 11.sp, color = MutedFg)
                         }
                     }
                 }

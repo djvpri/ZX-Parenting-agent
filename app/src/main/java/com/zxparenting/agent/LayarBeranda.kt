@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,7 +54,7 @@ fun LayarBeranda(jwt: String?, onBukaKuis: (String) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF)),
+            .background(Bg),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -60,7 +62,7 @@ fun LayarBeranda(jwt: String?, onBukaKuis: (String) -> Unit = {}) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(stringResource(R.string.home), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            BadgePill("ZX Official", Color(0xFFDCFCE7), Color(0xFF166534))
+            BadgePill("ZX Official", Hijau.copy(alpha = .12f), Hijau)
         }
 
         if (loading) {
@@ -73,7 +75,7 @@ fun LayarBeranda(jwt: String?, onBukaKuis: (String) -> Unit = {}) {
             }
         } else if (items.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.no_content), color = Color(0xFF94A3B8))
+                Text(stringResource(R.string.no_content), color = MutedFg)
             }
         } else {
             LazyColumn(
@@ -103,10 +105,10 @@ private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
         else -> item.tipe
     }
     val warnaTipe = when (item.tipe) {
-        "KUIS_HARIAN" -> Color(0xFF3B82F6)
-        "TANTANGAN_MINGGUAN" -> Color(0xFFF59E0B)
-        "ARTIKEL" -> Color(0xFF8B5CF6)
-        else -> Color(0xFF10B981)
+        "KUIS_HARIAN" -> Biru
+        "TANTANGAN_MINGGUAN" -> Amber
+        "ARTIKEL" -> Ungu
+        else -> Hijau
     }
 
     Card(
@@ -135,15 +137,15 @@ private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
                 Spacer(Modifier.width(10.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(item.judul, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                    Text(tipeLabel, fontSize = 10.sp, color = Color(0xFF94A3B8))
+                    Text(tipeLabel, fontSize = 10.sp, color = MutedFg)
                 }
                 if (meta?.premium == true) {
-                    BadgePill(stringResource(R.string.pro_badge), Color(0xFFFEE2E2), Color(0xFF991B1B))
+                    BadgePill(stringResource(R.string.pro_badge), Merah.copy(alpha = .12f), Merah)
                 }
             }
             if (!item.deskripsi.isNullOrBlank()) {
                 Spacer(Modifier.height(8.dp))
-                Text(item.deskripsi, fontSize = 12.sp, color = Color(0xFF475569))
+                Text(item.deskripsi, fontSize = 12.sp, color = MutedFg)
             }
             Spacer(Modifier.height(10.dp))
             Row(
@@ -153,13 +155,13 @@ private fun KartuOfficial(item: OfficialItem, onClick: () -> Unit = {}) {
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     if (meta?.kategori != null) {
-                        BadgePill(meta.kategori, Color(0xFFF1F5F9), Color(0xFF64748B))
+                        BadgePill(meta.kategori, Muted, MutedFg)
                     }
                     if (meta != null) {
-                        BadgePill("+${meta.tokenReward} ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                        BadgePill("+${meta.tokenReward} ZX", Hijau.copy(alpha = .12f), Hijau)
                     }
                 }
-                Text("${meta?.views ?: 0}x dilihat", fontSize = 10.sp, color = Color(0xFF94A3B8))
+                Text("${meta?.views ?: 0}x dilihat", fontSize = 10.sp, color = MutedFg)
             }
         }
     }

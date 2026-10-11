@@ -1,5 +1,7 @@
 package com.zxparenting.agent
 
+import com.zxparenting.agent.tema.*
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,7 +56,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFEFF6FF)),
+            .background(Bg),
     ) {
         // Header
         Row(
@@ -71,7 +73,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                 modifier = Modifier.weight(1f),
             )
             if (detail != null) {
-                BadgePill("+${detail!!.tokenReward} ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                BadgePill("+${detail!!.tokenReward} ZX", Hijau.copy(alpha = .12f), Hijau)
             }
         }
 
@@ -85,7 +87,7 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
             fase == "selesai" -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF10B981), modifier = Modifier.size(48.dp))
+                        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Hijau, modifier = Modifier.size(48.dp))
                         Spacer(Modifier.height(12.dp))
                         Text(stringResource(R.string.already_done), fontWeight = FontWeight.Bold)
                     }
@@ -157,7 +159,7 @@ private fun KartuSoal(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Unit)
                     onClick = { onPilih(idx) },
                     modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp),
                     shape = RoundedCornerShape(10.dp),
-                    color = if (terpilih) Color(0xFF3B82F6) else Color(0xFFF8FAFC),
+                    color = if (terpilih) Biru else Kartu,
                 ) {
                     Row(
                         modifier = Modifier.padding(12.dp),
@@ -167,18 +169,18 @@ private fun KartuSoal(no: Int, soal: Soal, dipilih: Int, onPilih: (Int) -> Unit)
                             modifier = Modifier
                                 .size(24.dp)
                                 .clip(RoundedCornerShape(12.dp))
-                                .background(if (terpilih) Color.White else Color(0xFF3B82F6).copy(alpha = 0.15f)),
+                                .background(if (terpilih) Color.White else Biru.copy(alpha = 0.15f)),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
                                 ('A' + idx).toString(),
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (terpilih) Color(0xFF3B82F6) else Color(0xFF3B82F6),
+                                color = if (terpilih) Biru else Biru,
                             )
                         }
                         Spacer(Modifier.width(10.dp))
-                        Text(opt, fontSize = 13.sp, color = if (terpilih) Color.White else Color(0xFF1E293B))
+                        Text(opt, fontSize = 13.sp, color = if (terpilih) Color.White else Teks)
                     }
                 }
             }
@@ -199,9 +201,9 @@ private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
         else -> stringResource(R.string.keep_practicing)
     }
     val warna = when {
-        persen >= 70 -> Color(0xFF10B981)
-        persen >= 50 -> Color(0xFFF59E0B)
-        else -> Color(0xFFEF4444)
+        persen >= 70 -> Hijau
+        persen >= 50 -> Amber
+        else -> Merah
     }
 
     Box(
@@ -229,9 +231,9 @@ private fun HasilKuis(hasil: CompleteRes?, onKembali: () -> Unit) {
                 Spacer(Modifier.height(12.dp))
                 Text(emoji, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
-                Text("$skor dari $total benar", fontSize = 14.sp, color = Color(0xFF64748B))
+                Text("$skor dari $total benar", fontSize = 14.sp, color = MutedFg)
                 Spacer(Modifier.height(16.dp))
-                BadgePill("+$token ZX", Color(0xFFDCFCE7), Color(0xFF166534))
+                BadgePill("+$token ZX", Hijau.copy(alpha = .12f), Hijau)
                 Spacer(Modifier.height(20.dp))
                 Button(
                     onClick = onKembali,
