@@ -11,6 +11,7 @@ object Simpanan {
     private const val K_NAMA = "nama_anak"
     private const val K_ANAK_ID = "anak_id"
     private const val K_UMUR = "umur_anak"
+    private const val K_USERNAME = "username_anak"
     private const val K_DEMO = "demo_mode"      // true = reviewer demo, skip API
 
     // --- Demo mode (Play Console reviewer) ---
@@ -19,6 +20,7 @@ object Simpanan {
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()
             .putBoolean(K_DEMO, true)
             .putString(K_NAMA, "Demo")
+            .putString(K_USERNAME, "haza")
             .putInt(K_UMUR, 8)
             .apply()
     }
@@ -52,17 +54,21 @@ object Simpanan {
     fun jwt(c: Context): String? =
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(K_JWT, null)
 
-    fun simpanAnak(c: Context, jwt: String, id: String, nama: String, umur: Int) {
+    fun simpanAnak(c: Context, jwt: String, id: String, nama: String, umur: Int, username: String = "") {
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()
             .putString(K_JWT, jwt)
             .putString(K_ANAK_ID, id)
             .putString(K_NAMA, nama)
+            .putString(K_USERNAME, username)
             .putInt(K_UMUR, umur)
             .apply()
     }
 
     fun namaAnak(c: Context): String? =
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(K_NAMA, null)
+
+    fun usernameAnak(c: Context): String? =
+        c.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(K_USERNAME, null)
 
     fun anakId(c: Context): String? =
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).getString(K_ANAK_ID, null)
@@ -72,7 +78,7 @@ object Simpanan {
 
     fun hapusAnak(c: Context) {
         c.getSharedPreferences(FILE, Context.MODE_PRIVATE).edit()
-            .remove(K_JWT).remove(K_NAMA).remove(K_ANAK_ID).remove(K_UMUR).remove(K_DEMO)
+            .remove(K_JWT).remove(K_NAMA).remove(K_USERNAME).remove(K_ANAK_ID).remove(K_UMUR).remove(K_DEMO)
             .apply()
     }
 }

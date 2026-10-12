@@ -93,6 +93,7 @@ fun LayarMasuk(onMasuk: () -> Unit, onDemo: () -> Unit) {
                                     a?.id ?: "",
                                     a?.nama ?: strAnak,
                                     a?.umur ?: 0,
+                                    username.trim(),
                                 )
                                 onMasuk()
                             } else {

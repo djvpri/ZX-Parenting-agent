@@ -75,6 +75,7 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
     var kuisId by remember { mutableStateOf<String?>(null) }
     var tugasKuisId by remember { mutableStateOf<String?>(null) }
     val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: strAnak }
+    val username = remember { Simpanan.usernameAnak(Ctx.get()) ?: "" }
     val umur = remember { Simpanan.umurAnak(Ctx.get()) }
 
     // Full-screen kuis detail ketika kuisId dipilih
@@ -105,7 +106,7 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
     ) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
             when (tab) {
-                0 -> LayarBeranda(jwt, nama, umur, onBukaKuis = { kuisId = it }, onKlikTugas = { tugasKuisId = it.id })
+                0 -> LayarBeranda(jwt, nama, umur, username = username, onBukaKuis = { kuisId = it }, onKlikTugas = { tugasKuisId = it.id })
                 1 -> LayarKuisAI(jwt = jwt ?: "", onKembali = { tab = 0 })
                 2 -> LayarTugas(jwt, onKlikTugas = { t -> tugasKuisId = t.id })
                 3 -> LayarHadiah(jwt = jwt)

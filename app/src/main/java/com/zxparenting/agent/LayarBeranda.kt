@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}) {
+fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var tugas by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
@@ -111,7 +111,7 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> 
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item { GreetingCard(nama, umur, streak, saldo) }
+            item { GreetingCard(nama, umur, streak, saldo, username) }
             item { AccessibilityWarning() }
 
             if (challenge != null) {
@@ -150,8 +150,9 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, onBukaKuis: (String) -> 
 }
 
 @Composable
-private fun GreetingCard(nama: String, umur: Int, streak: StreakRes?, saldo: Int) {
+private fun GreetingCard(nama: String, umur: Int, streak: StreakRes?, saldo: Int, username: String = "") {
     val strHi = stringResource(R.string.greeting_hi)
+    val sapaan = if (username.isNotBlank()) username else nama
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -159,7 +160,7 @@ private fun GreetingCard(nama: String, umur: Int, streak: StreakRes?, saldo: Int
             .background(Brush.linearGradient(listOf(Biru, Ungu))),
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
-            Text("$strHi $nama!", fontSize = 13.sp, color = Color.White.copy(alpha = .85f))
+            Text("$strHi $sapaan!", fontSize = 13.sp, color = Color.White.copy(alpha = .85f))
             Text("$nama, $umur", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
             Spacer(Modifier.height(10.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
