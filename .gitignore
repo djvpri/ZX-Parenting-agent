@@ -10,3 +10,7 @@
 .cxx
 app/rilis.keystore
 app/keystore.properties
+keystore/rilis.keystore
+keystore/rilis.keystore.pw
+keystore/rilis-baru.keystore
+keystore/rilis-baru.keystore.pw

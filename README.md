@@ -10,13 +10,14 @@ Agent parental control untuk HP anak — konsumen API `/api/agent` dari web ZX P
 - **Blokir per-app** (fase 5): Accessibility service deteksi app depan → overlay blokir utk app dalam daftar `appBlokir` dari server.
 
 ## Rilis Play Store
-Keystore release **sudah ada di repo** (`keystore/rilis.keystore` + `keystore/rilis.keystore.pw`) —
-workflow rilis otomatis pakai itu, tanpa perlu Secrets. Agent lain dgn signature sama:
-copy folder `keystore/` + file `.github/workflows/rilis.yml` ke repo agent itu.
+Keystore release **tidak committed ke repo** — disimpan di GitHub Secrets:
+`KEYSTORE_B64` (`base64 -w0 rilis.keystore`), `KEYSTORE_PASSWORD`,
+`KEYSTORE_ALIAS`, `KEYSTORE_KEY_PASSWORD`. Workflow rilis baca dari Secrets
+dulu, fallback ke file repo (legacy).
 
-Alternatif (fallback): Secrets `KEYSTORE_B64` (`base64 -w0 rilis.keystore`),
-`KEYSTORE_PASSWORD`, `KEYSTORE_ALIAS`, `KEYSTORE_KEY_PASSWORD`. Tanpa keduanya build GAGAL
-sengaja (Play tolak debug-signed). Keystore hilang = tak bisa update app di Play.
+Signature lama (v2.3.0 ke bawah) compromised — keystore lama pernah committed
+publik. Mulai v2.4.0 pakai keystore baru (rotasi). User harus reinstall app
+(signature beda = Android reject update dari versi lama).
 
 ## Kontrak API (web sudah live)
 ```
@@ -28,7 +29,7 @@ Body:   {"aksi": "ping"|"lokasi"|"activity", "detail": {...}}
 ## Build & rilis
 - WSL tak ada toolchain Android → compile dijajakan CI.
 - **CI** (`.github/workflows/ci.yml`): `assembleDebug` tiap push — judge compile.
-- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` → bump `alamat.json` → `bundleRelease` + `assembleRelease` (AAB utk Play + APK utk pasang langsung, keystore repo-first) → attach AAB & APK ke GitHub Release.
+- **Rilis** (`rilis.yml`): workflow_dispatch + input `versi` → bump `alamat.json` → `bundleRelease` + `assembleRelease` (AAB utk Play + APK utk pasang langsung, keystore Secrets-first) → attach AAB & APK ke GitHub Release.
 
 ## Struktur
 ```

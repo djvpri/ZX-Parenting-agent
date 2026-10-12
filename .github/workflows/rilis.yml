@@ -2,9 +2,9 @@ name: rilis
 
 # Rilis AAB ZX Agent untuk Play Store (pola Z-Rooms-android).
 # Dipicu manual: Actions -> rilis -> Run workflow. versiKode naik otomatis.
-# Keystore: utamakan file di repo (keystore/rilis.keystore + .pw) — agent lain
-# tinggal copy folder keystore/ + rilis.yml ini utk rilis dgn signature sama.
-# Fallback: Secrets (KEYSTORE_B64, KEYSTORE_PASSWORD, KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD).
+# Keystore: utamakan GitHub Secrets (KEYSTORE_B64, KEYSTORE_PASSWORD,
+# KEYSTORE_ALIAS, KEYSTORE_KEY_PASSWORD) — tidak committed ke repo.
+# Fallback: file di repo (keystore/rilis.keystore + .pw) untuk signature lama.
 # Play Store menolak AAB/APK debug-signed.
 
 on:
@@ -33,7 +33,7 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Pasang build-tools 35.0.0 + platform + cmdline-tools/latest
+      - name: Pasang build-tools 36.0.0 + platform + cmdline-tools/latest
         run: |
           set -euo pipefail
           SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
@@ -71,7 +71,7 @@ jobs:
           '
           echo "VERSI=$VERSI" >> "$GITHUB_ENV"
 
-      - name: Siapkan keystore (repo dulu, fallback Secrets)
+      - name: Siapkan keystore (Secrets dulu, fallback repo)
         env:
           KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -79,7 +79,15 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         run: |
           set -euo pipefail
-          if [ -f keystore/rilis.keystore ]; then
+          if [ -n "${KEYSTORE_B64:-}" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > app/rilis.keystore
+            cat > app/keystore.properties <<EOF
+          storeFile=rilis.keystore
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEYSTORE_ALIAS
+          keyPassword=$KEYSTORE_KEY_PASSWORD
+          EOF
+          elif [ -f keystore/rilis.keystore ]; then
             cp keystore/rilis.keystore app/rilis.keystore
             STORE_PW=$(cat keystore/rilis.keystore.pw)
             KEY_PW="${KEYSTORE_KEY_PASSWORD:-$STORE_PW}"
@@ -90,16 +98,8 @@ jobs:
           keyAlias=$ALIAS
           keyPassword=$KEY_PW
           EOF
-          elif [ -n "${KEYSTORE_B64:-}" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > app/rilis.keystore
-            cat > app/keystore.properties <<EOF
-          storeFile=rilis.keystore
-          storePassword=$KEYSTORE_PASSWORD
-          keyAlias=$KEYSTORE_ALIAS
-          keyPassword=$KEYSTORE_KEY_PASSWORD
-          EOF
           else
-            echo "::error::Keystore tidak ada — taruh keystore/rilis.keystore + .pw di repo, atau isi Secrets (lihat README)."
+            echo "::error::Keystore tidak ada — isi Secrets (KEYSTORE_B64 dll) atau taruh keystore/rilis.keystore + .pw di repo."
             exit 1
           fi
 
