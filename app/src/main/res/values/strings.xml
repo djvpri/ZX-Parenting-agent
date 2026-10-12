@@ -140,4 +140,7 @@
     <string name="update_available">Update available:</string>
     <string name="up_to_date">Up to date</string>
     <string name="check">Check</string>
+    <string name="accessibility_status">Accessibility</string>
+    <string name="accessibility_active">Active</string>
+    <string name="open_settings">Open Settings</string>
 </resources>

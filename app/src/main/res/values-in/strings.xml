@@ -140,4 +140,7 @@
     <string name="update_available">Pembaruan tersedia:</string>
     <string name="up_to_date">Sudah terbaru</string>
     <string name="check">Cek</string>
+    <string name="accessibility_status">Aksesibilitas</string>
+    <string name="accessibility_active">Aktif</string>
+    <string name="open_settings">Buka Setelan</string>
 </resources>

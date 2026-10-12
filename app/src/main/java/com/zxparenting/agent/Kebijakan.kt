@@ -68,6 +68,16 @@ object Kebijakan {
      * Agent kirim 1 log sesi_main tiap mulai sesi + 1 log sesi_selesai saat berhenti;
      * estimasi menit pakai sessionLimit per sesi (batas aman; server sumber kebenaran nanti).
      */
+    /** Menit sampai curfew mulai. Int.MAX_VALUE bila tidak ada curfew atau sudah dalam curfew. */
+    fun menitKeCurfew(jam: Int, menit: Int, mulai: String?, selesai: String?): Int {
+        if (mulai.isNullOrBlank() || selesai.isNullOrBlank()) return Int.MAX_VALUE
+        if (dalamCurfew(jam, menit, mulai, selesai)) return Int.MAX_VALUE
+        val m = (mulai.split(":").getOrNull(0)?.toIntOrNull() ?: return Int.MAX_VALUE) * 60 +
+                (mulai.split(":").getOrNull(1)?.toIntOrNull() ?: return Int.MAX_VALUE)
+        val kini = jam * 60 + menit
+        return if (m >= kini) m - kini else 24 * 60 - kini + m // cross-midnight: curfew besok
+    }
+
     fun evaluasi(a: Aturan, jam: Int, menit: Int, kini: Long = System.currentTimeMillis()): AlasanBlokir? {
         if (a.masterUnlock) return null
         if (dalamCurfew(jam, menit, a.curfewMulai, a.curfewSelesai)) return AlasanBlokir.JAM_TIDUR

@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.sp
 import com.zxparenting.agent.BuildConfig
 import androidx.compose.ui.res.stringResource
 import com.zxparenting.agent.tema.*
+import android.content.Intent
+import android.provider.Settings
 import com.zxparenting.agent.tema.WarnaAktif
 
 @Composable
@@ -73,6 +75,39 @@ fun LayarSaya(nama: String, umur: Int, onKeluar: () -> Unit) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.parental_control), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                     Text(stringResource(R.string.device_admin_active), fontSize = 11.sp, color = MutedFg)
+                }
+            }
+        }
+
+        // Status accessibility
+        val aksesAktif = AksesService.instance != null
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+        ) {
+            Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    if (aksesAktif) Icons.Default.Shield else Icons.Default.Warning,
+                    contentDescription = null,
+                    tint = if (aksesAktif) Hijau else Merah,
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(Modifier.width(12.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(stringResource(R.string.accessibility_status), fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        if (aksesAktif) stringResource(R.string.accessibility_active) else stringResource(R.string.accessibility_off),
+                        fontSize = 11.sp,
+                        color = if (aksesAktif) MutedFg else Merah,
+                    )
+                }
+                if (!aksesAktif) {
+                    TextButton(onClick = {
+                        ctx.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                    }) {
+                        Text(stringResource(R.string.open_settings))
+                    }
                 }
             }
         }
