@@ -152,7 +152,11 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", o
 @Composable
 private fun GreetingCard(nama: String, umur: Int, streak: StreakRes?, saldo: Int, username: String = "") {
     val strHi = stringResource(R.string.greeting_hi)
-    val sapaan = if (username.isNotBlank()) username else nama
+    val sapaan = when {
+        username.isNotBlank() -> username
+        nama.isNotBlank() -> nama.trim().split(" ").first()
+        else -> nama
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
