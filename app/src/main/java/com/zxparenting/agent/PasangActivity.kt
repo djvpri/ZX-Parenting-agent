@@ -8,7 +8,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.graphics.toArgb
 import com.zxparenting.agent.R
+import com.zxparenting.agent.tema.WarnaAktif
 
 /**
  * Layar pairing: masukkan deviceToken dari dashboard ortu -> simpan -> mulai service.
@@ -28,17 +30,17 @@ class PasangActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(56, 120, 56, 56)
-            setBackgroundColor(0xFFEFF6FF.toInt())
+            setBackgroundColor(WarnaAktif.palet.bg.toArgb())
         }
         val judul = TextView(this).apply {
             text = getString(R.string.app_name_agent)
             textSize = 26f
-            setTextColor(0xFF0F172A.toInt())
+            setTextColor(WarnaAktif.palet.teks.toArgb())
         }
         val petunjuk = TextView(this).apply {
             text = getString(R.string.pairing_hint)
             textSize = 14f
-            setTextColor(0xFF475569.toInt())
+            setTextColor(WarnaAktif.palet.teksMuted.toArgb())
             setPadding(0, 24, 0, 40)
         }
         val input = EditText(this).apply {

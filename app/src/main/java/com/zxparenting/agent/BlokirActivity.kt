@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import java.lang.ref.WeakReference
+import androidx.compose.ui.graphics.toArgb
 import com.zxparenting.agent.R
+import com.zxparenting.agent.tema.WarnaAktif
 
 /**
  * Layar blokir (mockup layar 3 & 4): ditampilkan AgentService saat sesi habis / curfew.
@@ -29,11 +31,11 @@ class BlokirActivity : Activity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(64, 200, 64, 64)
-            setBackgroundColor(0xFF1E3A8A.toInt())
+            setBackgroundColor(WarnaAktif.palet.biruGelap.toArgb())
         }
         val judul = TextView(this).apply {
             textSize = 26f
-            setTextColor(0xFFFFFFFF.toInt())
+            setTextColor(WarnaAktif.palet.kartu.toArgb())
             text = when {
                 paketTertutup != null -> getString(R.string.app_restricted)
                 alasan == AlasanBlokir.JAM_TIDUR -> getString(R.string.good_night)
@@ -44,7 +46,7 @@ class BlokirActivity : Activity() {
         }
         val isi = TextView(this).apply {
             textSize = 15f
-            setTextColor(0xFFB6C6E8.toInt())
+            setTextColor(WarnaAktif.palet.border.toArgb())
             setPadding(0, 32, 0, 0)
             text = when {
                 paketTertutup != null -> getString(R.string.app_blocked_msg)
