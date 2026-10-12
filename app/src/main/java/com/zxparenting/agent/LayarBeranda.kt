@@ -303,11 +303,14 @@ private fun TugasCard(t: TugasAnak, onClick: () -> Unit = {}) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (bisaDikerjakan) {
-                    Text("Kerjakan →", fontSize = 12.sp, color = Biru, fontWeight = FontWeight.Medium)
+                val infoKiri = if (t.createdAt != null) {
+                    t.createdAt.take(10)
+                } else if (bisaDikerjakan) {
+                    "Kerjakan →"
                 } else {
-                    t.deadline?.let { Text(it.take(10), fontSize = 12.sp, color = MutedFg) }
+                    t.deadline?.take(10) ?: ""
                 }
+                Text(infoKiri, fontSize = 12.sp, color = if (bisaDikerjakan) Biru else MutedFg, fontWeight = if (bisaDikerjakan) FontWeight.Medium else FontWeight.Normal)
                 BadgePill("+${t.reward}", Amber.copy(alpha = .15f), OranyeGelap)
             }
         }

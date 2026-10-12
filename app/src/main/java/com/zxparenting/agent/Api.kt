@@ -64,6 +64,7 @@ data class TugasAnak(
     val status: String,
     val deadline: String?,
     val type: String? = null, // manual | ai_quiz | ai_scheduled
+    @SerializedName("createdAt") val createdAt: String? = null,
 )
 
 // --- Kuis ---
