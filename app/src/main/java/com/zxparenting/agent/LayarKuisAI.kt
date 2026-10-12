@@ -25,12 +25,12 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarKuisAI(jwt: String, onKembali: () -> Unit) {
+fun LayarKuisAI(jwt: String, onKembali: () -> Unit, topikAwal: String = "") {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     val strTopicReq = stringResource(R.string.topic_required)
     val strFailCreate = stringResource(R.string.fail_create_quiz)
     val strFailSubmit = stringResource(R.string.fail_submit)
-    var topik by remember { mutableStateOf("") }
+    var topik by remember { mutableStateOf(topikAwal) }
     var level by remember { mutableStateOf(3) }
     var fase by remember { mutableStateOf("input") } // input | soal | hasil
     var soal by remember { mutableStateOf<List<Soal>>(emptyList()) }

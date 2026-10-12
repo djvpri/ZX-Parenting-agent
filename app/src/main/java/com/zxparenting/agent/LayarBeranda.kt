@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
 
 @Composable
-fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}) {
+fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", onBukaKuis: (String) -> Unit = {}, onKlikTugas: (TugasAnak) -> Unit = {}, onKlikChallenge: (String) -> Unit = {}) {
     val ctx = androidx.compose.ui.platform.LocalContext.current
     var items by remember { mutableStateOf<List<OfficialItem>>(emptyList()) }
     var tugas by remember { mutableStateOf<List<TugasAnak>>(emptyList()) }
@@ -117,7 +117,7 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", o
             if (challenge != null) {
                 item {
                     SectionLabel(stringResource(R.string.section_challenge_today))
-                    ChallengeCard(challenge!!, onBukaKuis)
+                    ChallengeCard(challenge!!, onBukaKuis, onKlikChallenge)
                 }
             }
 
@@ -224,9 +224,9 @@ private fun SectionLabel(text: String) {
 }
 
 @Composable
-private fun ChallengeCard(c: ChallengeRes, onBukaKuis: (String) -> Unit) {
+private fun ChallengeCard(c: ChallengeRes, onBukaKuis: (String) -> Unit, onKlikChallenge: (String) -> Unit) {
     Card(
-        onClick = { if (!c.selesai && c.id != null) onBukaKuis(c.id) },
+        onClick = { if (!c.selesai && !c.topik.isNullOrBlank()) onKlikChallenge(c.topik!!) },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),

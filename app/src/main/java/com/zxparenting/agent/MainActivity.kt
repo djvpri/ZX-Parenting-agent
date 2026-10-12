@@ -74,6 +74,7 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
     var tab by remember { mutableIntStateOf(0) }
     var kuisId by remember { mutableStateOf<String?>(null) }
     var tugasKuisId by remember { mutableStateOf<String?>(null) }
+    var topikPrefill by remember { mutableStateOf("") }
     val nama = remember { Simpanan.namaAnak(Ctx.get()) ?: strAnak }
     val username = remember { Simpanan.usernameAnak(Ctx.get()) ?: "" }
     val umur = remember { Simpanan.umurAnak(Ctx.get()) }
@@ -106,8 +107,8 @@ private fun LayarUtama(jwt: String?, onKeluar: () -> Unit) {
     ) { innerPadding ->
         Box(Modifier.padding(innerPadding)) {
             when (tab) {
-                0 -> LayarBeranda(jwt, nama, umur, username = username, onBukaKuis = { kuisId = it }, onKlikTugas = { tugasKuisId = it.id })
-                1 -> LayarKuisAI(jwt = jwt ?: "", onKembali = { tab = 0 })
+                0 -> LayarBeranda(jwt, nama, umur, username = username, onBukaKuis = { kuisId = it }, onKlikTugas = { tugasKuisId = it.id }, onKlikChallenge = { topikPrefill = it; tab = 1 })
+                1 -> LayarKuisAI(jwt = jwt ?: "", onKembali = { tab = 0 }, topikAwal = topikPrefill)
                 2 -> LayarTugas(jwt, onKlikTugas = { t -> tugasKuisId = t.id })
                 3 -> LayarHadiah(jwt = jwt)
                 4 -> LayarSaya(nama, umur, onKeluar)
