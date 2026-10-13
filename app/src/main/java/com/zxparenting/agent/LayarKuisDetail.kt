@@ -147,7 +147,9 @@ fun LayarKuisDetail(jwt: String, kuisId: String, onKembali: () -> Unit) {
                                 no = i + 1,
                                 soal = s,
                                 dipilih = jawaban[i],
-                                onPilih = { jawaban[i] = it },
+                                onPilih = {
+                                    jawaban = jawaban.toMutableList().also { l -> l[i] = it }
+                                },
                             )
                         }
                         item {

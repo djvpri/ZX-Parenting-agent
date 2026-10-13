@@ -105,7 +105,9 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit, topikAwal: String = "") {
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     itemsIndexed(soal) { i, s ->
-                        KartuSoalAI(i + 1, s, jawaban[i]) { jawaban[i] = it }
+                        KartuSoalAI(i + 1, s, jawaban[i]) {
+                            jawaban = jawaban.toMutableList().also { l -> l[i] = it }
+                        }
                     }
                     item {
                         val semua = jawaban.all { it >= 0 }
