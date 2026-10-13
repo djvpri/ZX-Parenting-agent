@@ -131,14 +131,16 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
                             )
                         }
                     }
-                    AnimatedVisibility(
-                        visible = selesaiExpanded,
-                        enter = expandVertically(),
-                        exit = shrinkVertically(),
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            selesai.forEach { t ->
-                                KartuTugasBaru(t, bisaKlik = false, onKlik = onKlikTugas, redup = true)
+                    item {
+                        AnimatedVisibility(
+                            visible = selesaiExpanded,
+                            enter = expandVertically(),
+                            exit = shrinkVertically(),
+                        ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                selesai.forEach { t ->
+                                    KartuTugasBaru(t, bisaKlik = false, onKlik = onKlikTugas, redup = true)
+                                }
                             }
                         }
                     }
