@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
 
         // Inisialisasi context global utk Simpanan
         Ctx.app = applicationContext
-        val ctx = applicationContext
 
         // Inisialisasi bahasa tersimpan
         ManajerBahasa.inisialisasi(ctx)

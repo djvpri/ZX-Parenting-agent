@@ -1,0 +1,296 @@
+﻿2026-10-13T03:58:56.4131014Z Current runner version: '2.337.0'
+2026-10-13T03:58:56.4157194Z ##[group]Runner Image Provisioner
+2026-10-13T03:58:56.4158077Z Hosted Compute Agent
+2026-10-13T03:58:56.4158665Z Version: 20261002.596
+2026-10-13T03:58:56.4159249Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-13T03:58:56.4159887Z Build Date: 2026-10-02T22:28:27Z
+2026-10-13T03:58:56.4160535Z Worker ID: {c11a4bc3-37c6-44dc-b6cc-26f6d9c0a08b}
+2026-10-13T03:58:56.4161165Z Region: westus3
+2026-10-13T03:58:56.4161810Z Cloud: Azure
+2026-10-13T03:58:56.4162364Z ##[endgroup]
+2026-10-13T03:58:56.4163865Z ##[group]Operating System
+2026-10-13T03:58:56.4164505Z Ubuntu
+2026-10-13T03:58:56.4164975Z 24.04.5
+2026-10-13T03:58:56.4165443Z LTS
+2026-10-13T03:58:56.4165931Z ##[endgroup]
+2026-10-13T03:58:56.4166481Z ##[group]Runner Image
+2026-10-13T03:58:56.4167046Z Image: ubuntu-24.04
+2026-10-13T03:58:56.4167554Z Version: 20261004.327.1
+2026-10-13T03:58:56.4168756Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-13T03:58:56.4170210Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-13T03:58:56.4171086Z ##[endgroup]
+2026-10-13T03:58:56.4172429Z ##[group]GITHUB_TOKEN Permissions
+2026-10-13T03:58:56.4174689Z Contents: read
+2026-10-13T03:58:56.4175215Z Metadata: read
+2026-10-13T03:58:56.4176084Z Packages: read
+2026-10-13T03:58:56.4176590Z ##[endgroup]
+2026-10-13T03:58:56.4178683Z Secret source: Actions
+2026-10-13T03:58:56.4179570Z Cache mode: write
+2026-10-13T03:58:56.4180190Z Prepare workflow directory
+2026-10-13T03:58:56.4506895Z Prepare all required actions
+2026-10-13T03:58:56.4556850Z Getting action download info
+2026-10-13T03:58:56.7653862Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-13T03:58:56.8689054Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-13T03:58:57.9288453Z Complete job name: build
+2026-10-13T03:58:58.0045710Z ##[group]Run actions/checkout@v4
+2026-10-13T03:58:58.0046781Z with:
+2026-10-13T03:58:58.0047472Z   repository: djvpri/ZX-Parenting-agent
+2026-10-13T03:58:58.0052205Z   token: ***
+2026-10-13T03:58:58.0052796Z   ssh-strict: true
+2026-10-13T03:58:58.0053371Z   ssh-user: git
+2026-10-13T03:58:58.0053939Z   persist-credentials: true
+2026-10-13T03:58:58.0054577Z   clean: true
+2026-10-13T03:58:58.0055175Z   sparse-checkout-cone-mode: true
+2026-10-13T03:58:58.0055799Z   fetch-depth: 1
+2026-10-13T03:58:58.0056380Z   fetch-tags: false
+2026-10-13T03:58:58.0056997Z   show-progress: true
+2026-10-13T03:58:58.0057592Z   lfs: false
+2026-10-13T03:58:58.0058153Z   submodules: false
+2026-10-13T03:58:58.0058707Z   set-safe-directory: true
+2026-10-13T03:58:58.0169706Z   allow-unsafe-pr-checkout: false
+2026-10-13T03:58:58.0171449Z ##[endgroup]
+2026-10-13T03:58:58.1213714Z Syncing repository: djvpri/ZX-Parenting-agent
+2026-10-13T03:58:58.1216127Z ##[group]Getting Git version info
+2026-10-13T03:58:58.1217629Z Working directory is '/home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent'
+2026-10-13T03:58:58.1219785Z [command]/usr/bin/git version
+2026-10-13T03:58:58.1306589Z git version 2.55.0
+2026-10-13T03:58:58.1341577Z ##[endgroup]
+2026-10-13T03:58:58.1357829Z Temporarily overriding HOME='/home/runner/work/_temp/3ccbb346-f8b5-4208-89ea-5430777f4c7f' before making global git config changes
+2026-10-13T03:58:58.1360615Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T03:58:58.1364982Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent
+2026-10-13T03:58:58.1420842Z Deleting the contents of '/home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent'
+2026-10-13T03:58:58.1432457Z ##[group]Initializing the repository
+2026-10-13T03:58:58.1443255Z [command]/usr/bin/git init /home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent
+2026-10-13T03:58:58.1559938Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-13T03:58:58.1563311Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-13T03:58:58.1565730Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-13T03:58:58.1567608Z hint: call:
+2026-10-13T03:58:58.1569016Z hint:
+2026-10-13T03:58:58.1570330Z hint: 	git config --global init.defaultBranch <name>
+2026-10-13T03:58:58.1571865Z hint:
+2026-10-13T03:58:58.1573349Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-13T03:58:58.1575496Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-13T03:58:58.1576847Z hint:
+2026-10-13T03:58:58.1578359Z hint: 	git branch -m <name>
+2026-10-13T03:58:58.1579782Z hint:
+2026-10-13T03:58:58.1581356Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-13T03:58:58.1583868Z Initialized empty Git repository in /home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent/.git/
+2026-10-13T03:58:58.1587641Z [command]/usr/bin/git remote add origin https://github.com/djvpri/ZX-Parenting-agent
+2026-10-13T03:58:58.1635820Z ##[endgroup]
+2026-10-13T03:58:58.1637493Z ##[group]Disabling automatic garbage collection
+2026-10-13T03:58:58.1638923Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-13T03:58:58.1681120Z ##[endgroup]
+2026-10-13T03:58:58.1682217Z ##[group]Setting up auth
+2026-10-13T03:58:58.1683117Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T03:58:58.1712772Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T03:58:58.2097707Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T03:58:58.2133093Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T03:58:58.2334981Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T03:58:58.2365723Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T03:58:58.2574996Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-13T03:58:58.2609460Z ##[endgroup]
+2026-10-13T03:58:58.2611077Z ##[group]Fetching the repository
+2026-10-13T03:58:58.2620944Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2ce817010656d4736a16a8a4c5eaee342e91ade1:refs/remotes/origin/main
+2026-10-13T03:58:58.7958510Z From https://github.com/djvpri/ZX-Parenting-agent
+2026-10-13T03:58:58.7960868Z  * [new ref]         2ce817010656d4736a16a8a4c5eaee342e91ade1 -> origin/main
+2026-10-13T03:58:58.7965520Z ##[endgroup]
+2026-10-13T03:58:58.7967299Z ##[group]Determining the checkout info
+2026-10-13T03:58:58.7968674Z ##[endgroup]
+2026-10-13T03:58:58.7970262Z [command]/usr/bin/git sparse-checkout disable
+2026-10-13T03:58:58.8024123Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-13T03:58:58.8053770Z ##[group]Checking out the ref
+2026-10-13T03:58:58.8058447Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-13T03:58:58.8151753Z Switched to a new branch 'main'
+2026-10-13T03:58:58.8155881Z branch 'main' set up to track 'origin/main'.
+2026-10-13T03:58:58.8161299Z ##[endgroup]
+2026-10-13T03:58:58.8198602Z [command]/usr/bin/git log -1 --format=%H
+2026-10-13T03:58:58.8220608Z 2ce817010656d4736a16a8a4c5eaee342e91ade1
+2026-10-13T03:58:58.8593290Z ##[group]Run actions/setup-java@v5
+2026-10-13T03:58:58.8594009Z with:
+2026-10-13T03:58:58.8594444Z   distribution: temurin
+2026-10-13T03:58:58.8594980Z   java-version: 17
+2026-10-13T03:58:58.8595476Z   java-package: jdk
+2026-10-13T03:58:58.8595979Z   check-latest: false
+2026-10-13T03:58:58.8596684Z   set-default: true
+2026-10-13T03:58:58.8597184Z   verify-signature: false
+2026-10-13T03:58:58.8597764Z   server-id: github
+2026-10-13T03:58:58.8598279Z   server-username: GITHUB_ACTOR
+2026-10-13T03:58:58.8598930Z   server-password: GITHUB_TOKEN
+2026-10-13T03:58:58.8599574Z   overwrite-settings: true
+2026-10-13T03:58:58.8600147Z   job-status: success
+2026-10-13T03:58:58.8608952Z   token: ***
+2026-10-13T03:58:58.8609482Z   show-download-progress: false
+2026-10-13T03:58:58.8610143Z ##[endgroup]
+2026-10-13T03:58:59.0114337Z ##[group]Installed distributions
+2026-10-13T03:58:59.0421052Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-13T03:58:59.0423195Z Setting Java 17.0.20+1 as the default
+2026-10-13T03:58:59.0433313Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-13T03:58:59.0507483Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-13T03:58:59.0508826Z 
+2026-10-13T03:58:59.0509341Z Java configuration:
+2026-10-13T03:58:59.0510573Z   Distribution: temurin
+2026-10-13T03:58:59.0512142Z   Version: 17.0.20+1
+2026-10-13T03:58:59.0513821Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:58:59.0515362Z 
+2026-10-13T03:58:59.0516861Z ##[endgroup]
+2026-10-13T03:58:59.0559325Z Creating settings.xml with server-id: github
+2026-10-13T03:58:59.0561445Z Writing to /home/runner/.m2/settings.xml
+2026-10-13T03:58:59.0565645Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-13T03:58:59.0748545Z ##[group]Run set -euo pipefail
+2026-10-13T03:58:59.0750453Z [36;1mset -euo pipefail[0m
+2026-10-13T03:58:59.0753074Z [36;1mSDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"[0m
+2026-10-13T03:58:59.0756038Z [36;1mSDKMAN=$(command -v sdkmanager || true)[0m
+2026-10-13T03:58:59.0758083Z [36;1mif [ -z "$SDKMAN" ]; then[0m
+2026-10-13T03:58:59.0761233Z [36;1m  SDKMAN=$(find "$SDK_ROOT/cmdline-tools" -maxdepth 3 -name sdkmanager -type f 2>/dev/null | head -1)[0m
+2026-10-13T03:58:59.0764623Z [36;1mfi[0m
+2026-10-13T03:58:59.0766638Z [36;1myes | "$SDKMAN" --sdk_root="$SDK_ROOT" --licenses >/dev/null 2>&1 || true[0m
+2026-10-13T03:58:59.0770261Z [36;1m"$SDKMAN" --sdk_root="$SDK_ROOT" --install "build-tools;36.0.0" "platforms;android-36"[0m
+2026-10-13T03:58:59.1045424Z shell: /usr/bin/bash -e {0}
+2026-10-13T03:58:59.1046463Z env:
+2026-10-13T03:58:59.1047584Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:58:59.1049533Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:58:59.1051021Z   MAVEN_ARGS: -ntp
+2026-10-13T03:58:59.1051999Z ##[endgroup]
+2026-10-13T03:59:07.7069226Z yes: standard output: Broken pipe
+2026-10-13T03:59:08.4211501Z Loading package information...                                                  
+2026-10-13T03:59:08.5330098Z Loading local repository...                                                     
+2026-10-13T03:59:08.5343156Z [                                       ] 3% Loading local repository...        
+2026-10-13T03:59:08.5425965Z [                                       ] 3% Fetch remote repository...         
+2026-10-13T03:59:08.8544439Z [=                                      ] 3% Fetch remote repository...         
+2026-10-13T03:59:08.9275655Z [=                                      ] 4% Fetch remote repository...         
+2026-10-13T03:59:08.9622574Z [=                                      ] 5% Fetch remote repository...         
+2026-10-13T03:59:09.0161183Z [==                                     ] 5% Fetch remote repository...         
+2026-10-13T03:59:09.1058612Z [==                                     ] 6% Fetch remote repository...         
+2026-10-13T03:59:09.2061048Z [==                                     ] 7% Fetch remote repository...         
+2026-10-13T03:59:09.2103210Z [==                                     ] 7% Computing updates...               
+2026-10-13T03:59:09.2201280Z [===                                    ] 8% Computing updates...               
+2026-10-13T03:59:09.2259818Z [===                                    ] 10% Computing updates...              
+2026-10-13T03:59:09.2261401Z [=======================================] 100% Computing updates...             
+2026-10-13T03:59:09.2262541Z 
+2026-10-13T03:59:09.2514587Z ##[group]Run echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+2026-10-13T03:59:09.2515089Z [36;1mecho "sdk.dir=$ANDROID_SDK_ROOT" > local.properties[0m
+2026-10-13T03:59:09.2553333Z shell: /usr/bin/bash -e {0}
+2026-10-13T03:59:09.2553631Z env:
+2026-10-13T03:59:09.2553945Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:59:09.2554422Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:59:09.2554795Z   MAVEN_ARGS: -ntp
+2026-10-13T03:59:09.2555011Z ##[endgroup]
+2026-10-13T03:59:09.2649002Z ##[group]Run chmod +x gradlew
+2026-10-13T03:59:09.2649316Z [36;1mchmod +x gradlew[0m
+2026-10-13T03:59:09.2649606Z [36;1m./gradlew --no-daemon assembleDebug[0m
+2026-10-13T03:59:09.2687084Z shell: /usr/bin/bash -e {0}
+2026-10-13T03:59:09.2687362Z env:
+2026-10-13T03:59:09.2687704Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:59:09.2688186Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-13T03:59:09.2688594Z   MAVEN_ARGS: -ntp
+2026-10-13T03:59:09.2688798Z ##[endgroup]
+2026-10-13T03:59:09.3892703Z Downloading https://services.gradle.org/distributions/gradle-8.9-bin.zip
+2026-10-13T03:59:10.8314198Z ............10%.............20%.............30%.............40%.............50%.............60%.............70%.............80%.............90%.............100%
+2026-10-13T03:59:11.9376340Z 
+2026-10-13T03:59:11.9378769Z Welcome to Gradle 8.9!
+2026-10-13T03:59:11.9379062Z 
+2026-10-13T03:59:11.9379492Z Here are the highlights of this release:
+2026-10-13T03:59:11.9380240Z  - Enhanced Error and Warning Messages
+2026-10-13T03:59:11.9380721Z  - IDE Integration Improvements
+2026-10-13T03:59:11.9381341Z  - Daemon JVM Information
+2026-10-13T03:59:11.9381756Z 
+2026-10-13T03:59:11.9383021Z For more details see https://docs.gradle.org/8.9/release-notes.html
+2026-10-13T03:59:11.9383938Z 
+2026-10-13T03:59:12.2354681Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.9/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-10-13T03:59:13.5333888Z Daemon will be stopped at the end of the build 
+2026-10-13T04:00:07.7358661Z WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+2026-10-13T04:00:07.7359279Z 
+2026-10-13T04:00:07.7359652Z This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+2026-10-13T04:00:07.7360155Z 
+2026-10-13T04:00:07.7360510Z You are strongly encouraged to update your project to use a newer
+2026-10-13T04:00:07.7361282Z Android Gradle plugin that has been tested with compileSdk = 36.
+2026-10-13T04:00:07.7361946Z 
+2026-10-13T04:00:07.7362301Z If you are already using the latest version of the Android Gradle plugin,
+2026-10-13T04:00:07.7363236Z you may need to wait until a newer version with support for compileSdk = 36 is available.
+2026-10-13T04:00:07.7363824Z 
+2026-10-13T04:00:07.7364099Z For more information refer to the compatibility table:
+2026-10-13T04:00:07.7364792Z https://d.android.com/r/tools/api-level-support
+2026-10-13T04:00:07.7365198Z 
+2026-10-13T04:00:07.7365388Z To suppress this warning, add/update
+2026-10-13T04:00:07.7365920Z     android.suppressUnsupportedCompileSdk=36
+2026-10-13T04:00:07.7366480Z to this project's gradle.properties.
+2026-10-13T04:00:08.1354871Z > Task :app:preBuild UP-TO-DATE
+2026-10-13T04:00:08.1355675Z > Task :app:preDebugBuild UP-TO-DATE
+2026-10-13T04:00:08.2346865Z > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+2026-10-13T04:00:08.2361971Z > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+2026-10-13T04:00:08.2363023Z > Task :app:generateDebugBuildConfig
+2026-10-13T04:00:24.7356541Z > Task :app:generateDebugResValues
+2026-10-13T04:00:24.8335687Z > Task :app:checkDebugAarMetadata
+2026-10-13T04:00:24.9332462Z > Task :app:mapDebugSourceSetPaths
+2026-10-13T04:00:24.9335382Z > Task :app:generateDebugResources
+2026-10-13T04:00:26.4342584Z > Task :app:packageDebugResources
+2026-10-13T04:00:27.5352840Z > Task :app:createDebugCompatibleScreenManifests
+2026-10-13T04:00:27.5372545Z > Task :app:extractDeepLinksDebug
+2026-10-13T04:00:27.5392113Z > Task :app:mergeDebugResources
+2026-10-13T04:00:27.6332321Z > Task :app:parseDebugLocalResources
+2026-10-13T04:00:27.9331920Z > Task :app:processDebugMainManifest
+2026-10-13T04:00:28.0344940Z > Task :app:processDebugManifest
+2026-10-13T04:00:28.0345493Z > Task :app:javaPreCompileDebug
+2026-10-13T04:00:28.0345973Z > Task :app:mergeDebugShaders
+2026-10-13T04:00:28.0346896Z > Task :app:compileDebugShaders NO-SOURCE
+2026-10-13T04:00:28.0347433Z > Task :app:generateDebugAssets UP-TO-DATE
+2026-10-13T04:00:28.1351234Z > Task :app:mergeDebugAssets
+2026-10-13T04:00:28.2387089Z > Task :app:desugarDebugFileDependencies
+2026-10-13T04:00:28.2432891Z > Task :app:compressDebugAssets
+2026-10-13T04:00:29.8339536Z > Task :app:mergeDebugJniLibFolders
+2026-10-13T04:00:29.8340414Z > Task :app:checkDebugDuplicateClasses
+2026-10-13T04:00:29.9337828Z > Task :app:mergeDebugNativeLibs
+2026-10-13T04:00:58.0342687Z > Task :app:processDebugManifestForPackage
+2026-10-13T04:00:59.9362600Z > Task :app:mergeExtDexDebug
+2026-10-13T04:01:46.5334177Z > Task :app:mergeLibDexDebug
+2026-10-13T04:01:46.6362269Z 
+2026-10-13T04:01:46.6383724Z > Task :app:stripDebugDebugSymbols
+2026-10-13T04:01:46.6392775Z Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so.
+2026-10-13T04:01:49.2331472Z 
+2026-10-13T04:01:49.2362736Z > Task :app:processDebugResources
+2026-10-13T04:01:49.6332636Z > Task :app:validateSigningDebug
+2026-10-13T04:02:00.9332234Z > Task :app:writeDebugAppMetadata
+2026-10-13T04:02:00.9332842Z > Task :app:writeDebugSigningConfigVersions
+2026-10-13T04:02:11.8331069Z 
+2026-10-13T04:02:11.8332084Z > Task :app:compileDebugKotlin FAILED
+2026-10-13T04:02:11.8333555Z e: file:///home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent/app/src/main/java/com/zxparenting/agent/MainActivity.kt:25:13 Conflicting declarations:
+2026-10-13T04:02:11.8334738Z local val ctx: Context!
+2026-10-13T04:02:11.8335846Z local val ctx: Context!
+2026-10-13T04:02:11.8370539Z e: file:///home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent/app/src/main/java/com/zxparenting/agent/MainActivity.kt:35:13 Conflicting declarations:
+2026-10-13T04:02:11.8372076Z local val ctx: Context!
+2026-10-13T04:02:11.8372492Z local val ctx: Context!
+2026-10-13T04:02:11.9342577Z 
+2026-10-13T04:02:11.9355390Z 29 actionable tasks: 29 executed
+2026-10-13T04:02:11.9362668Z FAILURE: Build failed with an exception.
+2026-10-13T04:02:11.9363232Z 
+2026-10-13T04:02:11.9363451Z * What went wrong:
+2026-10-13T04:02:11.9363945Z Execution failed for task ':app:compileDebugKotlin'.
+2026-10-13T04:02:11.9365212Z > A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+2026-10-13T04:02:11.9366452Z    > Compilation error. See log for more details
+2026-10-13T04:02:11.9366859Z 
+2026-10-13T04:02:11.9367047Z * Try:
+2026-10-13T04:02:11.9367491Z > Run with --stacktrace option to get the stack trace.
+2026-10-13T04:02:11.9368176Z > Run with --info or --debug option to get more log output.
+2026-10-13T04:02:11.9368788Z > Run with --scan to get full insights.
+2026-10-13T04:02:11.9369352Z > Get more help at https://help.gradle.org.
+2026-10-13T04:02:11.9369739Z 
+2026-10-13T04:02:11.9369941Z BUILD FAILED in 3m 2s
+2026-10-13T04:02:12.3434777Z ##[error]Process completed with exit code 1.
+2026-10-13T04:02:12.3588424Z Post job cleanup.
+2026-10-13T04:02:12.5020415Z Post job cleanup.
+2026-10-13T04:02:12.5972708Z [command]/usr/bin/git version
+2026-10-13T04:02:12.6003384Z git version 2.55.0
+2026-10-13T04:02:12.6044083Z Temporarily overriding HOME='/home/runner/work/_temp/c654d18c-5c0a-4049-9fbd-f916c1cf9cb3' before making global git config changes
+2026-10-13T04:02:12.6047438Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-13T04:02:12.6051550Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ZX-Parenting-agent/ZX-Parenting-agent
+2026-10-13T04:02:12.6092869Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-13T04:02:12.6127974Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-13T04:02:12.6330345Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-13T04:02:12.6359942Z http.https://github.com/.extraheader
+2026-10-13T04:02:12.6373419Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-13T04:02:12.6410410Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-13T04:02:12.6630919Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-13T04:02:12.6663863Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-13T04:02:12.7126933Z Cleaning up orphan processes
+2026-10-13T04:02:12.7378926Z Terminate orphan process: pid (2666) (java)
+2026-10-13T04:02:12.7399724Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
