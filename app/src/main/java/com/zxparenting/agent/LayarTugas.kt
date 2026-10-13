@@ -59,10 +59,12 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
     }
 
     val aktif = items.filter { it.status == "PENDING" && (it.type == "ai_quiz" || it.type == "ai_scheduled") }
-    val ditolak = items.filter { it.status == "DITOLAK" }
     val selesai = items.filter { it.status == "SELESAI" }
+    val ditolak = items.filter { it.status == "DITOLAK" }
     val lainnya = items.filter { it !in aktif && it !in ditolak && it !in selesai }
-    val total = items.size
+    // Sembunyikan DITOLAK + EXPIRED dari tampilan — bikin bingung + demotivasi
+    val tampilLainnya = lainnya.filterNot { it.status == "EXPIRED" }
+    val total = aktif.size + selesai.size
     val persen = if (total > 0) (selesai.size * 100 / total) else 0
 
     Column(modifier = Modifier.fillMaxSize().background(Bg)) {
@@ -85,7 +87,7 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 // Progress ring card
-                item { KartuProgres(persen, aktif.size, selesai.size, ditolak.size) }
+                item { KartuProgres(persen, aktif.size, selesai.size, 0) }
 
                 // Aktif
                 if (aktif.isNotEmpty()) {
@@ -93,16 +95,10 @@ fun LayarTugas(jwt: String?, onKlikTugas: (TugasAnak) -> Unit = {}) {
                     items(aktif) { t -> KartuTugasBaru(t, bisaKlik = true, onKlik = onKlikTugas) }
                 }
 
-                // Ditolak
-                if (ditolak.isNotEmpty()) {
-                    item { LabelSeksi(Icons.Default.Cancel, stringResource(R.string.rejected), ditolak.size, Merah) }
-                    items(ditolak) { t -> KartuTugasBaru(t, bisaKlik = false, onKlik = onKlikTugas) }
-                }
-
-                // Lainnya (EXPIRED, DIKUMPULKAN, dll)
-                if (lainnya.isNotEmpty()) {
-                    item { LabelSeksi(Icons.Default.Schedule, stringResource(R.string.verified), lainnya.size, Amber) }
-                    items(lainnya) { t -> KartuTugasBaru(t, bisaKlik = false, onKlik = onKlikTugas) }
+                // Lainnya (DIKUMPULKAN, dll — bukan EXPIRED)
+                if (tampilLainnya.isNotEmpty()) {
+                    item { LabelSeksi(Icons.Default.Schedule, stringResource(R.string.verified), tampilLainnya.size, Amber) }
+                    items(tampilLainnya) { t -> KartuTugasBaru(t, bisaKlik = false, onKlik = onKlikTugas) }
                 }
 
                 // Selesai (collapsible)
