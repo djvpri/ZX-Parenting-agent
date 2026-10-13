@@ -121,7 +121,7 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", o
                 }
             }
 
-            val quizItems = items.filter { it.tipe == "KUIS_HARIAN" || it.tipe == "TANTANGAN_MINGGUAN" }
+            val quizItems = items.filter { (it.tipe == "KUIS_HARIAN" || it.tipe == "TANTANGAN_MINGGUAN") && !it.selesai }
             if (quizItems.isNotEmpty()) {
                 item { SectionLabel(stringResource(R.string.section_quiz_today)) }
                 items(quizItems) { item ->
@@ -137,9 +137,10 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", o
                 }
             }
 
-            if (tugas.isNotEmpty()) {
+            val tugasAktif = tugas.filter { it.status != "SELESAI" }
+            if (tugasAktif.isNotEmpty()) {
                 item { SectionLabel(stringResource(R.string.section_task_parent)) }
-                items(tugas) { t -> TugasCard(t, onClick = { onKlikTugas(t) }) }
+                items(tugasAktif) { t -> TugasCard(t, onClick = { onKlikTugas(t) }) }
             }
 
             if (error.isNotEmpty()) {

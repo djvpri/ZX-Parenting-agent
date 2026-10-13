@@ -39,6 +39,7 @@ data class OfficialItem(
     val deskripsi: String?,
     @SerializedName("konten") val konten: List<Map<String, Any?>>?,
     @SerializedName("officialMeta") val meta: OfficialMeta?,
+    val selesai: Boolean = false,
 )
 
 data class OfficialMeta(
