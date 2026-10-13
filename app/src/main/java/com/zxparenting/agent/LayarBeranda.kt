@@ -137,7 +137,9 @@ fun LayarBeranda(jwt: String?, nama: String, umur: Int, username: String = "", o
                 }
             }
 
-            val tugasAktif = tugas.filter { it.status != "SELESAI" }
+            val tugasAktif = tugas.filter {
+                it.status == "PENDING" && (it.type == "ai_quiz" || it.type == "ai_scheduled")
+            }
             if (tugasAktif.isNotEmpty()) {
                 item { SectionLabel(stringResource(R.string.section_task_parent)) }
                 items(tugasAktif) { t -> TugasCard(t, onClick = { onKlikTugas(t) }) }
