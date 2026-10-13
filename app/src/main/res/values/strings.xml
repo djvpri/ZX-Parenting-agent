@@ -72,6 +72,7 @@
     <string name="app_name">ZX Agent</string>
     <string name="task_title">Tasks</string>
     <string name="verified">Verified</string>
+    <string name="rejected">Rejected</string>
     <string name="home">Home</string>
     <string name="article">Article</string>
     <string name="video">Video</string>

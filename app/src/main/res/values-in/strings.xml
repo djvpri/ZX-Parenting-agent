@@ -72,6 +72,7 @@
     <string name="app_name">ZX Agent</string>
     <string name="task_title">Tugas</string>
     <string name="verified">Terverifikasi</string>
+    <string name="rejected">Ditolak</string>
     <string name="home">Beranda</string>
     <string name="article">Artikel</string>
     <string name="video">Video</string>
