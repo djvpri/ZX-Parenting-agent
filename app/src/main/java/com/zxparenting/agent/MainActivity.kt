@@ -21,6 +21,13 @@ import com.zxparenting.agent.tema.TemaZX
 class MainActivity : ComponentActivity() {
     override fun onCreate(s: Bundle?) {
         super.onCreate(s)
+        // Tangkap crash tak terduga → kirim ke backend sebelum app mati.
+        val ctx = applicationContext
+        val prev = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { t, e ->
+            LaporError.kirim(ctx, "MainActivity", e.javaClass.simpleName + ": " + e.message)
+            prev?.uncaughtException(t, e)
+        }
         enableEdgeToEdge()
 
         // Inisialisasi context global utk Simpanan
