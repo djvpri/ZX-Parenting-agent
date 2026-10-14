@@ -203,7 +203,7 @@ data class HadiahItem(
     val id: String,
     val judul: String,
     val deskripsi: String?,
-    @SerializedName("hargaCoin") val hargaCoin: Int,
+    @SerializedName("hargaToken") val hargaToken: Int,
     val stok: Int,
     @SerializedName("sudahMinta") val sudahMinta: Boolean,
 )

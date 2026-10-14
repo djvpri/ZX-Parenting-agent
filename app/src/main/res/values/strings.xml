@@ -169,4 +169,5 @@
     <string name="accessibility_status">Accessibility</string>
     <string name="accessibility_active">Active</string>
     <string name="open_settings">Open Settings</string>
+    <string name="token">Token</string>
 </resources>

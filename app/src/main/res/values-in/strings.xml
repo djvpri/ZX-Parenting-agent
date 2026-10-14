@@ -169,4 +169,5 @@
     <string name="accessibility_status">Aksesibilitas</string>
     <string name="accessibility_active">Aktif</string>
     <string name="open_settings">Buka Setelan</string>
+    <string name="token">Token</string>
 </resources>

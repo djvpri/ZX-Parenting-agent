@@ -59,7 +59,7 @@ fun LayarHadiah(jwt: String?) {
     val strTerbaik = stringResource(R.string.streak_terbaik)
     val strLocked = stringResource(R.string.locked)
     val strZX = stringResource(R.string.tokens_unit)
-    val strCoins = stringResource(R.string.coins_unit)
+    val strTokens = stringResource(R.string.token)
 
     val menitOptions = listOf(5, 15, 30, 60, 120)
     var refreshTrigger by remember { mutableStateOf(0) }
@@ -427,7 +427,7 @@ fun LayarHadiah(jwt: String?) {
                             strSudahMinta = strSudahMinta,
                             strHabis = strHabis,
                             strLocked = strLocked,
-                            strCoins = strCoins,
+                            strTokens = strTokens,
                             modifier = Modifier.weight(1f),
                             onRequest = {
                                 if (demo) return@KatalogGridCard
@@ -579,7 +579,7 @@ private fun KatalogGridCard(
     strSudahMinta: String,
     strHabis: String,
     strLocked: String,
-    strCoins: String,
+    strTokens: String,
     modifier: Modifier = Modifier,
     onRequest: () -> Unit,
 ) {
@@ -610,7 +610,7 @@ private fun KatalogGridCard(
                 textAlign = TextAlign.Center,
                 maxLines = 2,
             )
-            Text("${hadiah.hargaCoin} $strCoins", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Pink)
+            Text("${hadiah.hargaToken} $strTokens", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Pink)
             Spacer(Modifier.height(8.dp))
             when {
                 hadiah.sudahMinta -> {
@@ -619,7 +619,7 @@ private fun KatalogGridCard(
                 hadiah.stok <= 0 -> {
                     Text(strHabis, fontSize = 11.sp, color = Merah)
                 }
-                hadiah.hargaCoin > 0 && hadiah.stok > 0 -> {
+                hadiah.hargaToken > 0 && hadiah.stok > 0 -> {
                     Button(
                         onClick = onRequest,
                         colors = ButtonDefaults.buttonColors(containerColor = Pink),
