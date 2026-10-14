@@ -59,6 +59,12 @@
     <string name="short_break">Istirahat sebentar ya!</string>
     <string name="start_quiz">Mulai Kuis</string>
     <string name="submit_answers">Kirim Jawaban</string>
+    <string name="question_of">Soal %1$d dari %2$d</string>
+    <string name="next">Lanjut</string>
+    <string name="previous">Sebelumnya</string>
+    <string name="finish_quiz">Selesai</string>
+    <string name="questions_count">%1$d soal · </string>
+    <string name="seconds_per_question">%1$ds/soal</string>
     <string name="time_to_rest">Waktunya istirahat!</string>
     <string name="topic_hint">Topik (cth: Matematika, IPA)</string>
     <string name="number_of_questions">Jumlah soal</string>
@@ -138,7 +144,6 @@
     <string name="open">Buka</string>
     <string name="complete_one_quiz">Selesaikan 1 kuis skor penuh</string>
     <string name="from_parent">Dari Ortu</string>
-    <string name="questions_count">%1$d soal</string>
     <string name="level_n">Level %1$d</string>
     <string name="min_n">%1$d menit</string>
     <string name="children_count">%1$s anak</string>

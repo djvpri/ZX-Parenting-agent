@@ -21,6 +21,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -159,6 +161,7 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit, topikAwal: String = "") {
             "soal" -> {
                 val totalDetik = durasiSoal * soal.size
                 var sisaDetik by remember { mutableStateOf(totalDetik) }
+                var soalAktif by remember { mutableStateOf(0) }
                 val submitAction: () -> Unit = {
                     if (jwt.isEmpty()) {
                         val kunci = (0 until soal.size).map { it % 4 }
@@ -209,58 +212,94 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit, topikAwal: String = "") {
                         }
                     }
                 }
-                LazyColumn(
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    // Progress bar
+                    LinearProgressIndicator(
+                        progress = (soalAktif + 1f) / soal.size,
+                        modifier = Modifier.fillMaxWidth().height(6.dp),
+                        color = Biru,
+                        trackColor = Biru.copy(alpha = 0.15f),
+                    )
+                    // Timer badge
                     if (timerAktif) {
-                        item {
-                            val mnt = sisaDetik / 60
-                            val dtk = sisaDetik % 60
-                            val urgent = sisaDetik <= 10
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End,
+                        val mnt = sisaDetik / 60
+                        val dtk = sisaDetik % 60
+                        val urgent = sisaDetik <= 10
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.End,
+                        ) {
+                            Surface(
+                                color = if (urgent) Merah.copy(alpha = 0.15f) else Biru.copy(alpha = 0.12f),
+                                shape = RoundedCornerShape(20.dp),
                             ) {
-                                Surface(
-                                    color = if (urgent) Merah.copy(alpha = 0.15f) else Biru.copy(alpha = 0.12f),
-                                    shape = RoundedCornerShape(20.dp),
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    Row(
-                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Icon(
-                                            Icons.Default.Schedule,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(16.dp),
-                                            tint = if (urgent) Merah else Biru,
-                                        )
-                                        Spacer(Modifier.width(6.dp))
-                                        Text(
-                                            "%02d:%02d".format(mnt, dtk),
-                                            fontSize = 14.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = if (urgent) Merah else Biru,
-                                        )
-                                    }
+                                    Icon(Icons.Default.Schedule, contentDescription = null, modifier = Modifier.size(14.dp), tint = if (urgent) Merah else Biru)
+                                    Spacer(Modifier.width(4.dp))
+                                    Text("%02d:%02d".format(mnt, dtk), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = if (urgent) Merah else Biru)
                                 }
                             }
                         }
                     }
-                    itemsIndexed(soal) { i, s ->
-                        KartuSoalAI(i + 1, s, jawaban[i]) {
-                            jawaban = jawaban.toMutableList().also { l -> l[i] = it }
+                    // Progress dots
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        soal.forEachIndexed { i, _ ->
+                            Box(
+                                modifier = Modifier
+                                    .padding(horizontal = 3.dp)
+                                    .height(8.dp)
+                                    .width(if (i == soalAktif) 24.dp else 8.dp)
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .background(
+                                        if (i < soalAktif) Hijau
+                                        else if (i == soalAktif) Biru
+                                        else Biru.copy(alpha = 0.2f),
+                                    ),
+                            )
                         }
                     }
-                    item {
-                        val semua = jawaban.all { it >= 0 }
+                    // Soal aktif
+                    KartuSoalAI(
+                        soalAktif + 1,
+                        soal[soalAktif],
+                        jawaban[soalAktif],
+                    ) { pilih ->
+                        jawaban = jawaban.toMutableList().also { l -> l[soalAktif] = pilih }
+                    }
+                    Spacer(Modifier.weight(1f))
+                    // Nav buttons
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        if (soalAktif > 0) {
+                            OutlinedButton(
+                                onClick = { soalAktif-- },
+                                modifier = Modifier.weight(1f).height(48.dp),
+                                shape = RoundedCornerShape(12.dp),
+                            ) {
+                                Text(stringResource(R.string.previous), fontSize = 13.sp)
+                            }
+                        }
                         Button(
-                            onClick = submitAction,
-                            enabled = semua,
-                            modifier = Modifier.fillMaxWidth().height(48.dp),
+                            onClick = {
+                                if (soalAktif < soal.size - 1) soalAktif++
+                                else submitAction()
+                            },
+                            modifier = Modifier.weight(1f).height(48.dp),
                             shape = RoundedCornerShape(12.dp),
-                        ) { Text(stringResource(R.string.submit_answers)) }
+                        ) {
+                            Text(
+                                if (soalAktif < soal.size - 1) stringResource(R.string.next) else stringResource(R.string.finish_quiz),
+                                fontSize = 13.sp,
+                            )
+                        }
                     }
                 }
             }
@@ -292,111 +331,185 @@ private fun FormKuisAI(
 ) {
     val pilihanSoal = listOf(5, 10, 15, 20)
     val pilihanDurasi = listOf(15, 30, 60, 90)
-    Column(
-        modifier = Modifier.fillMaxSize().padding(24.dp),
-        verticalArrangement = Arrangement.Center,
+    val strQCount = stringResource(R.string.questions_count, jumlahSoal)
+    val strTimer = stringResource(R.string.seconds_per_question, durasiSoal)
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(20.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-        ) {
-            Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(stringResource(R.string.create_own_quiz), fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.ai_quiz_desc), fontSize = 12.sp, color = MutedFg)
-                OutlinedTextField(
-                    value = topik,
-                    onValueChange = onTopik,
-                    label = { Text(stringResource(R.string.topic_hint)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                )
-                Text(stringResource(R.string.number_of_questions), fontSize = 12.sp, color = MutedFg)
+        // Hero
+        item {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(Brush.horizontalGradient(listOf(Biru, Ungu))),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Default.AutoAwesome, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(stringResource(R.string.create_own_quiz), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.ai_quiz_desc), fontSize = 12.sp, color = MutedFg, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            }
+        }
+        // Topik
+        item {
+            Text(stringResource(R.string.topic_hint), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+            OutlinedTextField(
+                value = topik,
+                onValueChange = onTopik,
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+            )
+        }
+        // Level
+        item {
+            Text("Level", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                (1..5).forEach { n ->
+                    Surface(
+                        onClick = { onLevel(n) },
+                        shape = RoundedCornerShape(12.dp),
+                        color = if (level == n) Biru.copy(alpha = 0.1f) else Kartu,
+                        border = androidx.compose.foundation.BorderStroke(2.dp, if (level == n) Biru else Biru.copy(alpha = 0.15f)),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(
+                            "$n",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = if (level == n) Biru else MutedFg,
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        )
+                    }
+                }
+            }
+        }
+        // Jumlah soal
+        item {
+            Text(stringResource(R.string.number_of_questions), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                pilihanSoal.forEach { n ->
+                    FilterChip(
+                        selected = jumlahSoal == n,
+                        onClick = { onJumlah(n) },
+                        label = { Text("$n") },
+                    )
+                }
+            }
+        }
+        // Timer toggle
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(stringResource(R.string.timer_per_question), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+                Switch(checked = timerAktif, onCheckedChange = onTimerAktif)
+            }
+            if (timerAktif) {
+                Spacer(Modifier.height(6.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    pilihanSoal.forEach { n ->
+                    pilihanDurasi.forEach { d ->
                         FilterChip(
-                            selected = jumlahSoal == n,
-                            onClick = { onJumlah(n) },
-                            label = { Text("$n") },
+                            selected = durasiSoal == d,
+                            onClick = { onDurasi(d) },
+                            label = { Text("${d}s") },
                         )
                     }
                 }
-                Text("Tingkat kesulitan: $level/5", fontSize = 12.sp, color = MutedFg)
-                Slider(
-                    value = level.toFloat(),
-                    onValueChange = { onLevel(it.toInt()) },
-                    valueRange = 1f..5f,
-                    steps = 3,
-                )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(stringResource(R.string.timer_per_question), fontSize = 12.sp, color = MutedFg)
-                    Switch(checked = timerAktif, onCheckedChange = onTimerAktif)
+            }
+        }
+        // Foto
+        item {
+            Text(stringResource(R.string.quiz_from_photo), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedButton(onClick = onCamera, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                    Icon(Icons.Default.PhotoCamera, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.camera), fontSize = 12.sp)
                 }
-                if (timerAktif) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        pilihanDurasi.forEach { d ->
-                            FilterChip(
-                                selected = durasiSoal == d,
-                                onClick = { onDurasi(d) },
-                                label = { Text("${d}s") },
-                            )
+                OutlinedButton(onClick = onGallery, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) {
+                    Icon(Icons.Default.PhotoLibrary, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.gallery), fontSize = 12.sp)
+                }
+            }
+            if (fotoBitmap != null) {
+                Spacer(Modifier.height(8.dp))
+                Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))) {
+                    Image(
+                        bitmap = fotoBitmap.asImageBitmap(),
+                        contentDescription = stringResource(R.string.photo_preview),
+                        modifier = Modifier.fillMaxWidth().height(160.dp),
+                        contentScale = ContentScale.Crop,
+                    )
+                    Surface(
+                        color = Color.Black.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
+                        onClick = onFoto,
+                    ) {
+                        Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove_photo), tint = Color.White, modifier = Modifier.size(20.dp).padding(2.dp))
+                    }
+                }
+            }
+        }
+        // Reward + timer info badge
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(strQCount, fontSize = 12.sp, color = MutedFg)
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    if (timerAktif) {
+                        Surface(color = Merah.copy(alpha = 0.12f), shape = RoundedCornerShape(20.dp)) {
+                            Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.Schedule, contentDescription = null, modifier = Modifier.size(12.dp), tint = Merah)
+                                Spacer(Modifier.width(4.dp))
+                                Text(strTimer, fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Merah)
+                            }
+                        }
+                    }
+                    Surface(color = Hijau.copy(alpha = 0.12f), shape = RoundedCornerShape(20.dp)) {
+                        Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Text("+${jumlahSoal * 3}", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Hijau)
+                            Spacer(Modifier.width(2.dp))
+                            Text("ZX", fontSize = 10.sp, fontWeight = FontWeight.Bold, color = Hijau)
                         }
                     }
                 }
-                Text(stringResource(R.string.quiz_from_photo), fontSize = 12.sp, color = MutedFg)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = onCamera, modifier = Modifier.weight(1f)) {
-                        Icon(Icons.Default.PhotoCamera, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(stringResource(R.string.camera), fontSize = 12.sp)
-                    }
-                    OutlinedButton(onClick = onGallery, modifier = Modifier.weight(1f)) {
-                        Icon(Icons.Default.PhotoLibrary, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(stringResource(R.string.gallery), fontSize = 12.sp)
-                    }
-                }
-                if (fotoBitmap != null) {
-                    Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))) {
-                        Image(
-                            bitmap = fotoBitmap.asImageBitmap(),
-                            contentDescription = stringResource(R.string.photo_preview),
-                            modifier = Modifier.fillMaxWidth().height(180.dp),
-                            contentScale = ContentScale.Crop,
-                        )
-                        Surface(
-                            color = Color.Black.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(8.dp),
-                            modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
-                            onClick = onFoto,
-                        ) {
-                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.remove_photo), tint = Color.White, modifier = Modifier.size(20.dp).padding(2.dp))
-                        }
-                    }
-                }
-                if (error.isNotEmpty()) {
-                    Text(error, color = MaterialTheme.colorScheme.error, fontSize = 12.sp)
-                }
-                Button(
-                    onClick = onMulai,
-                    enabled = !loading,
-                    modifier = Modifier.fillMaxWidth().height(48.dp),
-                    shape = RoundedCornerShape(12.dp),
-                ) {
-                    if (loading) {
-                        CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.creating_quiz))
-                    } else {
-                        Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.start_quiz))
-                    }
+            }
+        }
+        // Error
+        if (error.isNotEmpty()) {
+            item { Text(error, color = MaterialTheme.colorScheme.error, fontSize = 12.sp) }
+        }
+        // CTA
+        item {
+            Button(
+                onClick = onMulai,
+                enabled = !loading,
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Biru),
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.creating_quiz))
+                } else {
+                    Icon(Icons.Default.AutoAwesome, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.start_quiz), fontSize = 15.sp)
                 }
             }
         }
@@ -458,28 +571,37 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        // Ringkasan
+        // Ring score
         item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-            ) {
-                Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(RoundedCornerShape(32.dp))
-                            .background(warna.copy(alpha = 0.15f)),
-                        contentAlignment = Alignment.Center,
-                    ) { Text("$persen", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = warna) }
-                    Spacer(Modifier.height(8.dp))
-                    Text(emoji, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text("$skor/$total benar", fontSize = 13.sp, color = MutedFg)
-                    Spacer(Modifier.height(12.dp))
-                    BadgePill("+$token ZX", Hijau.copy(alpha = .12f), Hijau)
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(warna.copy(alpha = 0.12f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("$persen%", fontSize = 28.sp, fontWeight = FontWeight.Bold, color = warna)
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(emoji, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = warna)
+                Text("$skor/$total benar", fontSize = 13.sp, color = MutedFg)
+                Spacer(Modifier.height(12.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("$skor", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Hijau)
+                        Text("Benar", fontSize = 10.sp, color = MutedFg)
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("${total - skor}", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Merah)
+                        Text("Salah", fontSize = 10.sp, color = MutedFg)
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("+$token", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Hijau)
+                        Text("ZX", fontSize = 10.sp, color = MutedFg)
+                    }
                 }
             }
         }
@@ -489,22 +611,39 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = androidx.compose.foundation.BorderStroke(0.dp, Color.Transparent),
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(
+                    modifier = Modifier
+                        .padding(14.dp)
+                        .drawBehind {
+                            drawLine(
+                                color = if (h.benar) Hijau else Merah,
+                                strokeWidth = 4.dp.toPx(),
+                                start = androidx.compose.ui.geometry.Offset(0f, 0f),
+                                end = androidx.compose.ui.geometry.Offset(0f, size.height),
+                            )
+                        }
+                        .padding(start = 8.dp),
+                ) {
+                    Text("Soal ${i + 1}", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+                    Spacer(Modifier.height(4.dp))
+                    Text(h.q, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    Spacer(Modifier.height(6.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             if (h.benar) Icons.Default.CheckCircle else Icons.Default.Cancel,
                             contentDescription = null,
                             tint = if (h.benar) Hijau else Merah,
-                            modifier = Modifier.size(18.dp),
+                            modifier = Modifier.size(14.dp),
                         )
-                        Spacer(Modifier.width(8.dp))
-                        Text("Soal ${i + 1}", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.width(4.dp))
+                        Text(
+                            "Jawabanmu: ${'A' + h.jawabAnak}",
+                            fontSize = 11.sp,
+                            color = if (h.benar) Hijau else Merah,
+                        )
                     }
-                    Spacer(Modifier.height(6.dp))
-                    Text(h.q, fontSize = 13.sp)
-                    Spacer(Modifier.height(4.dp))
-                    Text("Jawabanmu: ${'A' + h.jawabAnak}", fontSize = 11.sp, color = if (h.benar) Hijau else Merah)
                     if (!h.benar) {
                         Text("Jawaban benar: ${'A' + h.jawabBenar}", fontSize = 11.sp, color = Hijau)
                     }
@@ -518,9 +657,10 @@ private fun HasilKuisAI(hasil: SubmitKuisRes?, soal: List<Soal>, jawaban: List<I
         item {
             Button(
                 onClick = onKembali,
-                modifier = Modifier.fillMaxWidth().height(48.dp),
-                shape = RoundedCornerShape(12.dp),
-            ) { Text(stringResource(R.string.done)) }
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Biru),
+            ) { Text(stringResource(R.string.done), fontSize = 15.sp) }
         }
     }
 }
