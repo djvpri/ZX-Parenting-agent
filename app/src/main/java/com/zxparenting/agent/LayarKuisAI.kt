@@ -8,6 +8,7 @@ import android.net.Uri
 import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -364,7 +365,7 @@ private fun FormKuisAI(
                 }
                 if (fotoBitmap != null) {
                     Box(modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))) {
-                        androidx.compose.foundation.Image(
+                        Image(
                             bitmap = fotoBitmap.asImageBitmap(),
                             contentDescription = stringResource(R.string.photo_preview),
                             modifier = Modifier.fillMaxWidth().height(180.dp),
