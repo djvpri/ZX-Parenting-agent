@@ -27,6 +27,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.ui.platform.LocalLifecycleOwner
 
 @Composable
 fun LayarHadiah(jwt: String?) {
@@ -58,8 +61,19 @@ fun LayarHadiah(jwt: String?) {
     val strCoins = stringResource(R.string.coins_unit)
 
     val menitOptions = listOf(5, 15, 30, 60, 120)
+    var refreshTrigger by remember { mutableStateOf(0) }
 
-    LaunchedEffect(jwt) {
+    // Re-fetch saat tab Hadiah aktif kembali (user selesai kuis di tab lain → saldo update)
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val obs = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) refreshTrigger++
+        }
+        lifecycleOwner.lifecycle.addObserver(obs)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
+    }
+
+    LaunchedEffect(jwt, refreshTrigger) {
         if (demo) {
             saldo = DataDemo.saldo
             streak = DataDemo.streak
