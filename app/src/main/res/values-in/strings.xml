@@ -123,6 +123,16 @@
     <string name="challenge_harian">Challenge Harian</string>
     <string name="streak_hari">hari streak</string>
     <string name="streak_terbaik">Terbaik</string>
+    <string name="quick_actions">Aksi Cepat</string>
+    <string name="today_gain">+%1$d hari ini</string>
+    <string name="hot_badge">HOT</string>
+    <string name="new_badge">BARU</string>
+    <string name="locked">Kunci</string>
+    <string name="available">Tersedia</string>
+    <string name="minutes_short">%1$d mnt</string>
+    <string name="tokens_unit">ZX</string>
+    <string name="coins_unit">koin</string>
+    <string name="borrow_n">Pinjam %1$d mnt</string>
     <string name="tema">Tema</string>
     <string name="tema_default">Default</string>
     <string name="tema_malam">Malam</string>
