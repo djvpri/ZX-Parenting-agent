@@ -133,6 +133,9 @@
     <string name="tokens_unit">ZX</string>
     <string name="coins_unit">coins</string>
     <string name="borrow_n">Borrow %1$d min</string>
+    <string name="kuota_main">Play Time Balance</string>
+    <string name="kuota_main_sub">%1$d minutes available to play</string>
+    <string name="kuota_empty">No play time yet. Exchange tokens above!</string>
     <string name="tema">Theme</string>
     <string name="tema_default">Default</string>
     <string name="tema_malam">Night</string>

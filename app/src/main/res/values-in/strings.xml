@@ -133,6 +133,9 @@
     <string name="tokens_unit">ZX</string>
     <string name="coins_unit">koin</string>
     <string name="borrow_n">Pinjam %1$d mnt</string>
+    <string name="kuota_main">Kuota Waktu Main</string>
+    <string name="kuota_main_sub">%1$d menit tersedia untuk main</string>
+    <string name="kuota_empty">Belum ada waktu main. Tukar token di atas!</string>
     <string name="tema">Tema</string>
     <string name="tema_default">Default</string>
     <string name="tema_malam">Malam</string>

@@ -251,6 +251,11 @@ data class PinjamRes(
 data class PinjamReq(val menit: Int)
 data class PinjamPostRes(val ok: Boolean, val menit: Int, val id: String)
 
+// --- Kuota waktu main (PlayTimeBalance) ---
+
+data class KuotaMainRiwayatItem(val jumlah: Int, val catatan: String?, val createdAt: String)
+data class KuotaMainRes(val menit: Int, val riwayat: List<KuotaMainRiwayatItem>?)
+
 // --- Error reporting (fire-and-forget) ---
 
 data class ErrorLogReq(
@@ -337,6 +342,9 @@ interface ZxApi {
 
     @POST("anak/pinjam")
     suspend fun pinjamAjukan(@Header("Authorization") bearer: String, @Body req: PinjamReq): Response<PinjamPostRes>
+
+    @GET("anak/kuota-main")
+    suspend fun kuotaMain(@Header("Authorization") bearer: String): Response<KuotaMainRes>
 
     @POST("log-error")
     suspend fun logError(@Header("Authorization") bearer: String, @Body req: ErrorLogReq): Response<Map<String, Any>>

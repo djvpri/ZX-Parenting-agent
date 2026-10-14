@@ -40,6 +40,7 @@ fun LayarHadiah(jwt: String?) {
     var quests by remember { mutableStateOf<List<QuestAnak>>(emptyList()) }
     var ledger by remember { mutableStateOf<List<LedgerItem>>(emptyList()) }
     var hutang by remember { mutableStateOf(0) }
+    var kuotaMain by remember { mutableStateOf(0) }
     var loading by remember { mutableStateOf(true) }
     var tukarMenit by remember { mutableStateOf(30) }
     var tukarMsg by remember { mutableStateOf("") }
@@ -67,6 +68,7 @@ fun LayarHadiah(jwt: String?) {
             quests = DataDemo.quests
             ledger = DataDemo.ledger
             hutang = DataDemo.pinjam.hutang
+            kuotaMain = 30
             loading = false
             return@LaunchedEffect
         }
@@ -79,6 +81,7 @@ fun LayarHadiah(jwt: String?) {
             val qs = withContext(Dispatchers.IO) { runCatching { Klien.api.questsSaya(bearer) }.getOrNull() }
             val le = withContext(Dispatchers.IO) { runCatching { Klien.api.riwayatToken(bearer) }.getOrNull() }
             val pj = withContext(Dispatchers.IO) { runCatching { Klien.api.pinjamStatus(bearer) }.getOrNull() }
+            val km = withContext(Dispatchers.IO) { runCatching { Klien.api.kuotaMain(bearer) }.getOrNull() }
 
             saldo = s?.body()?.saldo ?: 0
             streak = st?.body()
@@ -87,6 +90,7 @@ fun LayarHadiah(jwt: String?) {
             quests = qs?.body() ?: emptyList()
             ledger = le?.body()?.ledger ?: emptyList()
             hutang = pj?.body()?.hutang ?: 0
+            kuotaMain = km?.body()?.menit ?: 0
             loading = false
         }
     }
@@ -292,6 +296,7 @@ fun LayarHadiah(jwt: String?) {
                                     val body = res?.body()
                                     if (res?.isSuccessful == true && body?.ok == true) {
                                         saldo = body.saldo
+                                        kuotaMain += body.menit
                                         tukarMsg = "+${body.menit} $strMenit"
                                     } else {
                                         tukarMsg = "Saldo tidak cukup"
@@ -316,6 +321,37 @@ fun LayarHadiah(jwt: String?) {
                     if (tukarMsg.isNotEmpty()) {
                         Spacer(Modifier.height(4.dp))
                         Text(tukarMsg, fontSize = 11.sp, color = Hijau)
+                    }
+                }
+            }
+        }
+
+        // ===== KUOTA WAKTU MAIN =====
+        item {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Teal.copy(alpha = .08f)),
+            ) {
+                Row(
+                    Modifier.padding(20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Box(
+                        Modifier.size(56.dp).clip(RoundedCornerShape(18.dp))
+                            .background(Brush.linearGradient(listOf(Teal, Biru))),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(Icons.Default.SportsEsports, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                    }
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.kuota_main), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Teal)
+                        if (kuotaMain > 0) {
+                            Text(stringResource(R.string.kuota_main_sub, kuotaMain), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MutedFg)
+                        } else {
+                            Text(stringResource(R.string.kuota_empty), fontSize = 11.sp, color = MutedFg.copy(alpha = .6f))
+                        }
                     }
                 }
             }
