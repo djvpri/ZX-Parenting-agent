@@ -61,6 +61,13 @@
     <string name="submit_answers">Submit Answers</string>
     <string name="time_to_rest">Time to rest!</string>
     <string name="topic_hint">Topic (e.g: Math, Science)</string>
+    <string name="number_of_questions">Number of questions</string>
+    <string name="timer_per_question">Timer per question</string>
+    <string name="quiz_from_photo">Quiz from photo (optional)</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="photo_preview">Photo preview</string>
+    <string name="remove_photo">Remove photo</string>
     <string name="topic_required">Topic required</string>
     <string name="try_again">Try Again</string>
     <string name="usage_active">Usage reporting: active ✓</string>

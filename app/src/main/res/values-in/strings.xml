@@ -61,6 +61,13 @@
     <string name="submit_answers">Kirim Jawaban</string>
     <string name="time_to_rest">Waktunya istirahat!</string>
     <string name="topic_hint">Topik (cth: Matematika, IPA)</string>
+    <string name="number_of_questions">Jumlah soal</string>
+    <string name="timer_per_question">Timer per soal</string>
+    <string name="quiz_from_photo">Kuis dari foto (opsional)</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="photo_preview">Pratinjau foto</string>
+    <string name="remove_photo">Hapus foto</string>
     <string name="topic_required">Topik wajib</string>
     <string name="try_again">Coba Lagi</string>
     <string name="usage_active">Laporan pemakaian: sudah aktif ✓</string>

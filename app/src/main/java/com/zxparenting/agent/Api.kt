@@ -106,6 +106,13 @@ data class KuisAIReq(
     @SerializedName("jumlahSoal") val jumlahSoal: Int,
 )
 
+data class KuisFotoReq(
+    val topik: String,
+    @SerializedName("levelKesulitan") val levelKesulitan: Int,
+    @SerializedName("jumlahSoal") val jumlahSoal: Int,
+    @SerializedName("fotoBase64") val fotoBase64: String,
+)
+
 data class KuisAIRes(
     @SerializedName("attemptId") val attemptId: String,
     val soal: List<Soal>,
@@ -272,6 +279,9 @@ interface ZxApi {
 
     @POST("anak/kuis/start")
     suspend fun kuisStart(@Header("Authorization") bearer: String, @Body req: KuisAIReq): Response<KuisAIRes>
+
+    @POST("anak/kuis/foto")
+    suspend fun kuisFotoStart(@Header("Authorization") bearer: String, @Body req: KuisFotoReq): Response<KuisAIRes>
 
     @POST("anak/kuis/{id}/submit")
     suspend fun kuisSubmit(@Header("Authorization") bearer: String, @retrofit2.http.Path("id") id: String, @Body req: SubmitKuisReq): Response<SubmitKuisRes>
