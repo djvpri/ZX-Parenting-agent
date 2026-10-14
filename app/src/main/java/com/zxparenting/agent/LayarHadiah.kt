@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -116,7 +117,11 @@ fun LayarHadiah(jwt: String?) {
         return
     }
 
+    val listState = rememberLazyListState()
+    val scopeScroll = rememberCoroutineScope()
+
     LazyColumn(
+        state = listState,
         modifier = Modifier.fillMaxSize().background(Bg),
         contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 90.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -244,7 +249,7 @@ fun LayarHadiah(jwt: String?) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                // Tukar dock
+                // Tukar dock — scroll ke section Tukar Token
                 DockBtn(
                     icon = Icons.Default.SwapHoriz,
                     label = strTukar,
@@ -252,9 +257,9 @@ fun LayarHadiah(jwt: String?) {
                     tint = Hijau,
                     modifier = Modifier.weight(1f),
                 ) {
-                    // Scroll to tukar section — just trigger inline below
+                    scopeScroll.launch { listState.animateScrollToItem(4) }
                 }
-                // Minta dock
+                // Minta dock — scroll ke section Katalog
                 DockBtn(
                     icon = Icons.Default.CardGiftcard,
                     label = strMinta,
@@ -262,9 +267,9 @@ fun LayarHadiah(jwt: String?) {
                     tint = Pink,
                     modifier = Modifier.weight(1f),
                 ) {
-                    // Scroll to katalog
+                    scopeScroll.launch { listState.animateScrollToItem(listState.layoutInfo.totalItemsCount - 3) }
                 }
-                // Pinjam dock
+                // Pinjam dock — scroll ke section Pinjam
                 DockBtn(
                     icon = Icons.Default.Schedule,
                     label = stringResource(R.string.pinjam_waktu),
@@ -272,7 +277,7 @@ fun LayarHadiah(jwt: String?) {
                     tint = Amber,
                     modifier = Modifier.weight(1f),
                 ) {
-                    // Scroll to pinjam
+                    scopeScroll.launch { listState.animateScrollToItem(listState.layoutInfo.totalItemsCount - 1) }
                 }
             }
         }
