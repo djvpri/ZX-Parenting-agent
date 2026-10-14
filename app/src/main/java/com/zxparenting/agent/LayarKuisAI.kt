@@ -159,46 +159,44 @@ fun LayarKuisAI(jwt: String, onKembali: () -> Unit, topikAwal: String = "") {
             "soal" -> {
                 val totalDetik = durasiSoal * soal.size
                 var sisaDetik by remember { mutableStateOf(totalDetik) }
-                val submitAction = remember(jawaban.toList()) {
-                    {
-                        val semua = jawaban.all { it >= 0 }
-                        if (jwt.isEmpty()) {
-                            val kunci = (0 until soal.size).map { it % 4 }
-                            val skor = jawaban.mapIndexed { i, ans -> if (i < kunci.size && ans == kunci[i]) 1 else 0 }.sum()
-                            hasil = SubmitKuisRes(
-                                skor = skor,
-                                totalSoal = soal.size,
-                                tokenDidapat = skor * 3,
-                                challengeSelesai = false,
-                                hasil = soal.mapIndexed { i, s ->
-                                    HasilSoal(
-                                        q = s.q,
-                                        jawabAnak = maxOf(0, jawaban.getOrElse(i) { -1 }),
-                                        jawabBenar = kunci.getOrElse(i) { 0 },
-                                        benar = jawaban.getOrElse(i) { -1 } == kunci.getOrElse(i) { 0 },
-                                        explain = if (jawaban.getOrElse(i) { -1 } == kunci.getOrElse(i) { 0 }) "Benar!" else "Jawaban benar: ${s.options.getOrElse(kunci.getOrElse(i) { 0 }) { "" }}",
-                                    )
-                                },
-                            )
-                            fase = "hasil"
-                        } else {
-                            scope.launch {
-                                val res = withContext(Dispatchers.IO) {
-                                    runCatching {
-                                        Klien.api.kuisSubmit("Bearer $jwt", attemptId, SubmitKuisReq(jawaban.map { maxOf(0, it) }.toList()))
-                                    }.getOrNull()
-                                }
-                                val r = res?.body()
-                                if (res?.isSuccessful == true && r != null) {
-                                    hasil = r
-                                    fase = "hasil"
-                                } else {
-                                    error = strFailSubmit
-                                    LaporError.kirim(ctx, "LayarKuisAI", "kuisSubmit fail", mapOf("attemptId" to attemptId, "code" to (res?.code() ?: -1)))
-                                }
+                val submitAction: () -> Unit = {
+                    if (jwt.isEmpty()) {
+                        val kunci = (0 until soal.size).map { it % 4 }
+                        val skor = jawaban.mapIndexed { i, ans -> if (i < kunci.size && ans == kunci[i]) 1 else 0 }.sum()
+                        hasil = SubmitKuisRes(
+                            skor = skor,
+                            totalSoal = soal.size,
+                            tokenDidapat = skor * 3,
+                            challengeSelesai = false,
+                            hasil = soal.mapIndexed { i, s ->
+                                HasilSoal(
+                                    q = s.q,
+                                    jawabAnak = maxOf(0, jawaban.getOrElse(i) { -1 }),
+                                    jawabBenar = kunci.getOrElse(i) { 0 },
+                                    benar = jawaban.getOrElse(i) { -1 } == kunci.getOrElse(i) { 0 },
+                                    explain = if (jawaban.getOrElse(i) { -1 } == kunci.getOrElse(i) { 0 }) "Benar!" else "Jawaban benar: ${s.options.getOrElse(kunci.getOrElse(i) { 0 }) { "" }}",
+                                )
+                            },
+                        )
+                        fase = "hasil"
+                    } else {
+                        scope.launch {
+                            val res = withContext(Dispatchers.IO) {
+                                runCatching {
+                                    Klien.api.kuisSubmit("Bearer $jwt", attemptId, SubmitKuisReq(jawaban.map { maxOf(0, it) }.toList()))
+                                }.getOrNull()
+                            }
+                            val r = res?.body()
+                            if (res?.isSuccessful == true && r != null) {
+                                hasil = r
+                                fase = "hasil"
+                            } else {
+                                error = strFailSubmit
+                                LaporError.kirim(ctx, "LayarKuisAI", "kuisSubmit fail", mapOf("attemptId" to attemptId, "code" to (res?.code() ?: -1)))
                             }
                         }
                     }
+                    Unit
                 }
                 if (timerAktif) {
                     LaunchedEffect(soal.size) {
